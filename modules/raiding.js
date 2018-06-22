@@ -88,13 +88,14 @@ function plusPres() {
 }
 
 function bestGear() {
+    var currentModifier = (game.global.world - 235) % 15;
     document.getElementById("biomeAdvMapsSelect").value = "Random";
     document.getElementById('advSpecialSelect').value = "p";
     document.getElementById("lootAdvMapsRange").value = 0;
     document.getElementById("difficultyAdvMapsRange").value = 0;
     document.getElementById("sizeAdvMapsRange").value = 9;
     document.getElementById('advPerfectCheckbox').checked = false;
-    document.getElementById('advExtraLevelSelect').value = game.global.world%10<5 ? 5 - game.global.world%10 :10;
+    document.getElementById('advExtraLevelSelect').value = currentModifier === 1 ? plusMapToRun(game.global.world) : 10;
     if (updateMapCost(true) > game.resources.fragments.owned)
     {
         document.getElementById('advSpecialSelect').value = 0;
