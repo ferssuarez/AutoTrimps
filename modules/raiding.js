@@ -95,7 +95,7 @@ function bestGear() {
     document.getElementById("difficultyAdvMapsRange").value = 0;
     document.getElementById("sizeAdvMapsRange").value = 9;
     document.getElementById('advPerfectCheckbox').checked = false;
-    document.getElementById('advExtraLevelSelect').value = currentModifier === 1 ? plusMapToRun(game.global.world) : 10;
+    document.getElementById('advExtraLevelSelect').value = (currentModifier === 5 && game.global.world % 10 === 5) ? 10 : plusMapToRun(game.global.world);
     if (updateMapCost(true) > game.resources.fragments.owned)
     {
         document.getElementById('advSpecialSelect').value = 0;
