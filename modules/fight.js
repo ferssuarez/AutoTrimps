@@ -116,12 +116,12 @@ function betterAutoFight3()
 
 function buyArmors(){
     numTab(3);
-    buyEquipment('Boots');
-    buyEquipment('Helmet');
-    buyEquipment('Pants');
-    buyEquipment('Shoulderguards');
-    buyEquipment('Breastplate');
-    buyEquipment('Gambeson');
+    buyEquipment('Boots', null, true);
+    buyEquipment('Helmet', null, true);
+    buyEquipment('Pants', null, true);
+    buyEquipment('Shoulderguards', null, true);
+    buyEquipment('Breastplate', null, true);
+    buyEquipment('Gambeson', null, true);
     numTab(3);
     //cancelTooltip();
 }
