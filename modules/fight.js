@@ -122,5 +122,6 @@ function buyArmors(){
     buyEquipment('Shoulderguards');
     buyEquipment('Breastplate');
     buyEquipment('Gambeson');
-    cancelTooltip();
+    numTab(3);
+    //cancelTooltip();
 }
