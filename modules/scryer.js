@@ -7,6 +7,7 @@ function useScryerStance() {
     function autostancefunction() {
         if (AutoStance<=1) autoStance();    //"Auto Stance"
         else if (AutoStance==2) autoStance2();   //"Auto Stance #2"
+        else if (AutoStance===3) autoStance3(); //"Auto Stance #3"
     };
     //check preconditions   (exit quick, if impossible to use)
     var use_auto = game.global.preMapsActive || game.global.gridArray.length === 0 || game.global.highestLevelCleared < 180;
