@@ -130,6 +130,10 @@ function plusMapToRun(zone) {
             return 5;
         }
     }
+    else if (currentModifier === 11 && zone %10 === 6)
+    {
+        return 5;
+    }
     return 0;
 }
 
@@ -138,11 +142,15 @@ function nextMapAtZone(zone) {
     if (currentModifier === 0) {
         return 1 + zone;
     }
-    else if (currentModifier >= 5) {
-        return 16 - currentModifier + zone;
+    else if (currentModifier < 5)
+    {
+        return 5 - currentModifier + zone;
+    }
+    else if (currentModifier < 11 && (11 - currentModifier + zone) % 10 === 6) {
+        return 11 - currentModifier + zone;
     }
     else {
-        return 5 - currentModifier + zone;
+        return 16 - currentModifier + zone;
     }
 }
 
