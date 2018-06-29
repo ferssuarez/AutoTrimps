@@ -14,12 +14,10 @@ function raiding() {
         if (game.global.challengeActive === "Daily") {
             autoTrimpSettings["VoidMaps"].value = getPageSetting("DailyVMZone") > 0 ? getPageSetting("DailyVMZone") : autoTrimpSettings["VoidMaps"].value;
             autoTrimpSettings["ExitSpireCell"].value = 100;
-            gameMapAtZoneEnabled = 1;
         }
         else if (game.global.challengeActive === "") {
             autoTrimpSettings["VoidMaps"].value = getPageSetting("FillerVMZone") > 0 ? getPageSetting("FillerVMZone") : autoTrimpSettings["VoidMaps"].value;
             autoTrimpSettings["ExitSpireCell"].value = getPageSetting("FillerSpireCell") > 0 ? getPageSetting("FillerSpireCell") : autoTrimpSettings["ExitSpireCell"].value;
-            gameMapAtZoneEnabled = 0;
         }
     }
 
@@ -77,12 +75,21 @@ function plusPres() {
     document.getElementById("biomeAdvMapsSelect").value = "Random";
     document.getElementById('advExtraLevelSelect').value = plusMapToRun(game.global.world);
     document.getElementById('advSpecialSelect').value = "p";
-    document.getElementById("lootAdvMapsRange").value = 0;
+    document.getElementById("lootAdvMapsRange").value = 9;
     document.getElementById("difficultyAdvMapsRange").value = 9;
     document.getElementById("sizeAdvMapsRange").value = 9;
-    document.getElementById('advPerfectCheckbox').checked = false;
-    if (updateMapCost(true) > game.resources.fragments.owned) {
+    document.getElementById('advPerfectCheckbox').checked = true;
+    if (updateMapCost(true) > game.resources.fragments.owned)
+    {
+        document.getElementById('advPerfectCheckbox').checked = false;
+    }
+    if (updateMapCost(true) > game.resources.fragments.owned)
+    {
         document.getElementById('advSpecialSelect').value = 0;
+    }
+    while (updateMapCost(true) > game.resources.fragments.owned)
+    {
+        document.getElementById("lootAdvMapsRange").value--;
     }
     updateMapCost();
 }
@@ -91,11 +98,19 @@ function bestGear() {
     var currentModifier = (game.global.world - 235) % 15;
     document.getElementById("biomeAdvMapsSelect").value = "Random";
     document.getElementById('advSpecialSelect').value = "p";
-    document.getElementById("lootAdvMapsRange").value = 0;
+    document.getElementById("lootAdvMapsRange").value = 9;
     document.getElementById("difficultyAdvMapsRange").value = 9;
     document.getElementById("sizeAdvMapsRange").value = 9;
-    document.getElementById('advPerfectCheckbox').checked = false;
+    document.getElementById('advPerfectCheckbox').checked = true;
     document.getElementById('advExtraLevelSelect').value = (currentModifier === 5 && game.global.world % 10 === 5) ? 10 : plusMapToRun(game.global.world);
+    if (updateMapCost(true) > game.resources.fragments.owned)
+    {
+        document.getElementById('advPerfectCheckbox').checked = false;
+    }
+    while (updateMapCost(true) > game.resources.fragments.owned)
+    {
+        document.getElementById("lootAdvMapsRange").value--;
+    }
     if (updateMapCost(true) > game.resources.fragments.owned)
     {
         document.getElementById('advSpecialSelect').value = 0;
@@ -107,6 +122,22 @@ function bestGear() {
     while (updateMapCost(true) > game.resources.fragments.owned)
     {
         document.getElementById('advExtraLevelSelect').value--;
+    }
+    updateMapCost();
+}
+
+function bestCache()
+{
+    document.getElementById("biomeAdvMapsSelect").value = "Plentiful";
+    document.getElementById('advExtraLevelSelect').value = 10;
+    document.getElementById('advSpecialSelect').value = "lmc";
+    document.getElementById("lootAdvMapsRange").value = 9;
+    document.getElementById("difficultyAdvMapsRange").value = 9;
+    document.getElementById("sizeAdvMapsRange").value = 9;
+    document.getElementById('advPerfectCheckbox').checked = true;
+    while (updateMapCost(true) > game.resources.fragments.owned)
+    {
+        document.getElementById('difficultyAdvMapsRange').value--;
     }
     updateMapCost();
 }
