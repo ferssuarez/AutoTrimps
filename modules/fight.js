@@ -123,5 +123,4 @@ function buyArmors(){
     buyEquipment('Breastplate', null, true);
     buyEquipment('Gambeson', null, true);
     numTab(3);
-    //cancelTooltip();
 }
