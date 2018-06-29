@@ -87,7 +87,7 @@ function plusPres() {
     {
         document.getElementById('advSpecialSelect').value = 0;
     }
-    while (updateMapCost(true) > game.resources.fragments.owned)
+    while (updateMapCost(true) > game.resources.fragments.owned && document.getElementById("lootAdvMapsRange").value > 0)
     {
         document.getElementById("lootAdvMapsRange").value--;
     }
@@ -107,7 +107,7 @@ function bestGear() {
     {
         document.getElementById('advPerfectCheckbox').checked = false;
     }
-    while (updateMapCost(true) > game.resources.fragments.owned)
+    while (updateMapCost(true) > game.resources.fragments.owned && document.getElementById("lootAdvMapsRange").value > 0)
     {
         document.getElementById("lootAdvMapsRange").value--;
     }
@@ -115,11 +115,11 @@ function bestGear() {
     {
         document.getElementById('advSpecialSelect').value = 0;
     }
-    while (updateMapCost(true) > game.resources.fragments.owned)
+    while (updateMapCost(true) > game.resources.fragments.owned && document.getElementById('difficultyAdvMapsRange').value > 0)
     {
         document.getElementById('difficultyAdvMapsRange').value--;
     }
-    while (updateMapCost(true) > game.resources.fragments.owned)
+    while (updateMapCost(true) > game.resources.fragments.owned && document.getElementById('advExtraLevelSelect').value > 0)
     {
         document.getElementById('advExtraLevelSelect').value--;
     }
@@ -135,7 +135,7 @@ function bestCache()
     document.getElementById("difficultyAdvMapsRange").value = 9;
     document.getElementById("sizeAdvMapsRange").value = 9;
     document.getElementById('advPerfectCheckbox').checked = true;
-    while (updateMapCost(true) > game.resources.fragments.owned)
+    while (updateMapCost(true) > game.resources.fragments.owned && document.getElementById('difficultyAdvMapsRange').value > 0)
     {
         document.getElementById('difficultyAdvMapsRange').value--;
     }
