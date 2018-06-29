@@ -561,6 +561,7 @@ function autoStance3() {
         if (getEmpowerment() !== "Wind") {
             MODULES["maps"].enoughDamageCutoff = 4;
         }
+        autoTrimpSettings["BuyWeapons"].enabled = true;
     }
     else if (game.global.challengeActive === "Daily" && !game.global.spireActive && getPageSetting("WindStack")) {
         setFormation(4);
@@ -568,5 +569,6 @@ function autoStance3() {
             setFormation(2);
         }
         MODULES["maps"].enoughDamageCutoff = getPageSetting("WindStackCutOff");
+        autoTrimpSettings["BuyWeapons"].enabled = getHDRatio() > MODULES["maps"].enoughDamageCutoff;
     }
 }
