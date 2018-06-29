@@ -106,7 +106,7 @@ function betterAutoFight3()
         fightManual();
         buyArmors(); //temp fix for AT not buying armor
     }
-    if (game.global.antiStacks !== 45 && game.global.lastBreedTime >= 45000 && !game.global.spireActive) {
+    if (game.global.antiStacks !== 45 && Math.floor((getGameTime() - game.global.lastSoldierSentAt) / 1000) >= 45 && !game.global.spireActive) {
         forceAbandonTrimps();
     }
     if ((needPrestige || !enoughDamage) && game.global.world>=200 && (getEmpowerment() === "Ice" || (getEmpowerment() === "Wind" && game.global.lastBreedTime >= 45000)) && !game.global.mapsActive && game.global.mapBonus !== 10 && game.global.world!==game.options.menu.mapAtZone.setZone) {
