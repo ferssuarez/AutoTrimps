@@ -909,3 +909,8 @@ function mapTimeEstimater() {
         mapTimeEstimate = 0;
     return mapTimeEstimate;
 }
+
+function getHDRatio()
+{
+    return HDratio;
+}
