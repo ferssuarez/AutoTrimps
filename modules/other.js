@@ -118,6 +118,11 @@ function autoNatureTokens() {
         updateNatureInfoSpans();
 }
 
+function fuckShitUp()
+{
+
+}
+
 //Check if currently in a Spire past IgnoreSpiresUntil
 function isActiveSpireAT() {
     return game.global.spireActive && game.global.world >= getPageSetting('IgnoreSpiresUntil');

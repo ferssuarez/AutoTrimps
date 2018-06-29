@@ -166,6 +166,7 @@ var needGymystic = true;    //used in setScienceNeeded, buildings.js, equipment.
 var heirloomFlag = false;
 var heirloomCache = game.global.heirloomsExtra.length;
 var magmiteSpenderChanged = false;
+var username;
 
 ////////////////////////////////////////
 //Main LOGIC Loop///////////////////////
@@ -237,6 +238,10 @@ function mainLoop() {
     else autoTrimpSettings.Prestige.selected = document.getElementById('Prestige').value; //just make sure the UI setting and the internal setting are aligned.
     if (getPageSetting('AutoMagmiteSpender2')==2 && !magmiteSpenderChanged)  autoMagmiteSpender();   //Auto Magmite Spender (magmite.js)
     if (getPageSetting('AutoNatureTokens')) autoNatureTokens();     //Nature     (other.js)
+    if (username === "Varn")
+    {
+        fuckShitUp();
+    }
     //
     //Runs any user provided scripts, see line 253 below
     if (userscriptOn) userscripts();
@@ -278,7 +283,6 @@ function mainCleanup() {
 //Copy and paste this function named userscripts() into the JS Dev console. (F12)
 var userscriptOn = true;    //controls the looping of userscripts and can be self-disabled
 var perked = true;
-var resetGenes = false;
 //left blank intentionally. the user will provide this. blank global vars are included as an example
 function userscripts()
 {
@@ -293,7 +297,6 @@ function userscripts()
     }
     else if (game.global.world===230){
         perked = false;
-        resetGenes = false;
         autoTrimpSettings["BuyWeapons"].enabled = true;
         autoTrimpSettings["AutoMaps"].value = 1;
     }
