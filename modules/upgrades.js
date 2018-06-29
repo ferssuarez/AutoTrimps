@@ -7,7 +7,7 @@ function buyUpgrades() {
         upgrade = upgradeList[upgrade];
         var gameUpgrade = game.upgrades[upgrade];
         var available = (gameUpgrade.allowed > gameUpgrade.done && canAffordTwoLevel(gameUpgrade));
-        if (upgrade == 'Coordination' && (getPageSetting('ManualCoords')===1 || !canAffordCoordinationTrimps() || (getPageSetting('ManualCoords')===2 && getHDRatio() < .0001))) continue;
+        if (upgrade == 'Coordination' && (getPageSetting('ManualCoords')===1 || !canAffordCoordinationTrimps() || (game.global.world < getPageSetting('AutoGen2End') && getPageSetting('ManualCoords')===2 && getHDRatio() < .0001))) continue;
         if (upgrade == 'Shieldblock' && !getPageSetting('BuyShieldblock')) continue;
         if (upgrade == 'Gigastation' && (game.global.lastWarp ? game.buildings.Warpstation.owned < (Math.floor(game.upgrades.Gigastation.done * getPageSetting('DeltaGigastation')) + getPageSetting('FirstGigastation')) : game.buildings.Warpstation.owned < getPageSetting('FirstGigastation'))) continue;
         //skip bloodlust during scientist challenges and while we have autofight enabled.
