@@ -176,7 +176,7 @@ function mainLoop() {
     if(getPageSetting('PauseScript') || game.options.menu.pauseGame.enabled || game.global.viewingUpgrades) return;
     ATrunning = true;
     if(game.options.menu.showFullBreed.enabled != 1) toggleSetting("showFullBreed");    //more detail
-    addbreedTimerInsideText.innerHTML = (parseFloat(game.global.lastBreedTime/1000).toFixed(1) >= 45 ? 45 : parseFloat(game.global.lastBreedTime/1000).toFixed(1) ) + 's';  //add hidden next group breed timer;
+    addbreedTimerInsideText.innerHTML = (game.global.lastBreedTime/1000).toFixed(1) >= 45 ? 45 : parseFloat(game.global.lastBreedTime/1000).toFixed(1) ) + 's';  //add hidden next group breed timer;
     addToolTipToArmyCount(); //Add hidden tooltip for army count (SettingsGUI.js @ end)
     //Heirloom:
     if (mainCleanup() // Z1 new world
