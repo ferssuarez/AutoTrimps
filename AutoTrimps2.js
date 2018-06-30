@@ -166,7 +166,6 @@ var needGymystic = true;    //used in setScienceNeeded, buildings.js, equipment.
 var heirloomFlag = false;
 var heirloomCache = game.global.heirloomsExtra.length;
 var magmiteSpenderChanged = false;
-var username;
 
 ////////////////////////////////////////
 //Main LOGIC Loop///////////////////////
@@ -177,7 +176,7 @@ function mainLoop() {
     if(getPageSetting('PauseScript') || game.options.menu.pauseGame.enabled || game.global.viewingUpgrades) return;
     ATrunning = true;
     if(game.options.menu.showFullBreed.enabled != 1) toggleSetting("showFullBreed");    //more detail
-    addbreedTimerInsideText.innerHTML = parseFloat((getGameTime() - game.global.lastSoldierSentAt) / 1000).toFixed(1) + 's';  //add hidden next group breed timer;
+    addbreedTimerInsideText.innerHTML = (parseFloat(game.global.lastBreedTime/1000).toFixed(1) >= 45 ? 45 : parseFloat(game.global.lastBreedTime/1000).toFixed(1) ) + 's';  //add hidden next group breed timer;
     addToolTipToArmyCount(); //Add hidden tooltip for army count (SettingsGUI.js @ end)
     //Heirloom:
     if (mainCleanup() // Z1 new world
@@ -238,10 +237,6 @@ function mainLoop() {
     else autoTrimpSettings.Prestige.selected = document.getElementById('Prestige').value; //just make sure the UI setting and the internal setting are aligned.
     if (getPageSetting('AutoMagmiteSpender2')==2 && !magmiteSpenderChanged)  autoMagmiteSpender();   //Auto Magmite Spender (magmite.js)
     if (getPageSetting('AutoNatureTokens')) autoNatureTokens();     //Nature     (other.js)
-    if (username === "Varn")
-    {
-        fuckShitUp();
-    }
     //
     //Runs any user provided scripts, see line 253 below
     if (userscriptOn) userscripts();
@@ -283,6 +278,7 @@ function mainCleanup() {
 //Copy and paste this function named userscripts() into the JS Dev console. (F12)
 var userscriptOn = true;    //controls the looping of userscripts and can be self-disabled
 var perked = true;
+var resetGenes = false;
 //left blank intentionally. the user will provide this. blank global vars are included as an example
 function userscripts()
 {
@@ -291,16 +287,22 @@ function userscripts()
         toggleAutoMaps();
     }
 
+    if (game.global.world === 491)
+    {
+        game.global.genPaused = true;
+    }
+
     //Resetting values
     if (game.global.world <= 10 && game.global.dailyChallenge.hasOwnProperty("mirrored")){
         autoTrimpSettings["BuyWeapons"].enabled = false;
     }
     else if (game.global.world===230){
         perked = false;
+        resetGenes = false;
         autoTrimpSettings["BuyWeapons"].enabled = true;
         autoTrimpSettings["AutoMaps"].value = 1;
     }
-    
+    /**
     //AutoAllocate Looting II
     if (!perked && game.global.world !== 230){
         viewPortalUpgrades();
@@ -309,7 +311,6 @@ function userscripts()
         if (getPortalUpgradePrice("Looting_II")+game.resources.helium.totalSpentTemp <= game.resources.helium.respecMax){
             buyPortalUpgrade('Looting_II');
             activateClicked();
-			cancelPortal();
             message("Bought 100k Looting II","Notices");
         }
         else{
@@ -318,6 +319,7 @@ function userscripts()
             message("Done buying Looting II","Notices");
         }
     }
+    */
 }
 
 
