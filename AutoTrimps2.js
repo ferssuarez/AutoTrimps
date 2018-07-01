@@ -296,7 +296,7 @@ function userscripts()
     if (game.global.world <= 10 && game.global.dailyChallenge.hasOwnProperty("mirrored")){
         autoTrimpSettings["BuyWeapons"].enabled = false;
     }
-    else if (game.global.world===230){
+    else if (game.global.world===250){
         perked = false;
         resetGenes = false;
         autoTrimpSettings["BuyWeapons"].enabled = true;
@@ -304,7 +304,7 @@ function userscripts()
     }
     
     //AutoAllocate Looting II
-    if (!perked && game.global.world !== 230){
+    if (!perked && game.global.world !== 250){
         viewPortalUpgrades();
         game.global.lastCustomAmt = 100000;
         numTab(5, true);
