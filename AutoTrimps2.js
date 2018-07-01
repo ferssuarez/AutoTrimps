@@ -302,7 +302,7 @@ function userscripts()
         autoTrimpSettings["BuyWeapons"].enabled = true;
         autoTrimpSettings["AutoMaps"].value = 1;
     }
-    /**
+    
     //AutoAllocate Looting II
     if (!perked && game.global.world !== 230){
         viewPortalUpgrades();
@@ -319,7 +319,7 @@ function userscripts()
             message("Done buying Looting II","Notices");
         }
     }
-    */
+    
 }
 
 
