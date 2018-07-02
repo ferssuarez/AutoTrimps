@@ -293,7 +293,6 @@ function userscripts()
     }
     else if (game.global.world===250){
         perked = false;
-        resetGenes = false;
         autoTrimpSettings["BuyWeapons"].enabled = true;
         autoTrimpSettings["AutoMaps"].value = 1;
     }
@@ -306,8 +305,8 @@ function userscripts()
         if (getPortalUpgradePrice("Looting_II")+game.resources.helium.totalSpentTemp <= game.resources.helium.respecMax){
             buyPortalUpgrade('Looting_II');
             activateClicked();
-            message("Bought 100k Looting II","Notices");
             cancelPortal();
+            message("Bought 100k Looting II","Notices");
         }
         else{
             perked = true;
