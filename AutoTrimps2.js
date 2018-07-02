@@ -307,6 +307,7 @@ function userscripts()
             buyPortalUpgrade('Looting_II');
             activateClicked();
             message("Bought 100k Looting II","Notices");
+            cancelPortal();
         }
         else{
             perked = true;
