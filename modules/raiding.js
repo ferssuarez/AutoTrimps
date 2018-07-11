@@ -42,7 +42,7 @@ function prestigeRaiding(setMap) {
             }
             mapsClicked();
             game.options.menu.repeatUntil.enabled = 2;
-            game.global.repeatMap = true;
+            game.global.repeatMap = (game.global.world - 235) % 15 !== 11; // Repeat off if Ice to only grab dagger
         }
         else if (getPageSetting('AutoMaps') === 0 && game.global.preMapsActive && !prestiged) {
             setMap();
