@@ -326,6 +326,21 @@ function evaluateHeirloomMods(loom, location, upgrade) {
                     }
                 }
                 break;
+            case 'plaguebringer':
+                tempEff = loom.mods[m][1]*1000000;
+                eff += tempEff;
+                if(upgrade) {
+                    steps = game.heirlooms.Shield.plaguebringer.steps[loom.rarity];
+                    tempEff = (steps[2] / 1) / ((game.heirlooms.Shield.plaguebringer.currentBonus / 100) + 1);
+                    tempEff = tempEff / getModUpgradeCost(loom, m);
+                    if (tempEff > bestUpgrade.effect) {
+                        bestUpgrade.effect = tempEff;
+                        bestUpgrade.name = 'plaguebringer';
+                        bestUpgrade.index = m;
+                    }
+                }
+                break;
+
             case 'MinerSpeed':
                 tempEff = 0.75*loom.mods[m][1]/100;
                 eff += tempEff;
@@ -350,6 +365,34 @@ function evaluateHeirloomMods(loom, location, upgrade) {
                     if(tempEff > bestUpgrade.effect) {
                         bestUpgrade.effect = tempEff;
                         bestUpgrade.name = 'metalDrop';
+                        bestUpgrade.index = m;
+                    }
+                }
+                break;
+            case 'fragmentsDrop':
+                tempEff = 0.75*loom.mods[m][1]/10;
+                eff += tempEff;
+                if(upgrade) {
+                    steps = game.heirlooms.defaultSteps[loom.rarity];
+                    tempEff = (0.75*steps[2]/10)/((game.heirlooms.Staff.fragmentsDrop.currentBonus/100) + 1);
+                    tempEff = tempEff / getModUpgradeCost(loom, m);
+                    if(tempEff > bestUpgrade.effect) {
+                        bestUpgrade.effect = tempEff;
+                        bestUpgrade.name = 'DragimpSpeed';
+                        bestUpgrade.index = m;
+                    }
+                }
+                break;
+            case 'ExplorerSpeed':
+                tempEff = 0.75*loom.mods[m][1]/100;
+                eff += tempEff;
+                if(upgrade) {
+                    steps = game.heirlooms.defaultSteps[loom.rarity];
+                    tempEff = (0.75*steps[2]/100)/((game.heirlooms.Staff.ExplorerSpeed.currentBonus/100) + 1);
+                    tempEff = tempEff / getModUpgradeCost(loom, m);
+                    if(tempEff > bestUpgrade.effect) {
+                        bestUpgrade.effect = tempEff;
+                        bestUpgrade.name = 'gemsDrop';
                         bestUpgrade.index = m;
                     }
                 }
@@ -410,6 +453,19 @@ function evaluateHeirloomMods(loom, location, upgrade) {
                     }
                 }
                 break;
+            case 'FluffyExp':
+                tempEff = 0.5*loom.mods[m][1]*100000;
+                eff += tempEff;
+                if(upgrade) {
+                    steps = game.heirlooms.defaultSteps[loom.rarity];
+                    tempEff = (0.5 * steps[2]) / ((game.heirlooms.Staff.FluffyExp.currentBonus / 100) + 1);
+                    tempEff = tempEff / getModUpgradeCost(loom, m);
+                    if (tempEff > bestUpgrade.effect) {
+                        bestUpgrade.effect = tempEff;
+                        bestUpgrade.name = 'FluffyExp';
+                        bestUpgrade.index = m;
+                    }
+                }
             case 'empty':
                 var av;
                 if(upgrade) break;
@@ -443,7 +499,7 @@ function evaluateHeirloomMods(loom, location, upgrade) {
                 if(loom.type == 'Staff') {
                     steps = game.heirlooms.defaultSteps[loom.rarity];
                     av = steps[0] + ((steps[1] - steps[0])/2);
-                    if(!checkForMod('MinerSpeed', index, location) || !checkForMod('metalDrop', index, location) || !checkForMod('DragimpSpeed', index, location) || !checkForMod('gemsDrop', index, location)){
+                    if(!checkForMod('MinerSpeed', index, location) || !checkForMod('metalDrop', index, location) || !checkForMod('fragmentsDrop', index, location) || !checkForMod('ExplorerSpeed', index, location) || !checkForMod('FluffyExp', index, location)){
                         eff += 0.75*av/100;
                     }
                     else if(!checkForMod('FarmerSpeed', index, location) || !checkForMod('LumberjackSpeed', index, location)) {
