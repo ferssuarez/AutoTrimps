@@ -29,6 +29,11 @@ function raiding() {
         mapAtZone = nextMapAtZone(game.global.world - 1);
     }
 
+    if (game.global.spireActive)
+    {
+        buyArmors();
+    }
+
     prestigeRaiding(getPageSetting("PrestigeRaiding") === 0 ? plusPres : bestGear);
 }
 
