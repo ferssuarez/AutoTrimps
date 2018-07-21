@@ -41,7 +41,7 @@ function prestigeRaiding(setMap) {
     if (game.global.world === mapAtZone) {
         if (getPageSetting('AutoMaps') === 1 && !prestiged) {
             game.options.menu.mapAtZone.enabled = 0;
-            autoTrimpSettings["AutoMaps"].value = ((game.global.challengeActive === "" && autoTrimpSettings["CustomAutoPortal"].value === game.global.world) || (game.global.challengeActive === "Daily" && game.global.world === (autoTrimpSettings["CustomAutoPortal"].value + autoTrimpSettings["AutoFinishDailyZone"].value))) ? 1:0;
+            autoTrimpSettings["AutoMaps"].value = 0;
             if (!game.global.switchToMaps && game.options.menu.alwaysAbandon.enabled === 0) {
                 mapsClicked();
             }
