@@ -278,7 +278,7 @@ function mainCleanup() {
 //Copy and paste this function named userscripts() into the JS Dev console. (F12)
 var userscriptOn = true;    //controls the looping of userscripts and can be self-disabled
 var perked = true;
-var resetGenes = false;
+var reset = false;
 //left blank intentionally. the user will provide this. blank global vars are included as an example
 function userscripts()
 {
@@ -291,20 +291,26 @@ function userscripts()
     if (game.global.world <= 10 && game.global.dailyChallenge.hasOwnProperty("mirrored")){
         autoTrimpSettings["BuyWeapons"].enabled = false;
     }
-    else if (game.global.world===230) {
+    else if (reset === false && !checkIfLiquidZone()){
         perked = false;
-        resetGenes = false;
         autoTrimpSettings["BuyWeapons"].enabled = true;
-        autoTrimpSettings["AutoMaps"].value = 1;
+        reset = true;
     }
+    else if (checkIfLiquidZone())
+    {
+        autoTrimpSettings["AutoMaps"].value = 1;
+        reset = false;
+    }
+
     //AutoAllocate Looting II
-    if (!perked && game.global.world !== 230){
+    if (!perked && checkIfLiquidZone() === false){
         viewPortalUpgrades();
         game.global.lastCustomAmt = 100000;
         numTab(5, true);
         if (getPortalUpgradePrice("Looting_II")+game.resources.helium.totalSpentTemp <= game.resources.helium.respecMax){
             buyPortalUpgrade('Looting_II');
             activateClicked();
+            cancelPortal();
             message("Bought 100k Looting II","Notices");
         }
         else{
@@ -313,6 +319,7 @@ function userscripts()
             message("Done buying Looting II","Notices");
         }
     }
+
 }
 
 
