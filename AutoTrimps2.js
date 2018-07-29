@@ -292,7 +292,6 @@ function userscripts()
         autoTrimpSettings["BuyWeapons"].enabled = false;
     }
     else if (reset === false && !checkIfLiquidZone()){
-        perked = false;
         autoTrimpSettings["BuyWeapons"].enabled = true;
         reset = true;
     }
@@ -300,6 +299,7 @@ function userscripts()
     {
         autoTrimpSettings["AutoMaps"].value = 1;
         reset = false;
+        perked = false;
     }
 
     //AutoAllocate Looting II
