@@ -278,7 +278,7 @@ function mainCleanup() {
 //Copy and paste this function named userscripts() into the JS Dev console. (F12)
 var userscriptOn = true;    //controls the looping of userscripts and can be self-disabled
 var perked = true;
-var resetGenes = false;
+var reset = false;
 //left blank intentionally. the user will provide this. blank global vars are included as an example
 function userscripts()
 {
