@@ -535,6 +535,10 @@ function newStopCarryHeirloom(){
 }
 
 function equipMainShield(){
+    if (game.global.runningChallengeSquared) {
+        highDamageHeirloom = false;
+        return false;
+    }
     if(!getPageSetting('HeirloomSwapping') || !getPageSetting('AutoHeirlooms')) {
         highDamageHeirloom = true;
         return false;

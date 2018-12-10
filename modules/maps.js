@@ -1377,7 +1377,7 @@ function windZone(value){
 
 function poisonZone(zoneNum){
     var zone = typeof zoneNum === 'undefined' ? game.global.world : zoneNum;
-    return game.challengeActive == "Eradicated" ? zone % 15 <= 4 : ((zone-236) % 15 <= 4);
+    return game.global.challengeActive == "Eradicated" ? zone % 15 <= 4 : ((zone-236) % 15 <= 4);
 }
 
 function cycleZone(zoneNum){ //poizon - wind - ice

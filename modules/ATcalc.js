@@ -13,7 +13,7 @@ function calcArmyDamage(printout, currentGame, zone, dailyObj, armySizeUncapped,
     if(typeof zone === 'undefined') zone = game.global.world;
     var dmg = 6;
     if (printout) debug("base damage:" + dmg);
-    
+
     //equipment
     if(currentGame){
         var equipmentList = ["Dagger", "Mace", "Polearm", "Battleaxe", "Greatsword", "Arbalest"];
@@ -26,17 +26,17 @@ function calcArmyDamage(printout, currentGame, zone, dailyObj, armySizeUncapped,
     }
     else dmg += gearDamage;
     if (printout) debug("damage after gear: " + dmg.toExponential(2));
-    
+
     //soldiers
     var soldiers = currentGame ? game.resources.trimps.maxSoldiers : armySizeUncapped;
     dmg *= soldiers;
     if (printout) debug("max soldiers " + soldiers.toExponential(2) + " dmg " + dmg.toExponential(2));
-    
+
     //achievements
     var achievements = 1 + (game.global.achievementBonus / 100);
     dmg *= achievements;
     if (printout) debug("achievements " + achievements + " dmg " + dmg.toExponential(2));
-    
+
     //power 1 and 2
     var power1level = currentGame ? game.portal.Power.level    : AutoPerks.perksByName.Power.level;
     var power2level = currentGame ? game.portal.Power_II.level : AutoPerks.perksByName.Power_II.level;
@@ -50,7 +50,7 @@ function calcArmyDamage(printout, currentGame, zone, dailyObj, armySizeUncapped,
         dmg *= 1 + power2;
         if (printout) debug("power2 " + power2 + " dmg" + dmg.toExponential(2));
     }
-    
+
     var antiStacks = currentGame ? game.global.antiStacks : AutoPerks.AntiStacks;
     if (antiStacks > 0) {
         var anticipationLevel = currentGame ? game.portal.Anticipation.level : AutoPerks.perksByName.Anticipation.level;
@@ -78,11 +78,11 @@ function calcArmyDamage(printout, currentGame, zone, dailyObj, armySizeUncapped,
         dmg *= robo;
         if (printout) debug("robo " + robo.toFixed(2) + " dmg " + dmg.toExponential(2));
     }
-    
+
     var shield = highATK;
     dmg *= shield;
     if (printout) debug("shield " + shield.toFixed(2) + " dmg " + dmg.toExponential(2));
-    
+
     var battle = currentGame ? game.goldenUpgrades.Battle.currentBonus + 1: battleGUBonus;
     if (battle > 1){
         dmg *= battle;
@@ -131,21 +131,21 @@ function calcArmyDamage(printout, currentGame, zone, dailyObj, armySizeUncapped,
         dmg *= str;
         if (printout) debug("void siphon " + vm.toFixed(2) + " dmg " + dmg.toExponential(2));
     }
-    
+
     //Sugar Rush
     if(game.global.sugarRush > 0 || (!currentGame && sugarEventAT)){ //remaining time on sugar rush
         var sugar = 2 + Math.floor((zone - 200) / 100);
-         dmg *= Math.max(1,sugar);
-         if(printout) debug("sugar rush x" + sugar + " dmg " + dmg.toExponential(2));
+        dmg *= Math.max(1,sugar);
+        if(printout) debug("sugar rush x" + sugar + " dmg " + dmg.toExponential(2));
     }
-    
+
     if (currentGame && game.global.mapsActive && game.talents.bionic2.purchased && currMap.level > zone){
         dmg *= 1.5;
         if (printout) debug("Bionic Magnet II + 50% dmg " + dmg.toExponential(2));
     }
-    
+
     if (mutations.Magma.active()){
-        var magMult = game.challengeActive == "Eradicated" ? Math.pow(0.8, zone + 1) : Math.pow(0.8, zone-230+1);
+        var magMult = game.global.challengeActive == "Eradicated" ? Math.pow(0.8, zone + 1) : Math.pow(0.8, zone-230+1);
         dmg *= magMult;
         if (printout) debug("magma " + magMult.toExponential(2) + " dmg " + dmg.toExponential(2));
     }
@@ -175,27 +175,27 @@ function calcArmyDamage(printout, currentGame, zone, dailyObj, armySizeUncapped,
         dmg *= sharp;
         if (printout) debug("sharp " + sharp + " dmg " + dmg.toExponential(2));
     }
-    
+
     var min = 1;
     var max = 1.2;
-       
+
     //if we are currently in a damily with crit chance up/down, and are in portal screen, dont include those in the calculation
     var currCritUp   = typeof game.global.dailyChallenge.trimpCritChanceUp   != 'undefined' ? dailyModifiers.trimpCritChanceUp.getMult(game.global.dailyChallenge.trimpCritChanceUp.strength) : 0;
     var currCritDown = typeof game.global.dailyChallenge.trimpCritChanceDown != 'undefined' ? dailyModifiers.trimpCritChanceDown.getMult(game.global.dailyChallenge.trimpCritChanceDown.strength) : 0;
     var currDailyToNewPortalMod = (currentGame ? 0 : - currCritUp + currCritDown);
-    
+
     var lowCritChanceTmp  = lowCritChance  + currDailyToNewPortalMod;
     var highCritChanceTmp = highCritChance + currDailyToNewPortalMod;
-    
+
     if (challengeName == "Daily"){
         var theDailyObj = currentGame ? game.global.dailyChallenge : dailyObj;
         if (typeof theDailyObj.weakness !== 'undefined'){
             var weak = 1;
-            if(currentGame) 
+            if(currentGame)
                 weak = dailyModifiers.weakness.getMult(theDailyObj.weakness.strength, theDailyObj.weakness.stacks);
             else
                 weak = 1 - theDailyObj.weakness.stacks * 0.09; //9 stacks, capped
-            
+
             dmg *= weak;
             if (printout) debug("daily weak " + weak.toFixed(2) + " dmg " + dmg.toExponential(2));
         }
@@ -219,52 +219,52 @@ function calcArmyDamage(printout, currentGame, zone, dailyObj, armySizeUncapped,
             min = 1 - dailyModifiers.minDamage.getMult(theDailyObj.minDamage.strength);
             if (printout) debug("daily min " + min.toFixed(2));
         }
-        if (typeof theDailyObj.maxDamage !== 'undefined'){   
+        if (typeof theDailyObj.maxDamage !== 'undefined'){
             max = 1.2 + dailyModifiers.maxDamage.getMult(theDailyObj.maxDamage.strength);
             if (printout) debug("daily max " + max.toFixed(2));
         }
-        if (typeof theDailyObj.trimpCritChanceUp !== 'undefined'){   
+        if (typeof theDailyObj.trimpCritChanceUp !== 'undefined'){
             var delta = dailyModifiers.trimpCritChanceUp.getMult(theDailyObj.trimpCritChanceUp.strength);
             lowCritChanceTmp  += delta;
             highCritChanceTmp += delta;
             if (printout) debug("daily +"+delta+" crit");
         }
-        if (typeof theDailyObj.trimpCritChanceDown !== 'undefined'){   
+        if (typeof theDailyObj.trimpCritChanceDown !== 'undefined'){
             var delta = dailyModifiers.trimpCritChanceDown.getMult(theDailyObj.trimpCritChanceDown.strength);
             lowCritChanceTmp  -= delta;
             highCritChanceTmp -= delta;
             if (printout) debug("daily -"+delta+" crit");
-        } 
+        }
     }
-    
+
     var baseModifier = currentGame ? formationToBModifier() : 1; //current game only, we want all damage expressed in B stance
     dmg *= baseModifier;
     if(currentGame && printout) debug("x"+baseModifier+ " multiplier to B stance. new damage: " + dmg.toExponential(2));
-    
+
     var dmgLow = dmg / highATK * lowATK;
-    
+
     //calculate unlucky non crit and lucky crit only versions of the damages for each of the shields
     var lowNoCritTmp    = dmgLow * ATgetPlayerCritDamageMult(Math.floor(lowCritChanceTmp),  lowCritDamage);
     var lowCritOnlyTmp  = dmgLow * ATgetPlayerCritDamageMult( Math.ceil(lowCritChanceTmp),  lowCritDamage);
     var highNoCritTmp   = dmg    * ATgetPlayerCritDamageMult(Math.floor(highCritChanceTmp), highCritDamage);
     var highCritOnlyTmp = dmg    * ATgetPlayerCritDamageMult( Math.ceil(highCritChanceTmp), highCritDamage);
-    
+
     lowNoCritTmp  *= min;
     highNoCritTmp *= min;
-    
+
     var avgRange = (max + min) / 2;
-    
+
     //calculate average damage
     var critMultLow  = calcCritModifier(lowCritChanceTmp, lowCritDamage);
     var critMultHigh = calcCritModifier(highCritChanceTmp, highCritDamage);
     dmgLow *= critMultLow;
     dmg    *= critMultHigh;
     if (printout) debug ("critchance " + highCritChanceTmp + " critMult " + highCritDamage + " final " + critMultHigh.toFixed(2) + " dmg " + dmg.toExponential(2));
-    
+
     dmgLow *= avgRange;
     dmg    *= avgRange;
     if (printout) debug("avgRange " + avgRange.toFixed(2) + " dmg " + dmg.toExponential(2));
-    
+
     if(currentGame){ //save values for use
         baseDamageLowNoCrit     = lowNoCritTmp;
         baseDamageLowCritOnly   = lowCritOnlyTmp;
@@ -276,7 +276,7 @@ function calcArmyDamage(printout, currentGame, zone, dailyObj, armySizeUncapped,
         goodBadShieldRatio = baseDamageHigh / baseDamageLow;
     }
     if(isNaN(dmg)) throw "calcArmyDamage error: dmg is NaN";
-    
+
     return dmg;
 }
 
@@ -290,7 +290,7 @@ function corruptHealthyStatScaleAT(base, zone){
 function calcCurrSendHealth(currentGame, getNurseCount, printout, zone, dailyObj, armySizeUncapped, battleGUBonus, amalgamators, gearHealth, breedMult){
     var base = 50;
     if(printout) debug("base health: " + base);
-        
+
     if(currentGame){
         var equipmentList = ["Shield", "Boots", "Helmet", "Pants", "Shoulderguards", "Breastplate", "Gambeson"];
         for(var i = 0; i < equipmentList.length; i++){
@@ -302,75 +302,75 @@ function calcCurrSendHealth(currentGame, getNurseCount, printout, zone, dailyObj
     }
     else base += gearHealth;// / AutoPerks.gearLevels * 25;
     if(printout) debug("after gear: " + base.toExponential(2));
-    
+
     var soldiers = currentGame ? game.resources.trimps.maxSoldiers : armySizeUncapped;
     base *= soldiers;
     if(printout) debug("soldiers: " + soldiers.toExponential(2) + " after: " + base.toExponential(2));
-    
+
     var battle = currentGame ? game.goldenUpgrades.Battle.currentBonus + 1: battleGUBonus;
     if (battle > 1) {
         base *= battle;
         if(printout) debug("battle: " + battle.toExponential(2) + " after: " + base.toExponential(2));
     }
-    
+
     var resilPerk      = currentGame ? game.portal["Resilience"]   : AutoPerks.perksByName.Resilience;
     var toughness1Perk = currentGame ? game.portal["Toughness"]    : AutoPerks.perksByName.Toughness;
     var toughness2Perk = currentGame ? game.portal["Toughness_II"] : AutoPerks.perksByName.Toughness_II;
-    
+
     base *= (1 + 0.05*toughness1Perk.level) * (1 + 0.01*toughness2Perk.level)*Math.pow(1.1, resilPerk.level);
     if(printout) debug("after toughness1/2/resil: " + base.toExponential(2));
-    
+
     var formation = 0.5;
     base *= formation;
     if(printout) debug("formation: " + formation + " after: " + base.toExponential(2));
-    
+
     if(mutations.Magma.active()){
-        var magMult = game.challengeActive == "Eradicated" ? Math.pow(0.8, zone + 1) : Math.pow(0.8, zone-229);
+        var magMult = game.global.challengeActive == "Eradicated" ? Math.pow(0.8, zone + 1) : Math.pow(0.8, zone-229);
         base *= magMult;
         if(printout) debug("magMult: " + magMult.toExponential(2) + " after: " + base.toExponential(2));
     }
-    
+
     if (game.global.totalSquaredReward > 0){
         var sqr = 1 + game.global.totalSquaredReward / 100;
         base *= sqr;
         if(printout) debug("sqr: " + sqr.toExponential(2) + " after: " + base.toExponential(2));
     }
-    
+
     var amalCount = currentGame ? game.jobs.Amalgamator.owned : amalgamators;
     if (amalCount > 0){
         var amal = Math.pow(40, amalCount);
         base *= amal;
         if(printout) debug("amal: " + amal.toExponential(2) + " after: " + base.toExponential(2));
     }
-    
+
     //current run health affects from dailies are here. some health effects for future dailies are built in to the variables passed over to us by Auto Allocate.
     var challengeName = currentGame ? game.global.challengeActive : AutoPerks.ChallengeName;
     if (challengeName == "Daily"){
         var theDailyObj = currentGame ? game.global.dailyChallenge : dailyObj;
-        
+
         if(typeof theDailyObj.pressure !== 'undefined'){
             var stacks = currentGame ? theDailyObj.pressure.stacks : 600/dailyModifiers.pressure.timePerStack(theDailyObj.pressure.strength);
             var pressure = dailyModifiers.pressure.getMult(theDailyObj.pressure.strength, stacks);
             base *= pressure;
-        }  
+        }
     }
-    
+
     //geneticists bonus
     if(getNurseCount){ //we want to calculate how many nurseries are needed to match damage of cell 99
         //calcCurrSendHealth(true, true, false, game.global.world)
-        
+
         if(worldArray.length < 100) return 0;
         var armySize = game.portal.Coordinated.currentSend * Math.pow(1000, game.jobs.Amalgamator.owned);
         var breed =   0.0085        //how many trimps are bred each second before geneticists.
-                * trimpsRealMax/2
-                * Math.pow(1.1, game.upgrades.Potency.done)//Math.pow(1.1, Math.floor(zone / 5))
-                * Math.pow(1.003, game.unlocks.impCount.Venimp)
-                * 0.1           //broken planet
-                * (1 + 0.1*game.portal["Pheromones"].level);
-                
-                //* Math.pow(1.01, nurseries)
-                //* AutoPerks.DailyBreedingMult; //toxic daily modifier
-        
+            * trimpsRealMax/2
+            * Math.pow(1.1, game.upgrades.Potency.done)//Math.pow(1.1, Math.floor(zone / 5))
+            * Math.pow(1.003, game.unlocks.impCount.Venimp)
+            * 0.1           //broken planet
+            * (1 + 0.1*game.portal["Pheromones"].level);
+
+        //* Math.pow(1.01, nurseries)
+        //* AutoPerks.DailyBreedingMult; //toxic daily modifier
+
         var desiredBreedRate = (armySize / 45) / breed; //breed per sec
         var geneticists = Math.floor(Math.log(desiredBreedRate) / Math.log(0.98)); //geneticists amount
         //debug(geneticists);
@@ -405,7 +405,7 @@ function currEnemyHealth(){
     if(game.global.mapsActive) mapMult = currMap.difficulty;
     var cellNum = (game.global.mapsActive) ? game.global.lastClearedMapCell + 1 : game.global.lastClearedCell + 1;
     var cell = (game.global.mapsActive) ? game.global.mapGridArray[cellNum] : game.global.gridArray[cellNum];
-    
+
     var ret = game.global.mapsActive ? currMap.difficulty * calcEnemyHealth(cell.mutation, cell.corrupted, cell.name, cellNum, currMap.level, true) : calcEnemyHealth(cell.mutation, cell.corrupted, cell.name, cellNum, game.global.world, true);
     return ret.toExponential(2);
 }
@@ -414,20 +414,20 @@ function calcEnemyAttack(mutation, corrupted, name, level, zone, currentGame, da
     var isSpire = false;
     if(currentGame && game.global.spireActive) isSpire = true;
     else if (zone !== game.global.world && zone >= 200 && zone % 100 === 0) isSpire = true;
-    
+
     var atkScale = 1;
     if(mutation == "Healthy") atkScale = corruptHealthyStatScaleAT(5, zone);
     else if(mutation == "Corruption" || level == 99) atkScale = corruptHealthyStatScaleAT(3, zone);
-    
+
     var ignoreImpStats = isSpire || mutation == "Corruption" || mutation == "Healthy";
     var attack = isSpire ? getSpireStatsAT(zone, level+1, name, "attack")*1.2 : getEnemyAttackAT(zone, level+1, name, ignoreImpStats) * atkScale * 1.2; //1.2 for max damage (hopefully)
-    
-    if (corrupted == "corruptStrong") attack *= 2; 
+
+    if (corrupted == "corruptStrong") attack *= 2;
     if (corrupted == "healthyStrong") attack *= 2.5;
-    
+
     if (currentGame && getEmpowerment() == "Ice") //chilled
         attack *= game.empowerments.Ice.getCombatModifier();
-    
+
     var challenge = currentGame ? game.global.challengeActive : AutoPerks.ChallengeName;
     if (challenge != ""){
         if (challenge == "Obliterated")         attack *= currentGame ? oblitMultAT : AutoPerks.OblitMod;
@@ -440,28 +440,28 @@ function calcEnemyAttack(mutation, corrupted, name, level, zone, currentGame, da
         else if (challenge == 'Lead')           attack *= 2.5;
         else if (challenge == "Watch")          attack *= 1.25;
         else if (challenge == "Scientist" && getScientistLevel() == 5) attack *= 10;
-        
+
         else if (challenge == "Daily"){
             var theDailyObj = currentGame ? game.global.dailyChallenge : dailyObj;
             if (typeof theDailyObj.badStrength !== 'undefined')
                 attack *= dailyModifiers.badStrength.getMult(theDailyObj.badStrength.strength);
-            
+
             if (typeof theDailyObj.crits !== 'undefined'){
                 var critMult = dailyModifiers.crits.getMult(theDailyObj.crits.strength);
                 attack *= 1 + 0.25 * critMult;
             }
-                            
+
             if (typeof theDailyObj.badMapStrength !== 'undefined' && game.global.mapsActive)
-              attack *= dailyModifiers.badMapStrength.getMult(theDailyObj.badMapStrength.strength);
-            
+                attack *= dailyModifiers.badMapStrength.getMult(theDailyObj.badMapStrength.strength);
+
             if(currentGame){
                 if (typeof theDailyObj.empower !== 'undefined' && !game.global.mapsActive)
                     attack *= dailyModifiers.empower.getMult(theDailyObj.empower.strength, theDailyObj.empower.stacks);
-                
+
                 if (typeof theDailyObj.bloodthirst !== 'undefined')
                     attack *= dailyModifiers.bloodthirst.getMult(theDailyObj.bloodthirst.strength, theDailyObj.bloodthirst.stacks);
             }
-            
+
             if (typeof theDailyObj.mirrored !== 'undefined'){
                 var ourDamage = currentGame ? calcArmyDamage(false, true, game.global.world) : calcArmyDamage(false, false, zone, AutoPerks.dailyObj, AutoPerks.fullSoldiers, AutoPerks.battleGUMult, AutoPerks.currAmalgamators, AutoPerks.equipmentAttack, AutoPerks.sharpBonusMult);
                 attack += ourDamage * dailyModifiers.mirrored.getMult(theDailyObj.mirrored.strength) * (1 + dailyModifiers.mirrored.getReflectChance(theDailyObj.mirrored.strength));
@@ -476,29 +476,29 @@ function calcEnemyHealth(mutation, corrupted, name, level, zone, currentGame, da
     var isSpire = false;
     if(currentGame && game.global.spireActive) isSpire = true;
     else if (zone !== game.global.world && zone >= 200 && zone % 100 === 0) isSpire = true;
-    
+
     var healthScale = 1;
     if(mutation == "Healthy") healthScale = corruptHealthyStatScaleAT(14, zone);
     else if(mutation == "Corruption" || level == 99) healthScale = corruptHealthyStatScaleAT(10, zone);
 
     var ignoreImpStats = isSpire || mutation == "Corruption" || mutation == "Healthy";
     var amt = isSpire ? getSpireStatsAT(zone, level+1, name, "health") : getEnemyHealthAT(zone, level+1, name, ignoreImpStats) * healthScale;
-    
+
     if (corrupted == "corruptTough")         amt *= 5;
     else if (corrupted == "healthyTough")    amt *= 7.5;
-    
+
     var challenge = currentGame ? game.global.challengeActive : AutoPerks.ChallengeName;
     if (challenge !== ""){
         if (challenge == "Obliterated")         amt *= currentGame ? oblitMultAT : AutoPerks.OblitMod;
         else if (challenge == "Eradicated")    amt *= currentGame ? eradMultAT : 1;
         else if (challenge == "Coordinate")     amt *= currentGame ? coordMultAT : AutoPerks.CoordMod;
         else if (challenge == "Toxicity")       amt *= 2;
-        
+
         if(challenge == "Daily"){
             var theDailyObj   = currentGame ? game.global.dailyChallenge : dailyObj;
             if(typeof theDailyObj.badHealth !== 'undefined')
                 amt *= dailyModifiers.badHealth.getMult(theDailyObj.badHealth.strength);
-            
+
             if (typeof theDailyObj.badMapHealth !== 'undefined' && game.global.mapsActive)
                 amt *= dailyModifiers.badMapHealth.getMult(theDailyObj.badMapHealth.strength);
 
@@ -508,7 +508,7 @@ function calcEnemyHealth(mutation, corrupted, name, level, zone, currentGame, da
             }
         }
     }
-    
+
     return Math.floor(amt);
 }
 
@@ -547,7 +547,7 @@ function getEnemyHealthAT(zone, level, name, ignoreImpStat){
     if (world < 60) amt *= 0.75;
     if (!ignoreImpStat)
         amt *= game.badGuys[name].health;
-    
+
     return amt;
 }
 
@@ -593,7 +593,7 @@ function dmgNeededToOK(cellNum){
         if (tmp > requiredDmgToOKNext)
             requiredDmgToOKNext = tmp;
     }
-    
+
     return Math.max(requiredDmgToOK, requiredDmgToOKNext);
 }
 
@@ -609,13 +609,13 @@ function dmgNeededToOKHelper(cellNum, HP){
         if(game.global.mapsActive)
             requiredDmgToOK += game.global.mapGridArray[0].maxHealth; //TODO actually build maparray?
         else
-        requiredDmgToOK += worldArray[cellNum + i].maxHealth;
+            requiredDmgToOK += worldArray[cellNum + i].maxHealth;
         requiredDmgToOK = requiredDmgToOK / overkillPercent;
     }
     requiredDmgToOK += HP;
     if(poisonZone())
         requiredDmgToOK -= Math.min(game.empowerments.Poison.currentDebuffPower, HP);
-    
+
     return requiredDmgToOK;
 }
 
@@ -625,7 +625,7 @@ function aboutToDie(){
         return false;
     }
     var cellNum = game.global.lastClearedCell + 1;
-    
+
     var enemyAttack = game.global.gridArray[cellNum].attack * dailyModifiers.empower.getMult(game.global.dailyChallenge.empower.strength, game.global.dailyChallenge.empower.stacks);
     var ourHP = game.global.soldierHealth;
 
@@ -635,7 +635,7 @@ function aboutToDie(){
     var baseBlock = game.global.soldierCurrentBlock;
     if (game.global.formation == 3) baseBlock /= 4; //B stance
     else if (game.global.formation != "0") baseBlock *= 2;
-    
+
     if(baseBlock > game.global.gridArray[cellNum].attack)
         enemyAttack *= getPierceAmt();
     else
@@ -643,13 +643,13 @@ function aboutToDie(){
 
     if(game.global.challengeActive == "Daily" && typeof game.global.dailyChallenge.crits !== 'undefined')
         enemyAttack *= dailyModifiers.crits.getMult(game.global.dailyChallenge.crits.strength);
-    
+
     if (typeof game.global.dailyChallenge.bogged != 'undefined') //fixed %dmg taken every attack
         ourHP -= game.global.soldierHealthMax * dailyModifiers.bogged.getMult(game.global.dailyChallenge.bogged.strength);
-    
+
     if (typeof game.global.dailyChallenge.plague != 'undefined')
         ourHP -= game.global.soldierHealthMax * dailyModifiers.plague.getMult(game.global.dailyChallenge.plague.strength, game.global.dailyChallenge.plague.stacks);
-                 
+
     if(game.global.challengeActive == "Electricity") //%dmg taken per stack, 1 stack every attack
         ourHP -= game.global.soldierHealth -= game.global.soldierHealthMax * (game.challenges.Electricity.stacks * 0.1);
 
@@ -661,7 +661,7 @@ function aboutToDie(){
         ourHP *= 0.8;
     else if (game.global.gridArray[cellNum].corrupted == "healthyBleed")
         ourHP *= 0.7;
-    
+
     ourHP -= enemyAttack;
 
     if (ourHP <= 1000)
@@ -690,20 +690,20 @@ function isScryhardActive(){
 function timeEstimator(currentGame, fromCell, zone, dailyObj, toText){
     var totalHP = 0;
     var time = 0;
-    
+
     var stanceMult = zone > 70 ? 8 : 4; //D stance unlocked
     var dmgToUse = currentGame ? baseDamageHigh*stanceMult : calcArmyDamage(false, false, zone, AutoPerks.dailyObj, AutoPerks.fullSoldiers, AutoPerks.battleGUMult, AutoPerks.currAmalgamators, AutoPerks.equipmentAttack, AutoPerks.sharpBonusMult);
-    
+
     if(currentGame && game.global.antiStacks !== handleGA(true)) //if dont have max anti stacks, force them to
         dmgToUse = dmgToUse * (1 + 0.2*handleGA(true)) / (1 + 0.2*game.global.antiStacks);
-    
+
     dmgToUse *= 4; //~4 attacks a second
-    
+
     var isPoison = poisonZone(zone); //TODO: implement poison
 
     if(currentGame) totalHP = sumCurrZoneHP(fromCell);
     else            totalHP = approxZoneHP(zone);
-    
+
     if (typeof dailyObj.slippery !== 'undefined') //dodge daily
         totalHP = totalHP / (1+dailyModifiers.slippery.getMult(dailyObj.slippery.strength));
 
@@ -718,7 +718,7 @@ function timeEstimator(currentGame, fromCell, zone, dailyObj, toText){
         time = totalHP / dmgToUse;
         damageDone = totalHP;
     }
-    
+
     if((time + (totalHP - damageDone) / dmgToUse) > 300){ //magmanmancer bonus kicks in
         damageDone -= 300 * dmgToUse;
         var magmamancerStacks = 0;
@@ -742,11 +742,11 @@ function timeEstimator(currentGame, fromCell, zone, dailyObj, toText){
             time += (totalHP - damageDone) / (dmgToUse * magmaDmgMult);
         }
     }
-    
+
     var OC = 1 + Fluffy.isRewardActive("overkiller") + (game.talents.overkill.purchased ? 1 : 0);
     var minTime = Math.ceil(100 / 4 / OC);
     var ret = Math.max(minTime, time);
-    
+
     if(toText){
         if(!isFinite(dmgToUse) || !isFinite(totalHP)) return "Infinity";
         var timeText = "";
@@ -791,16 +791,16 @@ function sumCurrZoneHP(fromCell){
 function approxZoneHP(zoneNum){
     var zone = typeof zoneNum === 'undefined' ? game.global.world : zoneNum;
     var healthyCells = zone > 300 ? 2 + Math.floor((zone - 300)/15): 0;
-    
-    var corruptionStart = game.challengeActive == "Eradicated" ? 1 :AutoPerks.ChallengeName == "Corrupted" ? 60 : (game.talents.headstart.purchased && !game.global.runningChallengeSquared) ? ((game.talents.headstart2.purchased) ? ((game.talents.headstart3.purchased) ? 151 : 166) : 176) : 181;
+
+    var corruptionStart = game.global.challengeActive == "Eradicated" ? 1 :AutoPerks.ChallengeName == "Corrupted" ? 60 : (game.talents.headstart.purchased && !game.global.runningChallengeSquared) ? ((game.talents.headstart2.purchased) ? ((game.talents.headstart3.purchased) ? 151 : 166) : 176) : 181;
     var corruptedCells = zone < corruptionStart ? 0 : Math.max(0, Math.min(80, Math.floor((zone - corruptionStart) / 3) + 2) - healthyCells);
-    
+
     var nonColoredCells = 99 - corruptedCells - healthyCells;
-    
+
     var array = [];
     var corrupteds = [];
     for (var w = 0; w < 100; w++){
-            corrupteds.push("");
+        corrupteds.push("");
     }
     //if(healthyCells > 0) corrupteds   = healthyPattern(corrupteds, healthyCells);
     //if(corruptedCells > 0) corrupteds = corruptionPattern(corrupteds, corruptedCells);
@@ -808,11 +808,11 @@ function approxZoneHP(zoneNum){
     //corruptDbl,corruptCrit,corruptBleed,corruptStrong,corruptTough,corruptDodge,healthyDbl,healthyCrit,healthyBleed, healthyStrong, healthyTough, none
     var corruptMult = (3 + 5 + 1.3) / 6; //1.3 for dodge, 5 for tough
     var healthyMult = (4 + 7.5) / 5; //7.5 for tough
-    
+
     var healthyMid = Math.floor(healthyCells / 2);
     var corruptMid = healthyCells + Math.floor(corruptedCells / 2);
     var emptyMid   = healthyCells + corruptedCells + Math.floor((100 - healthyCells - corruptedCells) / 2);
-    
+
     //debug("healthy " + healthyCells + " corrupt " + corruptedCells);
     var amt = calcEnemyHealth("Healthy",    null, 'Snimp',       healthyMid, zone, false, AutoPerks.dailyObj) * healthyCells   * healthyMult
         +     calcEnemyHealth("Corruption", null, 'Snimp',       corruptMid, zone, false, AutoPerks.dailyObj) * corruptedCells * corruptMult
@@ -891,9 +891,9 @@ function expectedVMsAmount(zoneInput){
     var zone = typeof zoneInput === 'undefined' ? autoTrimpSettings.APValueBoxes.maxZone : zoneInput;
     //round down last poison zone 
     var cycle = cycleZone(zone);
-    if(cycle > 19) zone = zone - cycle + 19; 
+    if(cycle > 19) zone = zone - cycle + 19;
     else if(cycle > 4 && cycle < 15) zone = zone - cycleZone(zone) + 4;
-    
+
     var total = Math.round(zone * 0.09653);                        //calculated based on z1000 1000 iterations
     total += Fluffy.isRewardActive("voidance")     === 1 ? 4  : 0; //Each Portal, start with two double stacked Void Maps.
     total += Fluffy.isRewardActive("voidelicious") === 1 ? 16 : 0; //Start each Portal with 1 of each uniquely named Void Map (16 total).
@@ -938,10 +938,10 @@ function singleVMWorth(zoneInput, currentPortal, useHeliumGU){
     var zone = typeof zoneInput === 'undefined' ? autoTrimpSettings.APValueBoxes.maxZone : zoneInput;
     if(zone >= 240){//round down last poison zone 
         var cycle = cycleZone(zone);
-        if(cycle > 19) zone = zone - cycle + 19; 
+        if(cycle > 19) zone = zone - cycle + 19;
         else if(cycle > 4 && cycle < 15) zone = zone - cycleZone(zone) + 4;
     }
-    
+
     var AA = 1.35*(zone-19);
     var AAA = Math.pow(1.23, Math.sqrt(AA));
     var a = Math.floor(AA+AAA);
@@ -961,7 +961,7 @@ function singleVMWorth(zoneInput, currentPortal, useHeliumGU){
     var l = 1 + (fluffyBonus * 0.25);
     var heliumy = game.singleRunBonuses.heliumy.owned ? 1.25 : 1;
     var scryHard2 = game.talents.scry2.purchased ? 1.5 : 1;
-    
+
     var healthAmount = zone > 300 ? 2 + Math.floor((zone-300)/15) : 0;
     var maxCorrupted = Math.max(0,Math.min(80,Math.floor((zone - 151) / 3) + 2));
     var corrAmount   = maxCorrupted - healthAmount; //assumes full zone corruption
@@ -970,9 +970,9 @@ function singleVMWorth(zoneInput, currentPortal, useHeliumGU){
     var mutationTotal   = corruptionValue + healthValue + 1;
     var lastPortalZone  = currentPortal ? game.global.lastPortal : autoTrimpSettings.APValueBoxes.maxZone;
     var VS = 1 + game.talents.voidSpecial.purchased ? 0.0025 * lastPortalZone : 0;
-    
+
     var worth = a*b*c*d*e*f*g*h*i*j*k*l*heliumy*scryHard2*2*mutationTotal*VS; //1 VM helium
-    
+
     return worth;
 }
 
@@ -1010,7 +1010,7 @@ function calcCritModifier(critChance, critDamage){
     if(game.talents.crit.purchased) base += 1;
     if(Fluffy.isRewardActive("megaCrit")) base += 2;
     if(critChance > 3) critChance = 3; //triple crit highest in game ATM, red crit
-    
+
     if(critChance < 0 ) return 0.2*calcCritModifier(critChance+1, critDamage);
     if(critChance <= 1) return critChance * critDamage + (1-critChance);
     if(critChance <= 2) return (base*(critChance-1) + (2-critChance))*critDamage;
