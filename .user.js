@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         AutoTrimps-NT
+// @name         AutoTrimps-NT-Sliverz
 // @version      1.0-NT
-// @namespace    https://notthat.github.io/AutoTrimps
-// @updateURL    https://notthat.github.io/AutoTrimps/.user.js
+// @namespace    https://slivermasterz.io/AutoTrimps
+// @updateURL    https://slivermasterz.github.io/AutoTrimps/.user.js
 // @description  Automate all the trimps!
 // @author       zininzinin, spindrjr, Ishkaru, genBTC, Zeker0, Meowchan
 // @include      *trimps.github.io*
