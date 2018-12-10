@@ -361,8 +361,8 @@ function autoStance(){
             cmpActual += worldArray[cellNum].geoRelativeCellWorth;
 
         if(worldArray[cellNum].corrupted == "corruptDodge" && !stackSpire) {cmp *= 0.7; cmpActual *= 0.7;} //dodge cells are worth less
-        cmp       *= game.empowerments.Wind.getModifier() * dailyMult / OmniThreshold; //cmp is in OmniThreshold units
-        cmpActual *= game.empowerments.Wind.getModifier() * dailyMult / OmniThreshold;
+        cmp       *= game.empowerments.Wind.getModifier() / 10 * dailyMult / OmniThreshold; //cmp is in OmniThreshold units
+        cmpActual *= game.empowerments.Wind.getModifier() / 10 * dailyMult / OmniThreshold;
 
         calculateZoneWorth(0);
 
