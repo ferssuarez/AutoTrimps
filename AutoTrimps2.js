@@ -31,7 +31,7 @@ changelogList.push({date: "22.10.2018", version: "", description: "Reworked Auto
 changelogList.push({date: "13/06/2018", version: "", description: "War was beginning ", isNew: false});
 
 var atscript = document.getElementById('AutoTrimps-script'),
-        basepath = (local ? 'AutoTrimps/' : 'https://github.com/slivermasterz/AutoTrimps/'),
+        basepath = (local ? 'AutoTrimps/' : 'https://slivermasterz.github.io/AutoTrimps/'),
         modulepath = 'modules/';
 
 var initialized = false;
