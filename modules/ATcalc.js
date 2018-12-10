@@ -119,6 +119,12 @@ function calcArmyDamage(printout, currentGame, zone, dailyObj, armySizeUncapped,
         dmg *= str;
         if (printout) debug("strength in health " + str.toFixed(2) + " dmg " + dmg.toExponential(2));
     }
+    if (playerSpireTraps.Strength.owned){
+        var strBonus = playerSpireTraps.Strength.getWorldBonus();
+        var str = (1 + (strBonus / 100));
+        dmg *= str;
+        if (printout) debug("strength towers " + str.toFixed(2) + " dmg " + dmg.toExponential(2));
+    }
     
     //Sugar Rush
     if(game.global.sugarRush > 0 || (!currentGame && sugarEventAT)){ //remaining time on sugar rush
