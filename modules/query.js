@@ -60,48 +60,33 @@ function checkJobPercentageCost(what, toBuy) {
     return [true,percent];
 }
 
-function getScienceCostToUpgrade(upgrade) {
+function getScienceCostToUpgrade(upgrade){
     var upgradeObj = game.upgrades[upgrade];
-    if (upgradeObj.cost.resources.science !== undefined ? upgradeObj.cost.resources.science[0] !== undefined : false) {
-        return Math.floor(upgradeObj.cost.resources.science[0] * Math.pow(upgradeObj.cost.resources.science[1], (upgradeObj.done)));
-    } else if (upgradeObj.cost.resources.science !== undefined && upgradeObj.cost.resources.science[0] == undefined){
-        return upgradeObj.cost.resources.science;
-    } else {
-        return 0;
-    }
-}
 
+    if (upgradeObj.cost.resources.science !== undefined ? upgradeObj.cost.resources.science[0] !== undefined : false)
+        scienceNeeded += Math.floor(upgradeObj.cost.resources.science[0] * Math.pow(upgradeObj.cost.resources.science[1], (upgradeObj.done)));
+    else if (upgradeObj.cost.resources.science !== undefined && upgradeObj.cost.resources.science[0] == undefined)
+        scienceNeeded += upgradeObj.cost.resources.science;
+    
+    //these upgrades potentially are unbought for various reasons, so dont count their metal/wood/food for the sake of saving resources
+    if(upgrade == "Coordination" || upgrade == "Supershield" || upgrade == "Dagadder" || upgrade == "Bootboost" || upgrade == "Megamace" || 
+       upgrade == "Hellishment" || upgrade == "Polierarm" || upgrade == "Pantastic" || upgrade == "Axeidic" || upgrade == "Smoldershoulder" ||
+       upgrade == "Greatersword" || upgrade == "Bestplate" || upgrade == "Harmbalest" || upgrade == "GambesOP") return;
 
-function getEnemyMaxAttack(world, level, name, diff, corrupt) {
-    var amt = 0;
-    var adjWorld = ((world - 1) * 100) + level;
-    amt += 50 * Math.sqrt(world) * Math.pow(3.27, world / 2);
-    amt -= 10;
-    if (world == 1){
-        amt *= 0.35;
-        amt = (amt * 0.20) + ((amt * 0.75) * (level / 100));
-    }
-    else if (world == 2){
-        amt *= 0.5;
-        amt = (amt * 0.32) + ((amt * 0.68) * (level / 100));
-    }
-    else if (world < 60)
-        amt = (amt * 0.375) + ((amt * 0.7) * (level / 100));
-    else{
-        amt = (amt * 0.4) + ((amt * 0.9) * (level / 100));
-        amt *= Math.pow(1.15, world - 59);
-    }
-    if (world < 60) amt *= 0.85;
-    //if (world > 6 && game.global.mapsActive) amt *= 1.1;
-    if (diff) {
-        amt *= diff;
-    }
-    if (!corrupt)
-        amt *= game.badGuys[name].attack;
-    else {
-        amt *= getCorruptScale("attack");
-    }
-    return Math.floor(amt);
+    if (upgradeObj.cost.resources.food !== undefined ? upgradeObj.cost.resources.food[0] !== undefined : false)
+        foodNeeded += Math.floor(upgradeObj.cost.resources.food[0] * Math.pow(upgradeObj.cost.resources.food[1], (upgradeObj.done)));
+    else if (upgradeObj.cost.resources.food !== undefined && upgradeObj.cost.resources.food[0] == undefined)
+        foodNeeded += upgradeObj.cost.resources.food;
+    
+    if (upgradeObj.cost.resources.wood !== undefined ? upgradeObj.cost.resources.wood[0] !== undefined : false)
+        woodNeeded += Math.floor(upgradeObj.cost.resources.wood[0] * Math.pow(upgradeObj.cost.resources.wood[1], (upgradeObj.done)));
+    else if (upgradeObj.cost.resources.wood !== undefined && upgradeObj.cost.resources.wood[0] == undefined)
+        woodNeeded += upgradeObj.cost.resources.wood;
+    
+    if (upgradeObj.cost.resources.metal !== undefined ? upgradeObj.cost.resources.metal[0] !== undefined : false)
+        metalNeeded += Math.floor(upgradeObj.cost.resources.metal[0] * Math.pow(upgradeObj.cost.resources.metal[1], (upgradeObj.done)));
+    else if (upgradeObj.cost.resources.metal !== undefined && upgradeObj.cost.resources.metal[0] == undefined)
+        metalNeeded += upgradeObj.cost.resources.metal;
 }
 
 function getEnemyMaxHealth(world, level, corrupt) {
@@ -126,27 +111,10 @@ function getEnemyMaxHealth(world, level, corrupt) {
         amt *= game.badGuys["Grimp"].health;
     else
         amt *= getCorruptScale("health");
+    if (game.global.challengeActive == "Coordinate"){
+	   amt *= getBadCoordLevel();
+	}
     return Math.floor(amt);
-}
-
-function getCurrentEnemy(current) {
-    if (!current)
-        current = 1;
-    var enemy;
-    if (!game.global.mapsActive && !game.global.preMapsActive) {
-        if (typeof game.global.gridArray[game.global.lastClearedCell + current] === 'undefined') {
-            enemy = game.global.gridArray[game.global.gridArray.length - 1];
-        } else {
-            enemy = game.global.gridArray[game.global.lastClearedCell + current];
-        }
-    } else if (game.global.mapsActive && !game.global.preMapsActive) {
-        if (typeof game.global.mapGridArray[game.global.lastClearedMapCell + current] === 'undefined') {
-            enemy = game.global.mapGridArray[game.global.gridArray.length - 1];
-        } else {
-            enemy = game.global.mapGridArray[game.global.lastClearedMapCell + current];
-        }
-    }
-    return enemy;
 }
 
 function getCorruptedCellsNum() {
@@ -207,18 +175,17 @@ function getPotencyMod(howManyMoreGenes) {
 
 function getBreedTime(remaining,howManyMoreGenes) {
     var trimps = game.resources.trimps;
-    var trimpsMax = trimps.realMax();
 
     var potencyMod = getPotencyMod(howManyMoreGenes);
     // <breeding per second> would be calced here without the following line in potencymod
     potencyMod = (1 + (potencyMod / 10));
-    var timeRemaining = log10((trimpsMax - trimps.employed) / (trimps.owned - trimps.employed)) / log10(potencyMod);
+    var timeRemaining = log10((trimpsRealMax - trimps.employed) / (trimps.owned - trimps.employed)) / log10(potencyMod);
     timeRemaining /= 10;
     if (remaining)
         return parseFloat(timeRemaining.toFixed(1));
 
     var adjustedMax = (game.portal.Coordinated.level) ? game.portal.Coordinated.currentSend : trimps.maxSoldiers;
-    var totalTime = log10((trimpsMax - trimps.employed) / (trimpsMax - adjustedMax - trimps.employed)) / log10(potencyMod);
+    var totalTime = log10((trimpsRealMax - trimps.employed) / (trimpsRealMax - adjustedMax - trimps.employed)) / log10(potencyMod);
     totalTime /= 10;
 
     return parseFloat(totalTime.toFixed(1));
@@ -233,7 +200,7 @@ function isBuildingInQueue(building) {
 
 function getArmyTime() {
     var breeding = (game.resources.trimps.owned - game.resources.trimps.employed);
-    var newSquadRdy = game.resources.trimps.realMax() <= game.resources.trimps.owned + 1;
+    var newSquadRdy = trimpsRealMax <= game.resources.trimps.owned + 1;
     var adjustedMax = (game.portal.Coordinated.level) ? game.portal.Coordinated.currentSend : game.resources.trimps.maxSoldiers;
     var potencyMod = getPotencyMod();
     var tps = breeding * potencyMod;
@@ -243,13 +210,14 @@ function getArmyTime() {
 
 function setScienceNeeded() {
     scienceNeeded = 0;
+    metalNeeded = 0;
+    woodNeeded = 0;
+    foodNeeded = 0;
     for (var upgrade in upgradeList) {
         upgrade = upgradeList[upgrade];
         if (game.upgrades[upgrade].allowed > game.upgrades[upgrade].done) { //If the upgrade is available
             if (game.global.world == 1 && game.global.totalHeliumEarned<=1000 && upgrade.startsWith("Speed")) continue;  //skip speed upgrades on fresh game until level 2
-            scienceNeeded += getScienceCostToUpgrade(upgrade);
+            getScienceCostToUpgrade(upgrade);
         }
     }
-    if (needGymystic)
-        scienceNeeded += getScienceCostToUpgrade('Gymystic');
 }

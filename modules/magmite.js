@@ -29,13 +29,13 @@ function autoMagmiteSpender() {
     // then consider overclocker if we can afford it
     var hasOv = game.permanentGeneratorUpgrades.Hybridization.owned && game.permanentGeneratorUpgrades.Storage.owned;
     var ovclock = game.generatorUpgrades.Overclocker;
-    if (hasOv && (getPageSetting('BuyOvclock') || !ovclock.upgrades) && (game.global.magmite >= ovclock.cost())) {
+    if (hasOv && ((getPageSetting('BuyOneTimeOC')==1 || getPageSetting('BuyOneTimeOC')==3) || !ovclock.upgrades) && (game.global.magmite >= ovclock.cost())) {
         debug("Auto Spending " + ovclock.cost() + " Magmite on: Overclocker" + (ovclock.upgrades ? " #" + (ovclock.upgrades + 1) : ""), "magmite");
         buyGeneratorUpgrade('Overclocker');
     }
-    
+
 //Part #2
-    var repeat = !getPageSetting('OneTimeOnly');
+    var repeat = (getPageSetting('BuyOneTimeOC')==1 || getPageSetting('BuyOneTimeOC')==2);
     while (repeat) {
         if (MODULES["magmite"].algorithm == 2) {
             //Method 2:
@@ -62,10 +62,12 @@ function autoMagmiteSpender() {
                 CapObj.miCostPerPct= CapObj.cost / CapObj.effInc;
             var upgrade,item;
             //(try to) Buy Efficiency if its cheaper than Capacity in terms of Magmite cost per percent.
-            if (EffObj.miCostPerPct <= CapObj.miCostPerPct)
+            if(getPageSetting('ForceEffOnly')) //only buy efficiency
+                item = EffObj.name;
+            else if (EffObj.miCostPerPct <= CapObj.miCostPerPct)
                 item = EffObj.name;
             //if not, (try to) Buy Capacity if its cheaper than the cost of Supply.
-            else {
+            else{
                 const supCost = sup.cost();
                 var wall = getPageSetting('SupplyWall');
                 // If no wall, try to buy Capacity if it's cheaper.
@@ -95,13 +97,13 @@ function autoMagmiteSpender() {
             else
                 repeat = false;
         }
-        else if (MODULES["magmite"].algorithm == 1) {
+        else if (MODULES["magmite"].algorithm == 1){
             //Method 1(old):
             //list of available multi upgrades
             var names = ["Efficiency","Capacity","Supply"];
             var lowest = [null,null];   //keep track of cheapest one
             //cycle through:
-            for (var i=0; i < names.length; i++) {
+            for (var i=0; i < names.length; i++){
                 var item = names[i];
                 var upgrade = game.generatorUpgrades[item];
                 if (typeof upgrade === 'undefined')
@@ -115,7 +117,7 @@ function autoMagmiteSpender() {
                     lowest = [item,cost];
             }
             //if we can afford anything, buy it:
-            if (game.global.magmite >= lowest[1]) {
+            if (game.global.magmite >= lowest[1]){
                 buyGeneratorUpgrade(lowest[0]);
                 debug("Auto Spending " + lowest[1] + " Magmite on: " + lowest[0] + " #" + game.generatorUpgrades[lowest[0]].upgrades, "magmite");
                 didSpend = true;
@@ -125,71 +127,47 @@ function autoMagmiteSpender() {
                 repeat = false;
         }
     }
- }
- //dont get trapped in a while loop cause something stupid happened.
- catch (err) {
-     debug("AutoSpendMagmite Error encountered: " + err.message,"magmite");
- }
- //print the result
- if (didSpend)
-     debug("Leftover magmite: " + game.global.magmite,"magmite");
+}
+//dont get trapped in a while loop cause something stupid happened.
+catch (err) {
+    debug("AutoSpendMagmite Error encountered: " + err.message,"magmite");
+}
+//print the result
+if (didSpend)
+    debug("Leftover magmite: " + game.global.magmite,"magmite");
 }
 
-/**
- * Auto Generator:
- * [Early Mode (autogen2)]
- * -> (Reach Z / optimal fuel from Supply) ->
- * [Late Mode (for now: switch to primary mode)] // soon: autogen3
- */
+
 function autoGenerator() {
-  const world = game.global.world;
-  if (world < 230)
-    return; // Magma only
+    const MI = 0, FUEL = 1, HYBRID = 2;
 
-  const endZ = getPageSetting('AutoGen2End');
-  const endS = getPageSetting('AutoGen2SupplyEnd');
-  var endEarly = (endZ > 0 && world >= endZ) || (endS && world >= (230 + 2 * game.generatorUpgrades.Supply.upgrades));
-  if (endEarly) {
-    //if (autoGenerator3);
-    if (!autoGenOverrides()) {
-      const lateMode = getPageSetting('AutoGen3');
-      if (game.global.generatorMode != lateMode)
-        changeGeneratorState(lateMode);
+    var fuelFromZ = getPageSetting('FuelFromZ');
+    var fuelToZ = getPageSetting('FuelToZ');
+    if(fuelFromZ < 230) {fuelFromZ = 230; setPageSetting('FuelFromZ', fuelFromZ);}
+    if(fuelToZ < fuelFromZ) {fuelToZ = fuelFromZ; setPageSetting('FuelToZ', fuelToZ);}
+    
+    if(game.global.world < 230)
+        return;
+    
+    var dailyFlag = game.global.challengeActive == "Daily";
+    var c2Flag = game.global.runningChallengeSquared;
+    if(c2Flag || dailyFlag){
+        if(game.global.generatorMode != FUEL)
+            changeGeneratorState(FUEL);
+        return;
     }
-  } else autoGenerator2();
-}
-
-/** Early Mode */
-function autoGenerator2() {
-  const MI = 0, FUEL = 1, HYBRID = 2;
-  // Respect overrides first.
-  if (getPageSetting('AutoGen2Override') && autoGenOverrides())
-    return;
-
-  const mode = getPageSetting('AutoGen2'); // None : Microtick : Cap
-  if (!mode) // Default: move on
-    return;
-  else if (mode == 3 && game.generatorUpgrades["Overclocker"].upgrades > 0) { // Only trigger overclock if we have Overclocker upgrades.
-    changeGeneratorState(FUEL);
-    return;
-  }
-
-  const fuel = game.global.magmaFuel;
-  const want = mode == 1 ? getFuelBurnRate() : getGeneratorFuelCap();
-  if (!game.global.generatorMode) { // Currently: Gain Mi
-    if (fuel < want)
-      changeGeneratorState(game.permanentGeneratorUpgrades.Hybridization.owned ? HYBRID : FUEL);
-  } else if (fuel >= want) // Not gaining Mi when we should
-    changeGeneratorState(MI);
-}
-
-/**
- * Apply the necessary tweaks the user wants.
- * @return false or 0 if unnecessary; 1 fuel; 2 hybrid
- */
-function autoGenOverrides() {
-  const overriden = (game.global.runningChallengeSquared && getPageSetting('AutoGenC2')) || (game.global.dailyChallenge.seed && getPageSetting('AutoGenDC'));
-  if (overriden && (game.global.generatorMode != overriden))
-    changeGeneratorState(overriden);
-  return overriden;
+    
+    var amalOverride = getPageSetting('FuelUntilAmal') && game.jobs.Amalgamator.owned < getPageSetting('TillWeHaveAmalg');
+    if(game.global.world < fuelFromZ){
+        if(game.global.generatorMode != MI)
+            changeGeneratorState(MI);
+    }
+    else if(game.global.world > fuelToZ && !amalOverride){
+        if(game.global.generatorMode != MI)
+            changeGeneratorState(MI);
+    }
+    else{
+        if(game.global.generatorMode != FUEL)
+            changeGeneratorState(FUEL);
+    }
 }

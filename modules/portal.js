@@ -1,19 +1,17 @@
 MODULES["portal"] = {};
-//These can be changed (in the console) if you know what you're doing:
 MODULES["portal"].timeout = 10000;  //time to delay before autoportaling in milliseconds
 MODULES["portal"].bufferExceedFactor = 5;  //amount for: allows portaling midzone if we exceed (5x) the buffer
 
 /////////////////////////////////////////////////////
 //Portal Related Code)///////////////////////////////
 /////////////////////////////////////////////////////
-//var lastHeliumZone = 0; //zone where the He/hr portal conditions were first met
 var zonePostpone = 0;   //additional postponement of the zone above.
 
 //Decide When to Portal
 function autoPortal() {
     if(!game.global.portalActive) return;
-    var autoFinishDaily = (game.global.challengeActive == "Daily" && getPageSetting('AutoFinishDaily'));
-    var autoFinishDailyZone = getPageSetting('AutoFinishDailyZone');
+    var autoFinishDaily = (game.global.challengeActive == "Daily" && getPageSetting('AutoFinishDailyNew') != 999);
+    var autoFinishDailyZone = getPageSetting('AutoFinishDailyNew');
     if (!autoFinishDaily)
         autoFinishDailyZone = 0;    //dont use stale disabled values
     switch (autoTrimpSettings.AutoPortal.selected) {
@@ -43,7 +41,6 @@ function autoPortal() {
                 //Postpone Portal (and Actually Portal) code:
                 if (OKtoPortal && zonePostpone == 0) {
                     zonePostpone+=1;
-                    //lastHeliumZone = game.global.world;
                     debug("My HeliumHr was: " + myHeliumHr + " & the Best HeliumHr was: " + bestHeHr + " at zone: " +  bestHeHrZone, "portal");
                     cancelTooltip();
                     tooltip('confirm', null, 'update', '<b>Auto Portaling NOW!</b><p>Hit Delay Portal to WAIT 1 more zone.', 'zonePostpone+=1', '<b>NOTICE: Auto-Portaling in 10 seconds....</b>','Delay Portal');
@@ -87,11 +84,10 @@ function autoPortal() {
         case "Crushed":
         case "Nom":
         case "Toxicity":
-            if (getPageSetting('MaxTox'))
-                settingChanged("MaxTox");
         case "Watch":
         case "Lead":
         case "Corrupted":
+        case "Domination":
             if(!game.global.challengeActive) {
                 doPortal(autoTrimpSettings.AutoPortal.selected);
             }
@@ -104,51 +100,49 @@ function autoPortal() {
 //Actually Portal.
 function doPortal(challenge) {
     if(!game.global.portalActive) return;
-    if (getPageSetting('AutoMagmiteSpender2')==1) autoMagmiteSpender();
-    // From mainLoop
-    if (getPageSetting('AutoHeirlooms2')) autoHeirlooms2(); //"Auto Heirlooms 2" (heirlooms.js)
-    else if (getPageSetting('AutoHeirlooms')) autoHeirlooms();//"Auto Heirlooms"      (")
+    if (getPageSetting('AutoMagmiteSpender2') == 1) autoMagmiteSpender();
     if (getPageSetting('AutoUpgradeHeirlooms') && !heirloomsShown) autoNull();  //"Auto Upgrade Heirlooms" (heirlooms.js)
     //Go into portal screen
     portalClicked();
-    //AutoPerks: do this first, because it reflashes the screen.
-    if (getPageSetting('AutoAllocatePerks') && (typeof MODULES["perks"] !== 'undefined' || typeof AutoPerks !== 'undefined'))
-        AutoPerks.clickAllocate();
     //Auto Start Daily:
-    if (getPageSetting('AutoStartDaily')) {
+    if (getPageSetting('AutoStartDaily')){
         selectChallenge('Daily');
         checkCompleteDailies();
 
         var lastUndone = -7; // Note: Most previous challenge == -6
-        while (++lastUndone <= 0) {
+        while (++lastUndone <= 0){
             var done = (game.global.recentDailies.indexOf(getDailyTimeString(lastUndone)) != -1);
             if (!done)
                 break;
         }
 
-        if (lastUndone == 1) { // None
+        if (lastUndone == 1){ // None
             debug("All available Dailies already completed.", "portal");
             //Fallback to w/e Regular challenge we picked. Or none (unselect)
             selectChallenge(challenge || 0);
-        } else {
+        } 
+        else{
             getDailyChallenge(lastUndone);
             debug("Portaling into Daily for: " + getDailyTimeString(lastUndone, true) + " now!", "portal");
         }
     }
     //Regular Challenge:
-    else if(challenge) {
+    else if(challenge)
         selectChallenge(challenge);
-    }
-    //Push He Data:
+    
+    if (getPageSetting('AutoAllocatePerks') == 1)
+        AutoPerks.clickAllocate();
+    
+    //Push He Data for graphs.js:
     pushData();
     //Actually Portal.
-    activateClicked();
-    activatePortal();
-    lastHeliumZone = 0; zonePostpone = 0;
+    activateClicked(); //click button
+    activatePortal(); //confirm
+    zonePostpone = 0;
 }
 
 // Finish Challenge2 (UNI mod)
-function finishChallengeSquared() {
+function finishChallengeSquared(){
     // some checks done before reaching this:
     // getPageSetting('FinishC2')>0 && game.global.runningChallengeSquared
     var zone = getPageSetting('FinishC2');
@@ -159,7 +153,7 @@ function finishChallengeSquared() {
 }
 
 //helper for returning the proper level we should be auto-portaling at.
-function findOutCurrentPortalLevel() {
+function findOutCurrentPortalLevel(){
     var portalLevel = -1;
     var leadCheck = false;
     var portalLevelName =
@@ -172,10 +166,11 @@ function findOutCurrentPortalLevel() {
         "Toxicity" : 166,
         "Lead" : 181,
         "Watch" : 181,
-        "Corrupted" : 191
+        "Corrupted" : 191,
+        "Domination": 216
     };
     var AP = getPageSetting("AutoPortal");
-    switch (AP) {
+    switch (AP){
         case "Off":
             break;
         case "Custom":

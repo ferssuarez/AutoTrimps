@@ -22,7 +22,7 @@ if (!String.prototype.includes) {
 function loadPageVariables() {
     var tmp = JSON.parse(localStorage.getItem('autoTrimpSettings'));
     if (tmp !== null) {
-      debug('ATsettings: Checking version...');
+        debug('ATsettings: Checking version...');
         if (tmp['ATversion'] != undefined && !versionIsOlder(tmp['ATversion'], ATversion)) autoTrimpSettings = tmp;
         else { debug("ATsettings: Old version. There was a format change."); updateOldSettings(tmp);};
     }
@@ -66,26 +66,43 @@ function updateOldSettings(oldSettings) {
     var oldVer = oldSettings['ATversion'];
     debug("ATsettings: Updating v" +  oldVer + " to  v" + ATversion);
     if (versionIsOlder(oldVer, '2.1.6.9')) {
-      debug("ATsettings: Migrating AutoMaps + RunUniqueMaps to new AutoMaps.");
-      //migrate AutoMaps + RunUniqueMaps to new AutoMaps
-      var am = (oldSettings['AutoMaps']);
-      oldSettings['AutoMaps'] = am ? 1 : 0;
-      if (!oldSettings['RunUniqueMaps'])
-          oldSettings['AutoMaps']++;
-      delete oldSettings['RunUniqueMaps'];
+        debug("ATsettings: Migrating AutoMaps + RunUniqueMaps to new AutoMaps.");
+        //migrate AutoMaps + RunUniqueMaps to new AutoMaps
+        oldSettings['AutoMaps'].value = oldSettings['AutoMaps'].enabled ? 1 : 0;
+        if(oldSettings['RunUniqueMaps'] !== undefined){
+            if (!oldSettings['RunUniqueMaps'].enabled)
+                oldSettings['AutoMaps'].value++;
+            delete oldSettings['RunUniqueMaps'];
+        }
     }
-    /*
-    if (versionIsOlder(oldVer, '2.1.7.0')) {
-      debug("ATsettings: Migrating X + Y to new Z.");
-      //migrate X + Y to new Z
-      var am = (oldSettings['X']);
-      oldSettings['X'] = am ? 1 : 0;
-      if (!oldSettings['Y'])
-          oldSettings['X']++;
-      delete oldSettings['Y'];
-    }    
-    */
+    //These settingsneed to be migrated here:
+/*
 
+BuyBuildingsNew = BuyBuildings + BuyStorage
+BuyJobsNew = BuyJobs + WorkerRatios
+BuyWeaponsNew  = BuyWeaponUpgrades + BuyWeapons
+BuyArmorNew = BuyArmorUpgrades + BuyArmor
+ManualGather2 was 2 now 3 (4=way)  - needs to be converted.
+BuyOneTimeOC = BuyOvclock + OneTimeOnly
+PrestigeSkip1_2 = PrestigeSkipMode + PrestigeSkip2
+ScryerDieToUseS += ScryerDieZ
+(+more since 5 days ago)
+*/
+    /*if (versionIsOlder(oldVer, '2.1.7.0')) {
+        //example:*untested*
+        var X='BuyBuildings';
+        var Y='BuyStorage';
+        var Z='BuyBuildingsNew';
+        //migrate X + Y to new Z
+        var oldOne = oldSettings[X];
+        var oldTwo = oldSettings[Y];
+        var newOne = oldSettings[Z];        
+        debug("ATsettings: Migrating " + X + " + " + Y + " to new " + Z);
+        newOne.value = oldOne.enabled ? 1 : 0;
+        newOne.value+= oldTwo.enabled ? 1 : 0;
+        delete oldOne;
+        delete oldTwo;      
+    }*/
     autoTrimpSettings = oldSettings;
 }
 
@@ -96,10 +113,14 @@ function serializeSettings() {
         const el = autoTrimpSettings[k];
         switch (el.type) {
         case 'boolean':
+            //if(el.enabled === undefined)
+            //    return v[k] = false, v;
             return v[k] = el.enabled, v;
         case 'value':
         case 'valueNegative':
         case 'multitoggle':
+            //if(el.value === undefined)
+            //    return v[k] = -1, v;
             return v[k] = el.value, v;
         case 'dropdown':
             return v[k] = el.selected, v;
@@ -138,6 +159,8 @@ function setPageSetting(setting, value) {
     if (autoTrimpSettings.hasOwnProperty(setting) == false) {
         return false;
     }
+    //check type match first, otherwise theres a conflict. in this case we make the setting from new
+    //if(autoTrimpSettings[setting].type
     if (autoTrimpSettings[setting].type == 'boolean') {
         // debug('found a boolean');
         autoTrimpSettings[setting].enabled = value;
@@ -156,59 +179,180 @@ function setPageSetting(setting, value) {
 }
 
 //Global debug message
-//type: general, upgrades, equips, buildings, jobs, maps, other, graphs
-function debug(message, type, lootIcon) {
-    var general = getPageSetting('SpamGeneral');
-    var upgrades = getPageSetting('SpamUpgrades');
-    var equips = getPageSetting('SpamEquipment');
-    var maps = getPageSetting('SpamMaps');
-    var other = getPageSetting('SpamOther');
-    var buildings = getPageSetting('SpamBuilding');
-    var jobs = getPageSetting('SpamJobs');
-    var graphs = getPageSetting('SpamGraphs');
-    var magmite = getPageSetting('SpamMagmite');
-    var perks = getPageSetting('SpamPerks');
+function debug(messageStr, type, lootIcon) {
     var output = true;
+    //var noclock = false;
+    var noclock = true;
     switch (type) {
         case null:
             break;
+        case "spam":
+            output = getPageSetting('SpamGeneral');
+            noclock = true;
+            break;
         case "general":
-            output = general;
+            output = getPageSetting('SpamGeneral');
+            break;
+        case "wind":
+            output = getPageSetting('SpamWind');
             break;
         case "upgrades":
-            output = upgrades;
+            output = getPageSetting('SpamUpgrades');
             break;
         case "equips":
-            output = equips;
-            break;
-        case "buildings":
-            output = buildings;
-            break;
-        case "jobs":
-            output = jobs;
+            output = getPageSetting('SpamEquipment');
             break;
         case "maps":
-            output = maps;
+            output = getPageSetting('SpamMaps');
+            break;
+        case "heirlooms":
+            output = getPageSetting('SpamHeirlooms');
+            break;
+        case "trimpicide":
+            output = getPageSetting('SpamTrimpicide');
             break;
         case "other":
-            output = other;
+            output = getPageSetting('SpamAmal');
             break;
-        case "graphs":
-            output = graphs;
+        case "buildings":
+            output = getPageSetting('SpamBuilding');
+            break;
+        case "jobs":
+            output = getPageSetting('SpamJobs');
             break;
         case "magmite":
-            output = magmite;
+            output = getPageSetting('SpamMagmite');
+            break;
+        case "GU":
+            output = getPageSetting('SpamGU')
             break;
         case "perks":
-            output = perks;
-            break;
+            output = getPageSetting('SpamPerks');
+            break;      
     }
     if (output) {
-        if (enableDebug)
-            console.log(timeStamp() + ' ' + message);
-        message2(message, "AutoTrimps", lootIcon, type);
+        if (enableDebug){
+            if(noclock)
+                console.log(messageStr);
+                //setTimeout (console.log.bind (console, messageStr));
+            else
+                console.log(timeStamp() + ' ' + messageStr);
+                //setTimeout (console.log.bind (console, timeStamp() + ' ' + messageStr));
+        }
+        if(typeof pendingLogs !== 'undefined')
+            message3(messageStr, "AutoTrimps", lootIcon, type);
+        else
+            message2(messageStr, "AutoTrimps", lootIcon, type);
     }
 }
+
+function message3(messageString, type, lootIcon, extraClass, extraTag, htmlPrefix) {
+    /*if (messageLock && type !== "Notices"){
+            return;
+    }
+    if (extraTag && typeof game.global.messages[type][extraTag] !== 'undefined' && !game.global.messages[type][extraTag]){
+            return;
+    }*/
+    //var log = document.getElementById("log");
+    //var displayType = (game.global.messages[type].enabled) ? "block" : "none";
+    var displayType = (ATmessageLogTabVisible) ? "block" : "none";
+    //var prefix = "";
+    var addId = "";
+    /*if (messageString == "Game Saved!" || extraClass == 'save') {
+        addId = " id='saveGame'";
+        if (document.getElementById('saveGame') !== null){
+            var needsScroll = ((log.scrollTop + 10) > (log.scrollHeight - log.clientHeight));
+            var oldElem = document.getElementById('saveGame');
+            log.removeChild(oldElem);
+            log.appendChild(oldElem);
+            if (messageString != "Game Saved!") messageString = "<span class='glyphicon glyphicon-off'></span>" + messageString;
+            oldElem.innerHTML = messageString;
+            if (needsScroll) log.scrollTop = log.scrollHeight;
+            return;
+        }
+    }*/
+    //messageString = ((game.options.menu && game.options.menu.timestamps.enabled && game.options.menu.timestamps.enabled == 1) ? getCurrentTime() : updatePortalTimer(true)) + " " + messageString;
+    //messageString = messageString;
+    
+    if (!htmlPrefix){
+        if (lootIcon && lootIcon.charAt(0) == "*") {
+            lootIcon = lootIcon.replace("*", "");
+            prefix =  "icomoon icon-";
+        }
+        else prefix = "glyphicon glyphicon-";
+        //if (type == "Story") messageString = "<span class='glyphicon glyphicon-star'></span> " + messageString;
+        //if (type == "Combat") messageString = "<span class='glyphicon glyphicon-flag'></span> " + messageString;
+        //if (type == "Loot" && lootIcon) messageString = "<span class='" + prefix + lootIcon + "'></span> " + messageString;
+        //if (type == "Notices"){
+        //    if (lootIcon !== null) messageString = "<span class='" + prefix + lootIcon + "'></span> " + messageString;
+        //    else messageString = "<span class='glyphicon glyphicon-off'></span> " + messageString;
+        //}
+        messageString = "<span class=\"glyphicon glyphicon-superscript\"></span> " + messageString;
+        messageString = "<span class=\"icomoon icon-text-color\"></span>" + messageString;
+    }
+    else 
+        messageString = htmlPrefix + " " + messageString;
+    
+    var messageHTML = "<span" + addId + " class='" + type + "Message message" +  " " + extraClass + "' style='display: " + displayType + "'>" + messageString + "</span>";
+    pendingLogs.all.push(messageHTML);
+    if (type != "Story"){
+        var pendingArray = pendingLogs[type];
+        pendingArray.push(pendingLogs.all.length - 1);
+        if (pendingArray.length > 10){
+            var index = pendingArray[0];
+            pendingLogs.all.splice(index, 1)
+            pendingArray.splice(0, 1);
+            adjustMessageIndexes(index);
+        }
+    }
+}
+
+
+
+//we copied message function because this was not able to be called from function debug() without getting a weird scope? related "cannot find function" error.
+var lastmessagecount = 1;
+function message2(messageString, type, lootIcon, extraClass) {
+    var log = document.getElementById("log");
+    var needsScroll = ((log.scrollTop + 10) > (log.scrollHeight - log.clientHeight));
+    var displayType = (ATmessageLogTabVisible) ? "block" : "none";
+    var prefix = "";
+    if (lootIcon && lootIcon.charAt(0) == "*") {
+        lootIcon = lootIcon.replace("*", "");
+        prefix =  "icomoon icon-";
+    }
+    else prefix = "glyphicon glyphicon-";
+    //add timestamp
+    if (game.options.menu.timestamps.enabled){
+        messageString = ((game.options.menu.timestamps.enabled == 1) ? getCurrentTime() : updatePortalTimer(true)) + " " + messageString;
+    }
+    //add a suitable icon for "AutoTrimps"
+    if (lootIcon)
+        messageString = "<span class=\"" + prefix + lootIcon + "\"></span> " + messageString;
+    messageString = "<span class=\"glyphicon glyphicon-superscript\"></span> " + messageString;
+    messageString = "<span class=\"icomoon icon-text-color\"></span>" + messageString;
+
+    var add = "<span class='" + type + "Message message " + extraClass + "' style='display: " + displayType + "'>" + messageString + "</span>";
+    var toChange = document.getElementsByClassName(type + "Message");
+    if (toChange.length > 1 && toChange[toChange.length-1].innerHTML.indexOf(messageString) > -1){
+        var msgToChange = toChange[toChange.length-1].innerHTML;
+        lastmessagecount++;
+        //search string backwards for the occurrence of " x" (meaning x21 etc)
+        var foundXat = msgToChange.lastIndexOf(" x");
+        if (foundXat != -1){
+            toChange[toChange.length-1].innerHTML = msgToChange.slice(0, foundXat);  //and slice it out.
+        }
+        //so we can add a new number in.
+        toChange[toChange.length-1].innerHTML += " x" + lastmessagecount;
+    }
+    else {
+        lastmessagecount =1;
+        log.innerHTML += add;
+    }
+    if (needsScroll) log.scrollTop = log.scrollHeight;
+    trimMessages(type);
+}
+
+
 
 //Simply returns a formatted text timestamp
 function timeStamp() {
@@ -256,66 +400,9 @@ function postBuy2(old) {
 
 function setTitle() {
     if (aWholeNewWorld)
-        document.title = '(' + game.global.world + ')' + ' Trimps ' + document.getElementById('versionNumber').innerHTML;
+        document.title = game.global.world + ' Trimps';// + document.getElementById('versionNumber').innerHTML;
 }
 
-//we copied message function because this was not able to be called from function debug() without getting a weird scope? related "cannot find function" error.
-var lastmessagecount = 1;
-function message2(messageString, type, lootIcon, extraClass) {
-    var log = document.getElementById("log");
-    var needsScroll = ((log.scrollTop + 10) > (log.scrollHeight - log.clientHeight));
-    var displayType = (ATmessageLogTabVisible) ? "block" : "none";
-    var prefix = "";
-    if (lootIcon && lootIcon.charAt(0) == "*") {
-        lootIcon = lootIcon.replace("*", "");
-        prefix =  "icomoon icon-";
-    }
-    else prefix = "glyphicon glyphicon-";
-    //add timestamp
-    if (game.options.menu.timestamps.enabled){
-        messageString = ((game.options.menu.timestamps.enabled == 1) ? getCurrentTime() : updatePortalTimer(true)) + " " + messageString;
-    }
-    //add a suitable icon for "AutoTrimps"
-    if (lootIcon)
-        messageString = "<span class=\"" + prefix + lootIcon + "\"></span> " + messageString;
-    messageString = "<span class=\"glyphicon glyphicon-superscript\"></span> " + messageString;
-    messageString = "<span class=\"icomoon icon-text-color\"></span>" + messageString;
-
-    var add = "<span class='" + type + "Message message " + extraClass + "' style='display: " + displayType + "'>" + messageString + "</span>";
-    var toChange = document.getElementsByClassName(type + "Message");
-    if (toChange.length > 1 && toChange[toChange.length-1].innerHTML.indexOf(messageString) > -1){
-        var msgToChange = toChange[toChange.length-1].innerHTML;
-        lastmessagecount++;
-        //search string backwards for the occurrence of " x" (meaning x21 etc)
-        var foundXat = msgToChange.lastIndexOf(" x");
-        if (foundXat != -1){
-            toChange[toChange.length-1].innerHTML = msgToChange.slice(0, foundXat);  //and slice it out.
-        }
-        //so we can add a new number in.
-        toChange[toChange.length-1].innerHTML += " x" + lastmessagecount;
-    }
-    else {
-        lastmessagecount =1;
-        log.innerHTML += add;
-    }
-    if (needsScroll) log.scrollTop = log.scrollHeight;
-    trimMessages(type);
-}
-
-//HTML For adding a 5th tab to the message window
-//
-var ATbutton = document.createElement("button");
-ATbutton.innerHTML = 'AutoTrimps';
-ATbutton.setAttribute('id', 'AutoTrimpsFilter');
-ATbutton.setAttribute('type', 'button');
-ATbutton.setAttribute('onclick', "filterMessage2('AutoTrimps')");
-ATbutton.setAttribute('class', "btn btn-success logFlt");
-//
-var tab = document.createElement("DIV");
-tab.setAttribute('class', 'btn-group');
-tab.setAttribute('role', 'group');
-tab.appendChild(ATbutton);
-document.getElementById('logBtnGroup').appendChild(tab);
 //Toggle settings button & filter messages accordingly.
 function filterMessage2(what){
     var log = document.getElementById("log");
@@ -373,13 +460,11 @@ window.onerror = function catchErrors(msg, url, lineNo, columnNo, error) {
         console.log("AT logged error: " + message);
     //ATServer.Upload(message);
 };
-/*
-window.addEventListener('error', function(event) {
-    var message = JSON.stringify(event);
-    console.log("logged error: " + message);
-    //ATServer.Upload(message);
-});
-*/
+
 function throwErrorfromModule() {
     throw new Error("We have successfully read the thrown error message out of a module");
+}
+
+function log1point25(val) {
+  return Math.log(val) / Math.log(1.25);
 }
