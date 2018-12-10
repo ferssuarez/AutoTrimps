@@ -936,6 +936,7 @@ function rewardResourceAT(what, baseAmt, level, cellNum){ //before wind stacks, 
     }*/
     if (game.singleRunBonuses.heliumy.owned) amt *= 1.25;
     if (game.global.sLevel >= 5) amt *= Math.pow(1.005, game.global.world);
+    if (playerSpireTraps.Condenser.owned) amt *= (1 + (playerSpireTraps.Condenser.getWorldBonus() / 100));
     if (game.goldenUpgrades.Helium.currentBonus > 0) amt *= 1 + game.goldenUpgrades.Helium.currentBonus;
     var fluffyBonus = Fluffy.isRewardActive("helium");
     amt += (amt * (fluffyBonus * 0.25));
@@ -965,9 +966,10 @@ function calcOmniHelium(){ //rewardResource()
     var k = (game.global.totalSquaredReward / 1000) + 1;
     var fluffyBonus = Fluffy.isRewardActive("helium");
     var l = 1 + (fluffyBonus * 0.25);
+    var m = (1 + (playerSpireTraps.Condenser.getWorldBonus() / 100));
     var heliumy = game.singleRunBonuses.heliumy.owned ? 1.25 : 1;
     
-    m = a*b*c*d*e*f*g*h*i*j*k*l*heliumy; //Omnipotrimp helium
+    m = a*b*c*d*e*f*g*h*i*j*k*l*m*heliumy; //Omnipotrimp helium
     hr = m * 60 * 60 * 1/(Math.pow(0.95, 20) - 0.1); //if we kill Omni every attack how much he/hr we'll have
 
     updateOmniThreshold();
