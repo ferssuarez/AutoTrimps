@@ -245,7 +245,7 @@ function autoStance(){
                     for(var i = 98; i>80; i--){
                         worldArray[i].geoRelativeCellWorth = getRetainModifier("Wind") * (worldArray[i+1].baseWorth + worldArray[i+1].geoRelativeCellWorth);
                         worldArray[i].PBWorth = pbMult * (worldArray[i+1].baseWorth + worldArray[i+1].geoRelativeCellWorth);
-                        worldArray[i].finalWorth = (worldArray[i].baseWorth + worldArray[i].geoRelativeCellWorth + worldArray[i].PBWorth) * game.empowerments.Wind.getModifier() / 10 * dailyMult / OmniThreshold; //this is in Omnipotrimps units
+                        worldArray[i].finalWorth = (worldArray[i].baseWorth + worldArray[i].geoRelativeCellWorth + worldArray[i].PBWorth) * game.empowerments.Wind.getModifier(false,true) * dailyMult / OmniThreshold; //this is in Omnipotrimps units
                     }
                 }
             }
@@ -361,8 +361,8 @@ function autoStance(){
             cmpActual += worldArray[cellNum].geoRelativeCellWorth;
 
         if(worldArray[cellNum].corrupted == "corruptDodge" && !stackSpire) {cmp *= 0.7; cmpActual *= 0.7;} //dodge cells are worth less
-        cmp       *= game.empowerments.Wind.getModifier() / 10 * dailyMult / OmniThreshold; //cmp is in OmniThreshold units
-        cmpActual *= game.empowerments.Wind.getModifier() / 10 * dailyMult / OmniThreshold;
+        cmp       *= game.empowerments.Wind.getModifier(false,true) * dailyMult / OmniThreshold; //cmp is in OmniThreshold units
+        cmpActual *= game.empowerments.Wind.getModifier(false,true) * dailyMult / OmniThreshold;
 
         calculateZoneWorth(0);
 
@@ -877,11 +877,11 @@ function buildWorldArray(){
 
     worldArray[99].geoRelativeCellWorth = (game.global.world % 5 === 0 ? 0 : 1); //approximation of stack transfer worth into next zone    
     worldArray[99].PBWorth = 0; //PB doesnt get carried over to next zone
-    worldArray[99].finalWorth = (worldArray[99].baseWorth + worldArray[99].geoRelativeCellWorth) * game.empowerments.Wind.getModifier() / 10 * dailyMult / OmniThreshold; //this is in Omnipotrimps units
+    worldArray[99].finalWorth = (worldArray[99].baseWorth + worldArray[99].geoRelativeCellWorth) * game.empowerments.Wind.getModifier(false,true) * dailyMult / OmniThreshold; //this is in Omnipotrimps units
     for(var i = 98; i >= 0; i--){
         worldArray[i].geoRelativeCellWorth = getRetainModifier("Wind") * (worldArray[i+1].baseWorth + worldArray[i+1].geoRelativeCellWorth);
         worldArray[i].PBWorth = pbMult * (worldArray[i+1].baseWorth + worldArray[i+1].geoRelativeCellWorth);
-        worldArray[i].finalWorth = (worldArray[i].baseWorth + worldArray[i].geoRelativeCellWorth + worldArray[i].PBWorth) * game.empowerments.Wind.getModifier() / 10 * dailyMult / OmniThreshold; //this is in Omnipotrimps units
+        worldArray[i].finalWorth = (worldArray[i].baseWorth + worldArray[i].geoRelativeCellWorth + worldArray[i].PBWorth) * game.empowerments.Wind.getModifier(false,true) * dailyMult / OmniThreshold; //this is in Omnipotrimps units
     }
 
     stanceStats = {cmp: [], stacks: [], wastedStacksAtEnd: [], wastedStacksAtStart: [], shieldUsedAtCellDeath: [], trimpicides: [], wantLessDamage: [], wantMoreDamage: [], timeDead: 0}; //keep track of how well we're doing

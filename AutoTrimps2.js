@@ -18,7 +18,7 @@ var ATversion = '2.1.7.1'; //when this increases it forces users setting update 
 
 var local = false;
 //local = true;
-var ver = "52.17";
+var ver = "52.19";
 var verDate = "9.12.18";
 
 var changelogList = [];
@@ -270,6 +270,7 @@ var magmiteSpenderChanged = false;
 
 var oblitMultAT = 1;
 var coordMultAT = 1;
+var eradMultAT = 1;
 var windMult = 1;
 var poisonMultFixed=0.05;
 var poisonMult = 1;
@@ -484,6 +485,7 @@ function oncePerZoneCode(){
 
     oblitMultAT = game.global.challengeActive == "Obliterated" ? calcOblitMult(game.global.world) : 1;
     coordMultAT = game.global.challengeActive == "Coordinate" ? calcCoordMult(game.global.world) : 1;
+    eradMultAT = game.global.challengeActive == "Eradicated" ? calcEradMult(game.global.world) : 1;
 
     lastCell = -1;
     highCritChance = getPlayerCritChance();
@@ -520,6 +522,10 @@ function oncePerZoneCode(){
 
 function calcOblitMult(zone){
     return Math.pow(10,12) * Math.pow(10, Math.floor(zone / 10));
+}
+
+function calcEradMult(zone){
+    return Math.pow(10,20) * Math.pow( 3 , Math.floor(zone / 2));
 }
 
 function calcCoordMult(zone){

@@ -125,6 +125,12 @@ function calcArmyDamage(printout, currentGame, zone, dailyObj, armySizeUncapped,
         dmg *= str;
         if (printout) debug("strength towers " + str.toFixed(2) + " dmg " + dmg.toExponential(2));
     }
+    if (Fluffy.isRewardActive('voidSiphon') && game.stats.totalVoidMaps.value){
+        var voidMaps = game.stats.totalVoidMaps.value;
+        var vm = (1 + voidMaps * 0.05);
+        dmg *= str;
+        if (printout) debug("void siphon " + vm.toFixed(2) + " dmg " + dmg.toExponential(2));
+    }
     
     //Sugar Rush
     if(game.global.sugarRush > 0 || (!currentGame && sugarEventAT)){ //remaining time on sugar rush
@@ -138,8 +144,8 @@ function calcArmyDamage(printout, currentGame, zone, dailyObj, armySizeUncapped,
         if (printout) debug("Bionic Magnet II + 50% dmg " + dmg.toExponential(2));
     }
     
-    if (zone >= 230){
-        var magMult = Math.pow(0.8, zone-230+1);
+    if (mutations.Magma.active()){
+        var magMult = game.challengeActive == "Eradicated" ? Math.pow(0.8, zone + 1) : Math.pow(0.8, zone-230+1);
         dmg *= magMult;
         if (printout) debug("magma " + magMult.toExponential(2) + " dmg " + dmg.toExponential(2));
     }
@@ -149,7 +155,7 @@ function calcArmyDamage(printout, currentGame, zone, dailyObj, armySizeUncapped,
         if (printout) debug("sqr " + sqr + " dmg " + dmg.toExponential(2));
     }
     if (currentGame && getEmpowerment() == "Ice"){
-        var ice = 1 + (1 - game.empowerments.Ice.getCombatModifier());
+        var ice = 1 + (1 - game.empowerments.Ice.getDamageModifier());
         dmg *= ice;
         if (printout) debug("ice " + ice.toExponential(2) + " dmg " + dmg.toExponential(2));
     }
@@ -318,8 +324,8 @@ function calcCurrSendHealth(currentGame, getNurseCount, printout, zone, dailyObj
     base *= formation;
     if(printout) debug("formation: " + formation + " after: " + base.toExponential(2));
     
-    if(zone >= 230){
-        var magMult = Math.pow(0.8, zone-229);
+    if(mutations.Magma.active()){
+        var magMult = game.challengeActive == "Eradicated" ? Math.pow(0.8, zone + 1) : Math.pow(0.8, zone-229);
         base *= magMult;
         if(printout) debug("magMult: " + magMult.toExponential(2) + " after: " + base.toExponential(2));
     }
@@ -425,6 +431,7 @@ function calcEnemyAttack(mutation, corrupted, name, level, zone, currentGame, da
     var challenge = currentGame ? game.global.challengeActive : AutoPerks.ChallengeName;
     if (challenge != ""){
         if (challenge == "Obliterated")         attack *= currentGame ? oblitMultAT : AutoPerks.OblitMod;
+        else if (challenge == "Eradicated")     attack *= currentGame ? eradMultAT : 1; //need to add
         else if (challenge == "Coordinate")     attack *= currentGame ? coordMultAT : AutoPerks.CoordMod;
         else if (challenge == "Life")           attack *= 6;
         else if (challenge == "Toxicity")       attack *= 5;
@@ -483,6 +490,7 @@ function calcEnemyHealth(mutation, corrupted, name, level, zone, currentGame, da
     var challenge = currentGame ? game.global.challengeActive : AutoPerks.ChallengeName;
     if (challenge !== ""){
         if (challenge == "Obliterated")         amt *= currentGame ? oblitMultAT : AutoPerks.OblitMod;
+        else if (challenge == "Eradicated")    amt *= currentGame ? eradMultAT : 1;
         else if (challenge == "Coordinate")     amt *= currentGame ? coordMultAT : AutoPerks.CoordMod;
         else if (challenge == "Toxicity")       amt *= 2;
         
@@ -784,7 +792,7 @@ function approxZoneHP(zoneNum){
     var zone = typeof zoneNum === 'undefined' ? game.global.world : zoneNum;
     var healthyCells = zone > 300 ? 2 + Math.floor((zone - 300)/15): 0;
     
-    var corruptionStart = AutoPerks.ChallengeName == "Corrupted" ? 60 : (game.talents.headstart.purchased && !game.global.runningChallengeSquared) ? ((game.talents.headstart2.purchased) ? ((game.talents.headstart3.purchased) ? 151 : 166) : 176) : 181;
+    var corruptionStart = game.challengeActive == "Eradicated" ? 1 :AutoPerks.ChallengeName == "Corrupted" ? 60 : (game.talents.headstart.purchased && !game.global.runningChallengeSquared) ? ((game.talents.headstart2.purchased) ? ((game.talents.headstart3.purchased) ? 151 : 166) : 176) : 181;
     var corruptedCells = zone < corruptionStart ? 0 : Math.max(0, Math.min(80, Math.floor((zone - corruptionStart) / 3) + 2) - healthyCells);
     
     var nonColoredCells = 99 - corruptedCells - healthyCells;

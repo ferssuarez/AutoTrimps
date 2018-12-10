@@ -525,7 +525,7 @@ function praidAutoStartHelper(){
     var score = 1;
     if(game.global.challengeActive == "Obliterated") score = score / 400;
     
-    if(game.global.world < 236) return score;
+    if(game.global.world < 236 && game.global.challengeActive != "Eradicated") return score;
     var cycle = cycleZone();
     if(cycle < 5)        return score*0.003;  //xx6-xx0 poison
     else if (cycle < 10) return score*0.6;    //xx1-xx5 wind
@@ -1377,7 +1377,7 @@ function windZone(value){
 
 function poisonZone(zoneNum){
     var zone = typeof zoneNum === 'undefined' ? game.global.world : zoneNum;
-    return ((zone-236) % 15 <= 4);
+    return game.challengeActive == "Eradicated" ? zone % 15 <= 4 : ((zone-236) % 15 <= 4);
 }
 
 function cycleZone(zoneNum){ //poizon - wind - ice
