@@ -1,64 +1,71 @@
 MODULES["other"] = {};
 MODULES["other"].enableRoboTrimpSpam = true;  //set this to false to stop Spam of "Activated Robotrimp MagnetoShriek Ability"
+var bwraided = false;
+var failbwraid = false;
+var cost = (updateMapCost(true));
 
 
-//Activate Robo Trimp (will activate on the first zone after liquification)
 function autoRoboTrimp() {
-    //exit if the cooldown is active, or we havent unlocked robotrimp.
     if (game.global.roboTrimpCooldown > 0 || !game.global.roboTrimpLevel) return;
     var robotrimpzone = parseInt(getPageSetting('AutoRoboTrimp'));
-    //exit if we have the setting set to 0
     if (robotrimpzone == 0) return;
     //activate the button when we are above the cutoff zone, and we are out of cooldown (and the button is inactive)
-    if (game.global.world >= robotrimpzone && !game.global.useShriek){
+    if (game.global.world >= robotrimpzone && !game.global.useShriek && (game.global.world - robotrimpzone) % 5 === 0)
         magnetoShriek();
-        if (MODULES["other"].enableRoboTrimpSpam)
-            debug("Activated Robotrimp MagnetoShriek Ability @ z" + game.global.world, "graphs", '*podcast');
-    }
 }
 
-//Version 3.6 Golden Upgrades
-    //setting param : get the numerical value of the selected index of the dropdown box
-function autoGoldenUpgradesAT(setting) {
-    var num = getAvailableGoldenUpgrades();
-    if (num == 0) return;       //if we have nothing to buy, exit.
-    //Challenge^2 cant Get/Buy Helium, so adapt - do Derskagg mod.
-    var challSQ = game.global.runningChallengeSquared;
-    //Default: True = Always get 60% void by skipping the 12% upgrade then buying 14%/16%
-    var goldStrat = getPageSetting('goldStrat');
-    //Try to achieve 60% Void    
-    if (setting == "Void" && goldStrat == "Max then Helium") {
-      var nextVoidAmt = game.goldenUpgrades.Void.nextAmt().toFixed(2);
-      if (nextVoidAmt == 0.12)   //skip the 6th void upgrade
-        setting = (challSQ) ? "Battle" : "Helium"; //always buy battle during max then helium mode.
+function autoGoldenUpgradesAT(){
+    var setting = getPageSetting('AutoGoldenUpgrades');
+    if(setting === 'Off') return;
+    
+    var initialLock = game.options.menu.lockOnUnlock.enabled;
+    game.options.menu.lockOnUnlock.enabled = 0;
+    while(getAvailableGoldenUpgrades() > 0){
+        var what = "";
+        if(!game.global.runningChallengeSquared && getPageSetting('MaxVoid') && buyGoldenUpgrade("Void")) continue;
+        else if(game.global.runningChallengeSquared  && getPageSetting('MaxVoidC2') && buyGoldenUpgrade("Void")) continue;
+        else if(game.global.runningChallengeSquared || setting === "Battle") what = "Battle";
+        else if (setting === "Helium") what = "Helium";
+        else{ //'Match Perks' mode: aim to buy Helium/Battle at a ratio that matches our perk setup
+            var helCurrMult  = game.goldenUpgrades.Helium.currentBonus + 1;
+            var batCurrMult  = game.goldenUpgrades.Battle.currentBonus + 1;
+            //var helNextBonus = game.goldenUpgrades.Helium.nextAmt();
+            //var batNextBonus = game.goldenUpgrades.Battle.nextAmt();
+            
+            var helAtkGURatio = helCurrMult / batCurrMult;
+            
+            var looting = game.portal["Looting"].level;
+            var power   = game.portal["Power"].level;
+            
+            var helBenefit  = ((1 + 0.05*(looting+1)) * (1 + 0.0025*(looting+1))) / ((1 + 0.05*looting) * (1 + 0.0025*looting)) - 1; //relative helium increase from 1 more looting1 level
+            var atkBenefit  = ((1 + 0.05*(power+1)) * (1 + 0.01*(power+1))) / ((1 + 0.05*power) * (1 + 0.01*power)) - 1; //relative damage increase from 1 more power1 level
+            var helCost     = Math.ceil(looting/2 + 1 * Math.pow(1.3, looting)); //looting1 cost
+            var atkCost     = Math.ceil(power/2 + 1 * Math.pow(1.3, power)); //power1 cost
+            var helEff      = helBenefit / helCost; //looting efficiency
+            var atkEff      = atkBenefit / atkCost; //power efficiency
+            var helAtkRatio = atkEff / helEff; //how many times we like helium better than attack
+            
+            debug("Auto GU: Helium / Attack Perk Ratio: " + helAtkRatio.toFixed(2) + " GU Ratio: " + helAtkGURatio.toFixed(2), "GU");
+            if(helAtkGURatio > helAtkRatio){
+                debug("Match Perks GU: Buying Battle GU", "GU");
+                what = "Battle";
+            }
+            else what = "Helium";
+        }
+        
+        try{
+            if(!(what === "Helium" || what === "Battle" || what === "Void"))
+                throw "buying Golden upgrade: " + what + " unknown GU type";
+            
+            if(!buyGoldenUpgrade(what))
+                throw "General Golden Upgrade error - " + what;
+        }
+        catch(err){
+            debug("Golden Upgrade Critical Error! Failed to buy " + what + " upgrade. z " + game.global.world + " getAvailableGoldenUpgrades() = " + getAvailableGoldenUpgrades());
+            break;
+        }
     }
-    //buy one upgrade per loop.
-    var success = buyGoldenUpgrade(setting);
-
-    var doDerskaggChallSQ = false;
-    if (setting == ("Helium" || "Void") && challSQ)
-        {doDerskaggChallSQ = true; setting = (challSQ) ? "Battle" : "Helium"}
-    // DZUGAVILI MOD - SMART VOID GUs
-    // Assumption: buyGoldenUpgrades is not an asynchronous operation and resolves completely in function execution.
-    // Assumption: "Locking" game option is not set or does not prevent buying Golden Void
-    var noBat = getPageSetting('goldNoBattle');  //true = no battle = buy helium
-  //In 'Alternating' mode : instead of alternating between buying Helium and Battle, with this on it will only buy Helium.
-    if (!success && setting == "Void" || doDerskaggChallSQ) {
-        num = getAvailableGoldenUpgrades(); //recheck availables.
-        if (num == 0) return;
-        // DerSkagg Mod - Instead of Voids, For every Helium upgrade buy X-1 battle upgrades to maintain speed runs
-        if (goldStrat == "Alternating") {
-            var goldAlternating = getPageSetting('goldAlternating');
-            setting = (game.global.goldenUpgrades%goldAlternating == 0 || noBat) ? "Helium" : "Battle";
-        } else if (goldStrat == "Zone") {
-            var goldZone = getPageSetting('goldZone');
-            setting = (game.global.world <= goldZone || noBat) ? "Helium" : "Battle";
-        } else
-            setting = (challSQ) ? "Battle" : "Helium";
-        buyGoldenUpgrade(setting);
-    }
-    // END OF DerSkagg & DZUGAVILI MOD
-//} catch(err) { debug("Error in autoGoldenUpgrades: " + err.message, "general"); }
+    game.options.menu.lockOnUnlock.enabled = initialLock;
 }
 
 //auto spend nature tokens
@@ -97,7 +104,7 @@ function autoNatureTokens() {
                 var convertRate = (game.talents.nature.purchased) ? ((game.talents.nature2.purchased) ? 8 : 6) : 5;
                 game.empowerments[targetNature].tokens += convertRate;
                 changed = true;
-                debug('Converted ' + nature + ' tokens to ' + targetNature, 'nature');
+                //debug('Converted ' + nature + ' tokens to ' + targetNature, 'nature');
             }
         }
         else {
@@ -111,16 +118,11 @@ function autoNatureTokens() {
             var convertRate = (game.talents.nature.purchased) ? ((game.talents.nature2.purchased) ? 8 : 6) : 5;
             game.empowerments[targetNature].tokens += convertRate;
             changed = true;
-            debug('Converted ' + nature + ' tokens to ' + targetNature, 'nature');
+            //debug('Converted ' + nature + ' tokens to ' + targetNature, 'nature');
         }
     }
     if (changed)
         updateNatureInfoSpans();
-}
-
-function fuckShitUp()
-{
-
 }
 
 //Check if currently in a Spire past IgnoreSpiresUntil
@@ -130,6 +132,37 @@ function isActiveSpireAT() {
 
 //Exits the Spire after completing the specified cell.
 function exitSpireCell() {
-    if(isActiveSpireAT() && game.global.lastClearedCell >= getPageSetting('ExitSpireCell')-1)
+    if(game.global.challengeActive == "Daily"){
+        if(isActiveSpireAT() && game.global.lastClearedCell >= getPageSetting('ExitSpireCellDailyC2')-1 && getPageSetting('ExitSpireCellDailyC2') > 0)
+            endSpire();
+    }
+    else if(isActiveSpireAT() && game.global.lastClearedCell >= getPageSetting('ExitSpireCell')-1 && getPageSetting('ExitSpireCell') > 0)
         endSpire();
+}
+
+function fightManualAT(){
+    if(!game.upgrades.Battle.done) return; //battle upgrade not purchased yet
+    //run a check to see how much health we'll have if we attack now, and compare it to enemy health. if its not looking good only fight when we have full pop.
+    if(game.resources.trimps.owned/trimpsRealMax < 1 && game.global.challengeActive != "Trapper"){
+        var nextArmyHealth = calcCurrSendHealth(true, false, false, game.global.world);
+        var enemyDamage    = currEnemyDamage();
+        var block = game.global.soldierCurrentBlock;
+        
+        if(!game.global.mapsActive || block < enemyDamage){
+            if(nextArmyHealth/enemyDamage < 1000) return;
+            if(handleGA(true) < maxAnti) return; //in nom/bogged/electricity, never send armies before max pop
+        }
+    }
+    
+    if(wantGoodShield != highDamageHeirloom){
+        if(wantGoodShield == undefined)
+            debug("error: wantGoodShield undefined!");
+        if(highDamageHeirloom == undefined)
+            debug("error: highDamageHeirloom undefined!");
+        if(wantGoodShield)
+            equipMainShield();
+        else
+            equipLowDmgShield();
+    }
+    fightManual();
 }
