@@ -535,10 +535,6 @@ function newStopCarryHeirloom(){
 }
 
 function equipMainShield(){
-    if (game.global.runningChallengeSquared) {
-        highDamageHeirloom = false;
-        return false;
-    }
     if(!getPageSetting('HeirloomSwapping') || !getPageSetting('AutoHeirlooms')) {
         highDamageHeirloom = true;
         return false;
@@ -552,6 +548,8 @@ function equipMainShield(){
         return true;
     }
     if(heirloomsShown) //dont do anything while heirlooms window is open. under rate circumstances bad things could happen if both user and AT are handling heirlooms at the same time
+        return false;
+    if (game.global.runningChallengeSquared)
         return false;
     var loom = findMainShield();
     if (loom == null) return false;
@@ -583,6 +581,8 @@ function equipLowDmgShield(){
         return true;
     }
     if(heirloomsShown) //dont do anything while heirlooms window is open. under rate circumstances bad things could happen if both user and AT are handling heirlooms at the same time
+        return false;
+    if (game.global.runningChallengeSquared)
         return false;
     var loom = findLowDmgShield();
     if (loom == null) return false;
