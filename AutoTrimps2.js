@@ -18,18 +18,17 @@ var ATversion = '2.1.7.1'; //when this increases it forces users setting update 
 
 var local = false;
 //local = true;
-var ver = "52.21";
-var verDate = "13.12.18";
+var ver = "52.20";
+var verDate = "9.12.18";
 
 var changelogList = [];
-changelogList.push({date: "9.12.2018", version: "", description: "Spire Import Added", isNew: true});
 changelogList.push({date: "9.12.2018", version: "", description: "Max Void Fixed", isNew: true});
 changelogList.push({date: "18.11.2018", version: "", description: "Jobs reworked." , isNew: false});
 changelogList.push({date: "17.11.2018", version: "", description: "Added Income weight to Auto Allocate. Leave it at 0 unless you're deep running one of the big 3 C2s." , isNew: true});
 changelogList.push({date: "14.11.2018", version: "", description: "Improved Auto Allocate fuel zones range." , isNew: true});
 changelogList.push({date: "8.11.2018", version: "", description: "Improved early game.", isNew: false});
-//changelogList.push({date: "22.10.2018", version: "", description: "Reworked AutoAllocate, check your weights. Also BW raid setting." , isNew: false});
-//changelogList.push({date: "13/06/2018", version: "", description: "War was beginning ", isNew: false});
+changelogList.push({date: "22.10.2018", version: "", description: "Reworked AutoAllocate, check your weights. Also BW raid setting." , isNew: false});
+changelogList.push({date: "13/06/2018", version: "", description: "War was beginning ", isNew: false});
 
 var atscript = document.getElementById('AutoTrimps-script'),
         basepath = (local ? 'AutoTrimps/' : 'https://slivermasterz.github.io/AutoTrimps/'),
@@ -165,13 +164,7 @@ function startAT() {
             return result;
         };
     })();
-
-    let script = document.createElement('script');
-    script.id = 'SpireBuilder-script';
-    script.src = 'https://slivermasterz.github.io/TrimpScripts/SpireBuilder.js';
-    script.setAttribute('crossorigin',"anonymous");
-    document.head.appendChild(script);
-
+    
     debug('AutoTrimps loaded!');
 }
 
