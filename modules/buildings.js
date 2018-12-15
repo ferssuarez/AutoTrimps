@@ -179,7 +179,7 @@ function buyBuildings() {
     //Gyms:
     if (!game.buildings.Gym.locked) {
         var skipGym = false;
-        if ( game.buildings.Gym.owned >= getPageSetting('MaxGym'))
+        if ( game.buildings.Gym.owned >= getPageSetting('MaxGym') || getPageSetting('MaxGym') < 0 )
             skipGym = true;
         if(game.upgrades.Gymystic.allowed > game.upgrades.Gymystic.done)
             skipGym = true; //dont spend wood on gyms when we need gymystic upgrade. should add a check to buy gyms until they cost some percentage of gymystic
