@@ -245,7 +245,7 @@ function buyStorage() {
         var owned = game.resources[Bs[B]].owned;
         var max = game.resources[Bs[B]].max * packMod;
         if (game.heirlooms.Shield.storageSize.currentBonus > 0)
-            max *= (100 + game.heirlooms.Shield.storageSize.currentBonus);
+            max *= (100 + game.heirlooms.Shield.storageSize.currentBonus)/100;
         if ((game.global.world == 1 && owned > max * customVars.storageLowlvlCutoff1) ||
             (game.global.world >= 2 && game.global.world < 10 && owned > max * customVars.storageLowlvlCutoff2) ||
             (owned > max * customVars.storageMainCutoff)) {
