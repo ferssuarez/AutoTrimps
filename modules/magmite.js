@@ -145,8 +145,10 @@ function autoGenerator() {
     var fuelToZ = getPageSetting('FuelToZ');
     if(fuelFromZ < 230) {fuelFromZ = 230; setPageSetting('FuelFromZ', fuelFromZ);}
     if(fuelToZ < fuelFromZ) {fuelToZ = fuelFromZ; setPageSetting('FuelToZ', fuelToZ);}
-    game.global.genStateConfig[0][1] = fuelFromZ;
-    game.global.genStateConfig[1][1] = fuelToZ;
+    if (game.global.genStateConfig !== []) {
+        game.global.genStateConfig[0][1] = fuelFromZ;
+        game.global.genStateConfig[1][1] = fuelToZ;
+    }
 
 
 
