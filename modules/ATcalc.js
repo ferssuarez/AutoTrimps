@@ -155,7 +155,7 @@ function calcArmyDamage(printout, currentGame, zone, dailyObj, armySizeUncapped,
         if (printout) debug("sqr " + sqr + " dmg " + dmg.toExponential(2));
     }
     if (currentGame && getEmpowerment() == "Ice"){
-        var ice = 1 + (1 - game.empowerments.Ice.getDamageModifier());
+        var ice = 1 + game.empowerments.Ice.getDamageModifier();
         dmg *= ice;
         if (printout) debug("ice " + ice.toExponential(2) + " dmg " + dmg.toExponential(2));
     }
