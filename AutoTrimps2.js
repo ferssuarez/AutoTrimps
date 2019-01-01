@@ -18,8 +18,8 @@ var ATversion = '2.1.7.1'; //when this increases it forces users setting update 
 
 var local = false;
 //local = true;
-var ver = "52.27";
-var verDate = "21.12.18";
+var ver = "52.28";
+var verDate = "31.12.18";
 
 var changelogList = [];
 changelogList.push({date: "21.12.2018", version: "", description: "Spire Import Readded", isNew: true});
