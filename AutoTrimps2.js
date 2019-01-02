@@ -232,7 +232,7 @@ function printChangelog() {
     }
     var footer =
         '<b>Ongoing Development</b> - <u>Report any bugs/problems please</u>!\
-        <br>Talk with the dev: <b>Meowchan_#0720</b> @ <a target="#" href="https://discord.gg/W2Ajv4j">AutoTrimps Discord Channel</a>'
+        <br>Talk with the dev: <b>Sliverz#7416</b> @ <a target="#" href="https://discord.gg/W2Ajv4j">AutoTrimps Discord Channel</a>'
     ,   action = 'cancelTooltip()'
     ,   title = "AutoTrimps - Meowchan's Fork<br>" + "v" + ver + " " + verDate
     ,   acceptBtnText = "Thank you for playing AutoTrimps!"
