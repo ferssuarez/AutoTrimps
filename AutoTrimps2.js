@@ -18,18 +18,19 @@ var ATversion = '2.1.7.1'; //when this increases it forces users setting update 
 
 var local = false;
 //local = true;
-var ver = "52.28";
-var verDate = "31.12.18";
+var ver = "52.29";
+var verDate = "2.1.19";
 
 var changelogList = [];
-changelogList.push({date: "21.12.2018", version: "", description: "Spire Import Readded", isNew: true});
+changelogList.push({date: "2.1.2019", version: "", description: "Run Stacked Voids only added. More features soon", isNew: true});
+changelogList.push({date: "21.12.2018", version: "", description: "Spire Import Readded", isNew: false});
 changelogList.push({date: "9.12.2018", version: "", description: "Max Void Fixed", isNew: false});
-changelogList.push({date: "18.11.2018", version: "", description: "Jobs reworked." , isNew: false});
-changelogList.push({date: "17.11.2018", version: "", description: "Added Income weight to Auto Allocate. Leave it at 0 unless you're deep running one of the big 3 C2s." , isNew: true});
-changelogList.push({date: "14.11.2018", version: "", description: "Improved Auto Allocate fuel zones range." , isNew: true});
-changelogList.push({date: "8.11.2018", version: "", description: "Improved early game.", isNew: false});
-changelogList.push({date: "22.10.2018", version: "", description: "Reworked AutoAllocate, check your weights. Also BW raid setting." , isNew: false});
-changelogList.push({date: "13/06/2018", version: "", description: "War was beginning ", isNew: false});
+//changelogList.push({date: "18.11.2018", version: "", description: "Jobs reworked." , isNew: false});
+//changelogList.push({date: "17.11.2018", version: "", description: "Added Income weight to Auto Allocate. Leave it at 0 unless you're deep running one of the big 3 C2s." , isNew: false});
+//changelogList.push({date: "14.11.2018", version: "", description: "Improved Auto Allocate fuel zones range." , isNew: false});
+//changelogList.push({date: "8.11.2018", version: "", description: "Improved early game.", isNew: false});
+//changelogList.push({date: "22.10.2018", version: "", description: "Reworked AutoAllocate, check your weights. Also BW raid setting." , isNew: false});
+//changelogList.push({date: "13/06/2018", version: "", description: "War was beginning ", isNew: false});
 
 var atscript = document.getElementById('AutoTrimps-script'),
         basepath = (local ? 'AutoTrimps/' : 'https://slivermasterz.github.io/AutoTrimps/'),

@@ -364,7 +364,7 @@ function initializeAllSettings() {
     //Line3
     createSetting('VoidMaps', 'Void Maps', 'The zone at which you want all your void maps to be cleared. During dailies it will add VMs Daily Modifier unless VMs Daily Modifier is set to 999, in which case it will add Portal Daily Modifier instead. 0 to disable.', 'value', '0', null, "Maps");
     createSetting('RunNewVoidsUntilNew', 'New Voids Mod', 'This allows you to run new Void Maps obtained after Void Maps zone for a certain number of zones. For example set this to 10 to run new void maps for 10 more zones. 0 to disable, -1 to run VMs past VM zone always.', 'value', '0', null, 'Maps'); //Should replace the two below
-
+    createSetting('StackedVoidsOnly','Only Run Stacked Voids', 'This makes it so that AutoMaps only runs stacked voids maps, and leaves single maps alone.','boolean',false,null,"Maps");
     //createSetting('PRaidSetting', 'Auto PRaid', 'With this on AT will decide automatically when to Prestige Raid based on zone, damage and zone type.', 'boolean', true, null, 'Maps');
     createSetting('PRaidingZoneStart', 'Map Raiding Start', 'Starting this zone, begin raiding higher maps for prestige. -1 for never.', 'value', -1, null, 'Maps');
     createSetting('PAggression', ['PRaid: Light', 'PRaid: Aggressive', 'PRaid: Endgame'], 'How aggressively should AT chase after prestige. Aggressive costs more fragments. If you have a plagued staff with fragment drop then you probably want aggressive mode. Endgame will more liberally buy perfect prestigious maps.', 'multitoggle', 1, null, 'Maps');
