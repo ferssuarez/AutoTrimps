@@ -24,6 +24,7 @@ function autoGoldenUpgradesAT(){
         var what = "";
         if(!game.global.runningChallengeSquared && getPageSetting('MaxVoid') && buyGoldenUpgrade("Void")) continue;
         else if(game.global.runningChallengeSquared  && getPageSetting('MaxVoidC2') && buyGoldenUpgrade("Void")) continue;
+        else if(game.global.challengeActive === "Daily" && getPageSetting('MaxVoidDaily') && buyGoldenUpgrade("Void")) continue;
         else if(game.global.runningChallengeSquared || setting === "Battle") what = "Battle";
         else if (setting === "Helium") what = "Helium";
         else{ //'Match Perks' mode: aim to buy Helium/Battle at a ratio that matches our perk setup

@@ -18,11 +18,12 @@ var ATversion = '2.1.7.1'; //when this increases it forces users setting update 
 
 var local = false;
 //local = true;
-var ver = "52.29";
-var verDate = "2.1.19";
+var ver = "52.30";
+var verDate = "7.1.19";
 
 var changelogList = [];
-changelogList.push({date: "2.1.2019", version: "", description: "Run Stacked Voids only added. More features soon", isNew: true});
+changelogList.push({date: "7.1.2019", version: "", description: "Golden Void toggle for dailies", isNew: true});
+changelogList.push({date: "2.1.2019", version: "", description: "Run Stacked Voids only added. More features soon", isNew: false});
 changelogList.push({date: "21.12.2018", version: "", description: "Spire Import Readded", isNew: false});
 changelogList.push({date: "9.12.2018", version: "", description: "Max Void Fixed", isNew: false});
 //changelogList.push({date: "18.11.2018", version: "", description: "Jobs reworked." , isNew: false});

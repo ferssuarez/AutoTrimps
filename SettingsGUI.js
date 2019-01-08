@@ -468,7 +468,8 @@ function initializeAllSettings() {
 
 //Golden Upgrade
     createSetting('AutoGoldenUpgrades', 'Auto', 'Off - Does nothing. All other choices will max Void if the relevant button is pressed, and buy battle in C2.<br>Match Perks - will sometime get a battle GU when the inferred Helium/Attack ratio from active perks drops below the value of a Battle GU compared to an extra Helium one. You can turn on Golden Upgrade Spam under Display to see the numbers in action.', 'dropdown', 'Helium', ["Off", "Helium", "Battle", "Match Perks"], 'Golden');
-    createSetting('MaxVoid',        'Max Void', 'Always get 72% Void Not in C2.' ,'boolean', true, null, 'Golden');
+    createSetting('MaxVoid',        'Max Void', 'Always get 72% Void In Filler.' ,'boolean', true, null, 'Golden');
+    createSetting('MaxVoidDaily',        'Max Void Daily', 'Always get 72% Void in Daily.' ,'boolean', true, null, 'Golden');
     createSetting('MaxVoidC2',   'Max Void C2', 'Always get 72% Void In C2.'     ,'boolean', true, null, 'Golden');
 
 // Nature settings:
