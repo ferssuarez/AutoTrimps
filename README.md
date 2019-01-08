@@ -1,10 +1,11 @@
 # AutoTrimps + NT
 
-[![Join the chat at https://gitter.im/AutoTrimps/Lobby](https://badges.gitter.im/AutoTrimps/Lobby.svg)](https://gitter.im/AutoTrimps/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+## Note
+Meowchan disappeared before the launch of 4.10 and in order to preserve his work, this fork will be kept up to date using Meow's fork as a base. 
+ [![Join the chat at https://gitter.im/AutoTrimps/Lobby](https://badges.gitter.im/AutoTrimps/Lobby.svg)](https://gitter.im/AutoTrimps/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 ## Discussion / Discord Channel
 <a href="https://discord.gg/W2Ajv4j"><img src="https://pbs.twimg.com/profile_images/568588143226413056/9Lwrixxj.png" width=48></a>
-Discord is a chat program. Come to talk about AutoTrimps, for help, or suggestions for new features : https://discord.gg/W2Ajv4j (same one as zininzinin)
-
+Discord is a chat program. Come to talk about AutoTrimps, for help, or suggestions for new features : https://discord.gg/W2Ajv4j 
 ## Script Installation
 **Please backup your game via export before and during use to prevent losing your save due to corruption!**
 
@@ -30,22 +31,6 @@ FireFox/GreaseMonkey instructions:
 ***PSA: AutoTrimps was not designed for  new/low-level players.***
 
 The fact that it works at all is misleading new players into thinking its perfect. Its not. If your highest zone is under z60, you have not unlocked the stats required, and have not experienced the full meta with its various paradigm shifts. If you are just starting, my advice is to play along naturally and use AutoTrimps as a tool, not a crutch. Play with the settings as if it was the game, Dont expect to go unattended, if AT chooses wrong, and make the RIGHT choice yourself. Additionally, its not coded to run one-time challenges for you, only repeatable ones for helium. During this part of the game, content is king - automating literally removes the fun of the game. If you find that many flaws in the automation exist for you, level up. Keep in mind the challenge of maintaining the code is that it has to work for everyone. AT cant see the future and doesnt run simulations, it exists only in the present moment. Post any suggestions on how it can be better, or volunteer to adapt the code, or produce some sort of low-level player guide with what youve learned. Happy scripting! -genBTC
-
-## Easy explanation of Colors for EquipUpgrades / prestiges highlights
-- white - Upgrade is not available
-- yellow - Upgrade is not affordable
-- orange - Upgrade is affordable, but will lower stats
-- red - Yes, do it now!
-
-## Confusing original explanation of colors, (gl trying to understand this!)
-- Red text on Equip - it's best in its category in terms of stat per resource. This also compares Gyms with Shields.
-- Orange text - Upgrade is available and improving this will make the upgrade actually reduce stat in question and it's best in its category in terms of stat per resource.
-- Yellow text - Upgrade is available and improving this will make the upgrade actually reduce stat in question
-- White border - upgrade is not yet available
-- Yellow border - upgrade is available, but not affordable
-- Orange border - upgrade is available, affordable, but will actually reduce stat in question
-- Red border - you have enough resources to level equip after upgrade to surpass it's current stats.
-- Green border on buildings - Best for gems
 
 
 ## Detailed Code Documentation:
