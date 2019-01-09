@@ -173,11 +173,15 @@ function handleGA(currentGame, dailyObj){
             case 2:
             case 3:
                 GATimer = 2;
-                break
+                break;
             default:
                 GATimer = 1;
         }
     }
+
+    let cellNum = (game.global.mapsActive) ? game.global.lastClearedMapCell + 1 : game.global.lastClearedCell + 1;
+    if (getPageSetting('StackSkip') >= 1 && (worldArray[cellNum].corrupted === "healthyBleed" || worldArray[cellNum].corrupted === "corruptBleed"))
+        GATimer = 1;
     
     if(currentGame && !getPageSetting('GASetting') && getPageSetting('GASettingManual') > 0) //manual input
         GATimer = getPageSetting('GASettingManual');
