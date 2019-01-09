@@ -175,7 +175,7 @@ function autoMap(){
     }
     
     if (doVoids && !needPrestige){
-        selectedMap = getPageSetting("StackedVoidsOnly")? findFirstStackedVoidMap() : findFirstVoidMap(); //returns map object or false - First logic only returns stacked maps, second returns all maps
+        selectedMap = getPageSetting("StackedVoids") !== 0 ? findFirstStackedVoidMap() : findFirstVoidMap(); //returns map object or false - First logic only returns stacked maps, second returns all maps
         statusMsg = 'VMs Left: ' + game.global.totalVoidMaps + "<br>";
     }
     
@@ -1362,7 +1362,7 @@ function checkNeedToVoid(){
 
 function findFirstStackedVoidMap(){
     for (var map in game.global.mapsOwnedArray){
-        if(game.global.mapsOwnedArray[map].location === "Void" && game.global.mapsOwnedArray[map].stacked > 0)
+        if(game.global.mapsOwnedArray[map].location === "Void" && game.global.mapsOwnedArray[map].stacked + 1 > getPageSetting('StackedVoids'))
             return game.global.mapsOwnedArray[map];
     }
     return false;

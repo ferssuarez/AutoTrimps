@@ -18,11 +18,12 @@ var ATversion = '2.1.7.1'; //when this increases it forces users setting update 
 
 var local = false;
 //local = true;
-var ver = "52.32";
+var ver = "52.33";
 var verDate = "8.1.19";
 
 var changelogList = [];
-changelogList.push({date: "8.1.2019", version: "", description: "Added Option to stack bleed and dodge cells", isNew: true});
+changelogList.push({date: "8.1.2019", version: "", description: "Stacked Void running is now a value. ", isNew: true});
+changelogList.push({date: "8.1.2019", version: "", description: "Added Option to stack bleed and dodge cells", isNew: false});
 changelogList.push({date: "7.1.2019", version: "", description: "Golden Void toggle for dailies", isNew: false});
 changelogList.push({date: "2.1.2019", version: "", description: "Run Stacked Voids only added. More features soon", isNew: false});
 changelogList.push({date: "21.12.2018", version: "", description: "Spire Import Readded", isNew: false});
