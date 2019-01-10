@@ -311,7 +311,7 @@ function initializeAllSettings() {
     createSetting('WarpstationWall3', 'Warpstation Wall', 'Conserves Metal. Only buys 1 Warpstation when you can afford <b>X</b> warpstations metal cost (at the first one\'s price, simple math). -1, 0, 1 = disable. In other words, only allows warps that cost less than 1/nth your currently owned metal. (to save metal for prestiges)', 'value', -1, null, 'Buildings');
     createSetting('MaxNursery', 'Max Nurseries', 'Advanced. Recommend: 9999 until you reach Magma (z230+)', 'value', '-1', null, "Buildings");
     createSetting('NoNurseriesUntil', 'No Nurseries Until z', 'For Magma z230+ purposes. Nurseries get shut down, and wasting nurseries early on is probably a bad idea. Might want to set this to 230+ for now. Can use combined with the old Max Nurseries cap setting.', 'value', 1, null, 'Buildings');
-    createSetting('NoNurseriesIce', 'No Nurseries Ice', 'Do not buy Nurseries in Ice zones. ', 'boolean', true, null, 'Buildings');
+    createSetting('NoNurseriesIce', 'No Nurseries Ice', 'Do not buy Nurseries in Ice zones. Nurseries will still be bought in an Ice zone if it is within 5 zones of No Nurseries Until value. This is to ensure that max nurseries can be reached.', 'boolean', true, null, 'Buildings');
 
 
 
