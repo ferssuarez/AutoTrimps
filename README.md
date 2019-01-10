@@ -24,7 +24,7 @@ Overly detailed Chrome/TamperMonkey Instructions:
 
 FireFox/GreaseMonkey instructions:
 - GreaseMonkey identifies userscripts by visiting a URL that ends with ".user.js" in them:
-- Visit this URL, and Agree to install the userscript:  https://github.com/NotThat/AutoTrimps/raw/gh-pages/.user.js
+- Visit this URL, and Agree to install the userscript:  https://github.com/slivermasterz/AutoTrimps/raw/master/.user.js
 
 ***LowLevelPlayer Notes:***
 
