@@ -1,3 +1,5 @@
+var maxGraphs = 15;
+
 function pushData(){
     var dailyMultGraph = 1 + (countDailyWeight() === 0 ? 0 : getDailyHeliumValue(countDailyWeight()) / 100);
 
@@ -35,7 +37,8 @@ function pushData(){
         nursery: game.buildings.Nursery.purchased
     });
     //only keep 15 portals worth of runs to prevent filling storage
-    clearData(15);
+    if (allSaveData.length >= 9500) maxGraphs--;
+    clearData(maxGraphs);
     safeSetItems('allSaveData', JSON.stringify(allSaveData));
 }
 
@@ -229,7 +232,7 @@ function clearData(portal,clrall) {
     if(!portal)
         portal = 0;
     if (!clrall) {
-        while(allSaveData[0].totalPortals <= game.global.totalPortals - portal) {
+        while(allSaveData[0].totalPortals < game.global.totalPortals - portal) {
             allSaveData.shift();
         }
     } else {

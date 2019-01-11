@@ -493,7 +493,7 @@ function initializeAllSettings() {
     createSetting('ForceUpdateGraph', 'Live Graph', 'When the graph window is open, it will update on every cell.', 'boolean', false, null, 'Display');
     createSetting('ChangeLog', 'Show Changelog', '(Action Button). Shows the changelog popup message that AT loads on startup again, in case you missed it. The blue color means this is not a settable setting, just a button.', 'action', 'printChangelog()', null, 'Display');
     createSetting('ShowSettings', 'Show Extra Settings', 'Show/Hide settings that in my personal opinion, are rarely useful (HZE 470)', 'boolean', true, null, 'Display');
-    createSetting('MaxGraphs', 'Max Graphs', 'Maximum graphs to save. Default is 15, however 15 becomes too much when each run has more than 600 zones so adjust this value every time saving breaks', 'value', 15,null,'Display');
+    //createSetting('MaxGraphs', 'Max Graphs', 'Maximum graphs to save. Default is 15, however 15 becomes too much when each run has more than 600 zones so adjust this value every time saving breaks', 'value', 15,null,'Display');
     document.getElementById('Display').lastChild.insertAdjacentHTML('afterend','<br>');
 
 //SPAM settings:
