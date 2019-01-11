@@ -229,7 +229,7 @@ function clearData(portal,clrall) {
     if(!portal)
         portal = 0;
     if (!clrall) {
-        while(allSaveData[0].totalPortals < game.global.totalPortals - portal) {
+        while(allSaveData[0].totalPortals <= game.global.totalPortals - portal) {
             allSaveData.shift();
         }
     } else {
