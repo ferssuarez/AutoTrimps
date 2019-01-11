@@ -1,5 +1,6 @@
 var maxGraphs = 15;
 
+
 function pushData(){
     var dailyMultGraph = 1 + (countDailyWeight() === 0 ? 0 : getDailyHeliumValue(countDailyWeight()) / 100);
 
