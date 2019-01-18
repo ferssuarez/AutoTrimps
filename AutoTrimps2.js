@@ -18,8 +18,8 @@ var ATversion = '2.1.7.1'; //when this increases it forces users setting update 
 
 var local = false;
 //local = true;
-var ver = "52.37";
-var verDate = "8.1.19";
+var ver = "52.38";
+var verDate = "17.1.19";
 
 var changelogList = [];
 changelogList.push({date: "8.1.2019", version: "", description: "Stacked Void running is now a value. ", isNew: true});

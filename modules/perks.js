@@ -1213,8 +1213,7 @@ power2LevelFunc = function(){
     return Math.floor(0.0005*Math.pow(2,-x)*(Math.sqrt(125*Math.pow(2,2*x + 5)*Math.pow(x,2) + 8000*Math.pow(5.2,x)*x + 625*Math.pow(2,2*x + 7)*x + Math.pow(2,x + 8)*Math.pow(5,4 - x)*Math.pow(13,x) + 3515625*Math.pow(2,2*x + 10)) - 4375*Math.pow(2,x + 5)));
 };
 
-function calcStartingPop(){ //this is pre carp1/2 population
-    //simplification, assume 10 of each building. the purpose is mostly to have something other than 1
+function calcStartingPop(){ //this is pre carp1/2 population //simplification, assume 10 of each building. the purpose is mostly to have something other than 1
     var zone = autoTrimpSettings.APValueBoxes.maxZone > 230 ? 230 : autoTrimpSettings.APValueBoxes.maxZone; //beyond 230, pop comes from DG.
     var startingPop = 10;
     var howMany = 150;

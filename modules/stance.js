@@ -395,7 +395,7 @@ function autoStance(){
             wantLessDamage = true;
 
         var boggedFlag = (typeof game.global.dailyChallenge.bogged !== 'undefined' && DHratio > 10);
-        let stackSkip = getPageSetting('StackSkip') === 0 ? true : getPageSetting('StackSkip') === 1 ? worldArray[cellNum].corrupted === "corruptDodge" : false;
+        let stackSkip = (getPageSetting('StackSkip') <= 1 && worldArray[cellNum].corrupted === "corruptDodge") || (getPageSetting('StackSkip') === 0 && (worldArray[cellNum].corrupted === "corruptBleed" || worldArray[cellNum].corrupted === "healthyBleed"));
         var rushFlag = !stackSpire && !boggedFlag && stackSkip;
         if(expectedNumHitsD > missingStacks || cmp < 1 || rushFlag){ //we need more damage, or this cell isnt worth our time                
             //when we use high damage shield to hit a cell it could lower its cmp a bit if our main shield has less plaguebringer than our low shield. lets adjust cell PBWorth accordingly.
