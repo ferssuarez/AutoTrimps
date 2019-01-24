@@ -10,7 +10,7 @@ function getMaxWorkers(){
 
 function safeBuyJob(jobTitle, amount){
     if (!Number.isFinite(amount) || amount === 0 || typeof amount === 'undefined' || Number.isNaN(amount)) {
-        debug("Exiting out of safeBuyJob early " + jobTitle + " " + amount);
+        debug("Exiting out of safeBuyJob early " + jobTitle + " " + amount, "jobs");
         return false;
     }
     var old = preBuy2();
@@ -42,7 +42,7 @@ function safeBuyJob(jobTitle, amount){
 
 function safeFireJob(jobTitle,amount) {
    if (!Number.isFinite(amount) || amount === 0 || typeof amount === 'undefined' || Number.isNaN(amount)) {
-        debug("Exiting out of safeFireJob early " + jobTitle + " " + amount);
+        debug("Exiting out of safeFireJob early " + jobTitle + " " + amount, "jobs");
         return false;
     }
     //do some jiggerypokery in case jobs overflow and firing -1 worker does 0 (java integer overflow)
