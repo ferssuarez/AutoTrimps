@@ -176,7 +176,7 @@ function autoMap(){
     
     if (doVoids && !needPrestige){
         selectedMap = getPageSetting("StackedVoids") !== 0 ? findFirstStackedVoidMap() : findFirstVoidMap(); //returns map object or false - First logic only returns stacked maps, second returns all maps
-        statusMsg = 'VMs Left: ' + game.global.totalVoidMaps + "<br>";
+        statusMsg = 'VMs: ' + game.global.totalVoidMaps + ' (' + (selectedMap.stacked + 1) + ')' + "<br>";
     }
     
     //spire specific
