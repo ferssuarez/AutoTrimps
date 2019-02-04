@@ -750,6 +750,7 @@ function switchOnGA(){
         maxTries--;
         //cancelTooltip(); //in case its on
         //toggleGeneticistassist(true);
+        ctrlPressed = false;
         toggleGeneticistassist();
         currentStep = steps.indexOf(game.global.GeneticistassistSetting);
     }
