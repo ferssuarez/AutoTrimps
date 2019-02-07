@@ -701,6 +701,7 @@ function getTargetAntiStack(target, firstRun){
             fireGeneticists(deltaGenes);
         }
         stackConservingTrimpicide();
+        switchOnGA();
         return false;
     }
 
