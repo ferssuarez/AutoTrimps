@@ -209,9 +209,10 @@ function buyBuildings() {
             return;
         }
     }
-    
-    var nursminlvl = getPageSetting('NoNurseriesUntil');
-    var maxNursery = (isActiveSpireAT() ? getPageSetting('PreSpireNurseries') : getPageSetting('MaxNursery'));
+
+    let spirenurslvl = getPageSetting('PreSpireNurseriesStartZone');
+    let nursminlvl = (game.global.world >= spirenurslvl && game.global.world <= spirenurslvl + 100 - spirenurslvl % 100) ? spirenurslvl : getPageSetting('NoNurseriesUntil');
+    let maxNursery = (isActiveSpireAT() ? getPageSetting('PreSpireNurseries') : getPageSetting('MaxNursery'));
     if (((game.global.world < nursminlvl || nursminlvl < 0) && !isActiveSpireAT()) || (game.buildings.Nursery.owned >= maxNursery && maxNursery >= 0) || maxNursery === 0 || (getPageSetting('NoNurseriesIce') && (getEmpowerment() == "Ice") && game.global.world > nursminlvl+5)) {
         postBuy2(oldBuy);
         return;
@@ -225,7 +226,7 @@ function buyBuildings() {
     //buy nurseries irrelevant of warpstations (after we unlock them) - if we have enough extra gems that its not going to impact anything. note:(we will be limited by wood anyway - might use a lot of extra wood)
     var buyWithExtraGems = (!game.buildings.Warpstation.locked && nursCost * resomod < nwr * game.resources.gems.owned);
     if ((buyWithExtraGems ||
-         ((nursCost < nwr * warpCost || game.buildings.Warpstation.locked) &&
+         ((nursCost < nwr * warpCost || game.buil=dings.Warpstation.locked) &&
           (nursCost < nwr * collCost || game.buildings.Collector.locked || !game.buildings.Warpstation.locked)))) {*/
            safeBuyBuilding('Nursery');
     //}
