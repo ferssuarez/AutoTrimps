@@ -1518,7 +1518,8 @@ function calcDmg(){
         var max = Math.min(game.global.GeneticistassistSteps[3], maxAnti);
         ourBaseDamage = ourBaseDamage * (1+0.2*max) / (1+0.2 * game.global.antiStacks);
     }
-    
+
+    /*
     //if autostance forces not to buy coordinations, factor those in. otherwise we'll enter maps for more damage thinking that we dont have enough.
     if(buyCoords == false && game.upgrades.Coordination.done < game.upgrades.Coordination.allowed && getPageSetting('AutoStance')){
         //calculate how many coordinations we could buy if we wanted to.
@@ -1534,6 +1535,7 @@ function calcDmg(){
         }
         ourBaseDamage = ourBaseDamage * Math.pow(1.25, missingCoords);
     }
+    */
     
     if(game.global.mapsActive){
         if (game.global.titimpLeft > 1)
