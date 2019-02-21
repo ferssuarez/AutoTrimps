@@ -211,7 +211,7 @@ function buyBuildings() {
     }
 
     let spirenurslvl = getPageSetting('PreSpireNurseriesStartZone');
-    let nursminlvl = ((game.global.world >= spirenurslvl) && (((spirenurslvl % 100) == 0) ? spirenurslvl : (game.global.world <= (spirenurslvl + 100 - spirenurslvl % 100)))) ? spirenurslvl : getPageSetting('NoNurseriesUntil');
+    let nursminlvl = ((game.global.world >= spirenurslvl) && (game.global.world <= (((spirenurslvl % 100) == 0) ? spirenurslvl : (spirenurslvl + 100 - spirenurslvl % 100)))) ? spirenurslvl : getPageSetting('NoNurseriesUntil');
     let maxNursery = (isActiveSpireAT() ? getPageSetting('PreSpireNurseries') : getPageSetting('MaxNursery'));
     if (((game.global.world < nursminlvl || nursminlvl < 0) && !isActiveSpireAT()) || (game.buildings.Nursery.owned >= maxNursery && maxNursery >= 0) || maxNursery === 0 || (getPageSetting('NoNurseriesIce') && (getEmpowerment() == "Ice") && game.global.world > nursminlvl+5)) {
         postBuy2(oldBuy);
