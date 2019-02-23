@@ -29,7 +29,7 @@ function autoMagmiteSpender() {
     // then consider overclocker if we can afford it
     var hasOv = game.permanentGeneratorUpgrades.Hybridization.owned && game.permanentGeneratorUpgrades.Storage.owned;
     var ovclock = game.generatorUpgrades.Overclocker;
-    if (hasOv && ((getPageSetting('BuyOneTimeOC')==1 || getPageSetting('BuyOneTimeOC')==3) || !ovclock.upgrades) && (game.global.magmite >= ovclock.cost())) {
+    if (hasOv && !getPageSetting('ForceEffOnly') && ((getPageSetting('BuyOneTimeOC')==1 || getPageSetting('BuyOneTimeOC')==3) || !ovclock.upgrades) && (game.global.magmite >= ovclock.cost())) {
         debug("Auto Spending " + ovclock.cost() + " Magmite on: Overclocker" + (ovclock.upgrades ? " #" + (ovclock.upgrades + 1) : ""), "magmite");
         buyGeneratorUpgrade('Overclocker');
     }
