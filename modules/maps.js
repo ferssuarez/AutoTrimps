@@ -236,7 +236,8 @@ function autoMap(){
     
     var preferFAMaps = false;
 
-    if(game.equipment["Dagger"].level > 100 && game.equipment["Greatsword"].level > 100 && !windZone())
+    if(game.global.runningChallengeSquared && game.global.challengeActive == 'Metal' || // prefer FA in metal2
+       game.equipment["Dagger"].level > 100 && game.equipment["Greatsword"].level > 100 && !windZone())
         preferFAMaps = true;
 
     if(game.talents.hyperspeed2.purchased && game.global.world <= Math.floor((game.global.highestLevelCleared+1)/2))
