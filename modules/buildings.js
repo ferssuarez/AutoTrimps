@@ -210,14 +210,33 @@ function buyBuildings() {
         }
     }
 
-    let spirenurslvl = getPageSetting('PreSpireNurseriesStartZone');
-    let nursminlvl = ((game.global.world >= spirenurslvl) && (game.global.world <= (((spirenurslvl % 100) == 0) ? spirenurslvl : (spirenurslvl + 100 - spirenurslvl % 100)))) ? spirenurslvl : getPageSetting('NoNurseriesUntil');
-    let maxNursery = ((game.global.world >= spirenurslvl) && (game.global.world <= (spirenurslvl + 100 - spirenurslvl % 100)) ? getPageSetting('PreSpireNurseries') : getPageSetting('MaxNursery'));
-    if (((game.global.world < nursminlvl || nursminlvl < 0) && !isActiveSpireAT()) || (game.buildings.Nursery.owned >= maxNursery && maxNursery >= 0) || maxNursery === 0 || (getPageSetting('NoNurseriesIce') && (getEmpowerment() == "Ice") && game.global.world > nursminlvl+5)) {
+    let pn = getPageSetting('PreSpireNurseries');
+    let pZone = getPageSetting('PreSpireNurseriesStartZone');
+    let zone = getPageSetting('NoNurseriesUntil');
+
+    let buyN = buyNN();
+    let nNeed = getPageSetting('MaxNursery');
+
+    if (zone <= pZone) {
+        nNeed = inPreSpireRange(game.global.world) ? pn : nNeed;
+    }
+    else if (inPreSpireRange(zone)) {
+        buyN = game.global.world >= pZone;
+        nNeed = inPreSpireRange(game.global.world) ? Math.max(pn,nNeed) : (game.global.world < zone) ? pn : nNeed;
+    }
+    else if (inPreSpireRange(game.global.world)) {
+        buyN = true;
+        nNeed = pn;
+    }
+
+    if ((!buyN && !isActiveSpireAT()) || (game.buildings.Nursery.owned >= nNeed && nNeed >= 0) || (getPageSetting('NoNurseriesIce') && (getEmpowerment() == "Ice") && game.global.world > Math.max(zone, pZone)+5)) {
         postBuy2(oldBuy);
         return;
     }
-    
+    safeBuyBuilding('Nursery');
+    postBuy2(oldBuy);
+
+
     /*var nwr = customVars.nursCostRatio; //nursery to warpstation/collector cost ratio. Also for extra gems.
     var nursCost = getBuildingItemPrice(game.buildings.Nursery, "gems", false, 1);
     var warpCost = getBuildingItemPrice(game.buildings.Warpstation, "gems", false, 1);
@@ -228,9 +247,20 @@ function buyBuildings() {
     if ((buyWithExtraGems ||
          ((nursCost < nwr * warpCost || game.buildings.Warpstation.locked) &&
           (nursCost < nwr * collCost || game.buildings.Collector.locked || !game.buildings.Warpstation.locked)))) {*/
-           safeBuyBuilding('Nursery');
+
     //}
-    postBuy2(oldBuy);
+}
+
+function buyNN()
+{
+    return (game.global.world >= getPageSetting('NoNurseriesUntil') && getPageSetting('NoNurseriesUntil') > 0);
+}
+
+function inPreSpireRange(zoneVal)
+{
+    let pZone = getPageSetting('PreSpireNurseriesStartZone');
+    let spire = (pZone % 100 === 0) ? pZone : (pZone + 100 - pZone % 100);
+    return (zoneVal >= pZone && zoneVal <= spire);
 }
 
 //Buys more storage if resource is over 85% full (or 50% if Zone 2-10) (or 70% if zone==1)
