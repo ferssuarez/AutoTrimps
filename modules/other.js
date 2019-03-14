@@ -72,6 +72,7 @@ function autoGoldenUpgradesAT(){
 
 //auto spend nature tokens
 function autoNatureTokens() {
+    let reserveAmt = getPageSetting('TokenReserve');
     var changed = false;
     for (var nature in game.empowerments) {
         var empowerment = game.empowerments[nature];
@@ -81,7 +82,7 @@ function autoNatureTokens() {
         //buy/convert once per nature per loop
         if (setting == 'Empowerment') {
             var cost = getNextNatureCost(nature);
-            if (empowerment.tokens < cost)
+            if (empowerment.tokens < cost + reserveAmt)
                 continue;
             empowerment.tokens -= cost;
             empowerment.level++;
@@ -92,14 +93,14 @@ function autoNatureTokens() {
             if (empowerment.retainLevel >= 80)
                 continue;
             var cost = getNextNatureCost(nature, true);
-            if (empowerment.tokens < cost) continue;
+            if (empowerment.tokens < cost + reserveAmt) continue;
             empowerment.tokens -= cost;
             empowerment.retainLevel++;
             changed = true;
             debug('Upgraded ' + nature + ' transfer rate', 'nature');
         }
         else if (setting == 'Convert to Both') {
-            if (empowerment.tokens < 20) continue;
+            if (empowerment.tokens < 20 + reserveAmt) continue;
             for (var targetNature in game.empowerments) {
                 if (targetNature == nature) continue;
                 empowerment.tokens -= 10;
@@ -110,7 +111,7 @@ function autoNatureTokens() {
             }
         }
         else {
-            if (empowerment.tokens < 10)
+            if (empowerment.tokens < 10 + reserveAmt)
                 continue;
             var match = setting.match(/Convert to (\w+)/);
             var targetNature = match ? match[1] : null;
