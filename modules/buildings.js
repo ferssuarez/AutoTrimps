@@ -190,8 +190,10 @@ function buyBuildings() {
             if ((gymEff.Wall) || (gymEff.Factor <= shieldEff.Factor && !gymEff.Wall))
                 skipGym = true;
         }
+        /*
         if(buyCoords && game.upgrades.Coordination.done < game.upgrades.Coordination.allowed)
             skipGym = true;
+         */
         if (!skipGym)
             safeBuyBuilding('Gym');
     }
