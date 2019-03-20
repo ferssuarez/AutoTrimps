@@ -1006,7 +1006,8 @@ function ATgetPlayerCritDamageMult(critChance, critDamage){ //this multiplies AT
     else if(critChance === 0) return 1;
     else if(critChance === 1) return critDamage;
     else if(critChance === 2) return critDamage * Math.pow(base, 1);
-    else if(critChance >= 3)  return critDamage * Math.pow(base, 2); //triple crit highest in game ATM, red crit
+    else if(critChance === 3)  return critDamage * Math.pow(base, 2);//triple crit highest in game ATM, red crit
+    else if(critChance >= 4) return critDamage * Math.pow(base,3);
     else throw "error in ATgetPlayerCritDamageMult: unexpected crit chance " + critChance;
 }
 
@@ -1014,11 +1015,12 @@ function calcCritModifier(critChance, critDamage){
     var base = 5;
     if(game.talents.crit.purchased) base += 1;
     if(Fluffy.isRewardActive("megaCrit")) base += 2;
-    if(critChance > 3) critChance = 3; //triple crit highest in game ATM, red crit
+    if(critChance > 4) critChance = 4; //quad crit highest in game ATM, purple crit
 
     if(critChance < 0 ) return 0.2*calcCritModifier(critChance+1, critDamage);
     if(critChance <= 1) return critChance * critDamage + (1-critChance);
     if(critChance <= 2) return (base*(critChance-1) + (2-critChance))*critDamage;
+    if(critChance <= 3) return ((base*(critChance-2) + (3-critChance))*critDamage) * base;
     else                return base*calcCritModifier(critChance-1, critDamage);
 }
 
