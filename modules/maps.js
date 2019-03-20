@@ -1551,9 +1551,9 @@ function calcDmg(){
     }
     
     if (windZone() && getPageSetting('AutoStance') == 1 && !game.global.runningChallengeSquared && zoneWorth > 1)
-        windMult = 0.125; //in windstacking zones, we want less dmg since more attacks is not as bad
+        windMult = 0.08; //in windstacking zones, we want less dmg since more attacks is not as bad
     else
-        windMult = 1;
+        windMult = .25;
     
     poisonMult = (getEmpowerment() == "Poison" ? poisonMultFixed : 1);
 
