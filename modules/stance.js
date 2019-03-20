@@ -37,6 +37,7 @@ var timeDead = 0;
 var lastNextStartingStacksCurrent = 0;
 var wantLessDamage = false;
 var wantMoreDamage = false;
+var maxAttacks = 0;
 
 var negativeDamageCounter = 0;
 var easyRatioThreshold = 10;
@@ -565,9 +566,19 @@ function autoStance(){
         chosenFormation = 5;
         if (zoneWorth > .4)
         {
+            allowBuyingCoords = true;
             wantGoodShield = true;
             wantMoreDamage = true;
             wantLessDamage = false;
+        }
+        if (cell.health !== 1 && game.empowerments.Wind.currentDebuffPower === ATmaxWind)
+        {
+            if (maxAttacks++ > 0)
+            chosenFormation = 2;
+        }
+        else
+        {
+            maxAttacks = 0;
         }
     }
 
