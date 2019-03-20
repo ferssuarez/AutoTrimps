@@ -329,6 +329,8 @@ function autoMap(){
                 repeatClicked(); //disable repeat
             if(useScryhard2())
                 goDefaultStance(4);
+            if(getUberEmpowerment() === "Wind")
+                goDefaultStance(5);
         }
         else if(selectedMap != currMap){ //if we are not where we want to be, then disable repeat
             if (game.global.repeatMap)
@@ -1554,11 +1556,13 @@ function calcDmg(){
         windMult = 1;
     
     poisonMult = (getEmpowerment() == "Poison" ? poisonMultFixed : 1);
+
+    iceMult = (getEmpowerment() == "Ice" ? (Fluffy.isRewardActive("naturesWrath")?3:2) : 1);
     
     var zoneRemainingHealth = sumCurrZoneHP(game.global.lastClearedCell + 1);
     var zoneHP = sumCurrZoneHP();
     
-    threshold = poisonMult * windMult * zoneRemainingHealth / zoneHP * 1;
+    threshold = poisonMult * windMult * iceMult * zoneRemainingHealth / zoneHP * 1;
     
     DHratio = (ourBaseDamage*0.25*100) / zoneHP;
     nextZoneDHratio = DHratio / (game.jobs.Magmamancer.getBonusPercent() * ((game.global.mapBonus * .2) + 1) * 2);

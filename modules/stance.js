@@ -41,11 +41,11 @@ var wantMoreDamage = false;
 var negativeDamageCounter = 0;
 var easyRatioThreshold = 10;
 
-var ATmaxWind = game.empowerments.Wind.maxStacks;
+var ATmaxWind = game.empowerments.Wind.stackMax();
 //game.empowerments.Wind.retainLevel
 
 function autoStance(){
-    ATmaxWind = game.empowerments.Wind.maxStacks;
+    ATmaxWind = game.empowerments.Wind.stackMax();
     if(game.global.autoBattle && game.global.pauseFight) pauseFight(); //autofight on
     if (game.resources.trimps.owned == trimpsRealMax && game.global.soldierHealth === 0)
             fightManualAT(); //for when we dont have auto battle upgraded
@@ -214,7 +214,7 @@ function autoStance(){
     
     if(windZone()){
         var stacks = game.empowerments.Wind.currentDebuffPower;
-               var maxDesiredStacks = ((game.global.challengeActive == "Daily") ? ATmaxWind-4 : ATmaxWind-8); //overshooting is really bad, so take a safety margin on non dailies. note that with plaguebringer the script will overshoot this by quite a bit on occasions so a big safety margin is recommended
+        var maxDesiredStacks = ((game.global.challengeActive == "Daily") ? ATmaxWind-4 : ATmaxWind-8); //overshooting is really bad, so take a safety margin on non dailies. note that with plaguebringer the script will overshoot this by quite a bit on occasions so a big safety margin is recommended
         if((cell.corrupted !== undefined && cell.corrupted.includes("healthy")) || cellNum == 99)
             maxDesiredStacks = ATmaxWind-4; //still want max stacks for healthy/end cells
         
@@ -233,12 +233,15 @@ function autoStance(){
         var pbHitstmp = (cellNum == 99 || nextCell.plagueHits === undefined ? 0 : Math.ceil(nextCell.plagueHits));
         var corruptedtmp = (cell.corrupted === undefined ? "none" : cell.corrupted);
 
-        var pbMult = lowPB;
+        var pbMult = lowPB + (Fluffy.isRewardActive("plaguebrought") ? .5 : 0);
         if(cellNum < 99){
             worldArray[cellNum+1].health = Math.max(worldArray[cellNum+1].maxHealth - nextPBDmgtmp, 0.05*worldArray[cellNum+1].maxHealth); //extra damage on next cell from PB
             worldArray[cellNum+1].pbHits = pbHitstmp; //extra wind stacks on next cell from PB
+            let hits = 1;
+            if (getEmpowerment() == "Wind" && getUberEmpowerment() == "Wind") hits *= 2;
+            if (Fluffy.isRewardActive("plaguebrought")) hits *= 2;
             var nextStartingStacks = Math.min(1 + Math.ceil(stacks * getRetainModifier("Wind") + pbHitstmp + expectedNumHitsD * (pbMult + getRetainModifier("Wind")) + Math.ceil(worldArray[cellNum+1].health/ourAvgDmgD)), ATmaxWind);
-            var nextStartingStacksCurrent = Math.min(1 + Math.ceil((stacks+1) * getRetainModifier("Wind") + pbHitstmp), ATmaxWind);
+            var nextStartingStacksCurrent = Math.min(1 + Math.ceil((stacks+hits) * getRetainModifier("Wind") + pbHitstmp), ATmaxWind);
             if(cellNum == 80){
                 if(nextZoneDHratio <= poisonMult * windMult && worldArray[99].geoRelativeCellWorth > 0){
                     worldArray[99].geoRelativeCellWorth = 0; //need to update previous cells as well
@@ -311,7 +314,7 @@ function autoStance(){
             getDamageCaller(1.5*requiredDmgToOK, false, true);
         }
         else{
-            var limit = 20 * (goodBadShieldRatio / 20);
+            var limit = .1 * (goodBadShieldRatio / 20);
             var zonesToWind = (150000 - game.global.world) % 15 + 1; //how many zones to go until we hit wind
             var maxDHratio = limit * Math.pow(2, zonesToWind); //maximum DHratio we want right now
             var currDHratio = DHratio;
@@ -366,7 +369,7 @@ function autoStance(){
 
         calculateZoneWorth(0);
 
-        var limit = 10;
+        var limit = .125;
         if(stackSpire){
             if(cellNum < 99){
                 if(checkForGoodCell(cellNum))
@@ -426,7 +429,7 @@ function autoStance(){
                 var goodCellFlag = false;
                 for (var i = cellNum; i < cellNum+10; i++){ //check if theres a single good cell in the next 10 cells
                     if(i > 99)
-                        continue
+                        continue;
                     if(worldArray[i].finalWorth > 1){
                         goodCellFlag = true;
                         break;
@@ -443,6 +446,11 @@ function autoStance(){
                     trimpicides++;
                     return;
                 }        
+            }
+
+            if (game.global.world <= Math.floor((game.global.highestLevelCleared + 1) * (game.talents.liquification3.purchased ? 75 : 50 / 100)))
+            {
+                zoneWorth *= 1.63;
             }
 
             if(zoneWorth < 0.4){ //wind zone suxxx full OK
@@ -551,7 +559,18 @@ function autoStance(){
 
     if (chosenFormation == '0' && game.global.soldierHealth < 0.66 * game.global.soldierHealthMax) //dont swap to X if it will kill/almost kill us
         chosenFormation = 3;
-    
+
+    if(cmp >= 1 && !stackSpire && game.global.uberNature === "Wind" || zoneWorth > .4)
+    {
+        chosenFormation = 5;
+        if (zoneWorth > .4)
+        {
+            wantGoodShield = true;
+            wantMoreDamage = true;
+            wantLessDamage = false;
+        }
+    }
+
     goDefaultStance(chosenFormation);
     
     //check dmg last atk
@@ -829,7 +848,7 @@ function buildWorldArray(){
         enemy.corrupted = game.global.gridArray[i].corrupted;
         
         if(enemy.mutation == "Corruption")   enemy.baseWorth = 0.15;
-        else if(enemy.mutation == "Healthy") enemy.baseWorth = 0.45;
+        else if(enemy.mutation == "Healthy") enemy.baseWorth = game.talents.healthStrength2.purchased ? .65 : .45;
         else                                 enemy.baseWorth = 0;
         
         enemy.attack    = calcEnemyAttack(enemy.mutation, enemy.corrupted, enemy.name, i, game.global.world, true);
@@ -841,7 +860,7 @@ function buildWorldArray(){
     //last cell special case
     worldArray[99].baseWorth = 1;
     
-    var pbMult = (lowPB > -1 ? lowPB : game.heirlooms.Shield.plaguebringer.currentBonus / 100); //weaker shield should have more PB. PB isnt that good of a damage modifier.    
+    var pbMult = (lowPB > -1 ? lowPB : game.heirlooms.Shield.plaguebringer.currentBonus / 100) + (Fluffy.isRewardActive("plaguebrought") ? .5 : 0); //weaker shield should have more PB. PB isnt that good of a damage modifier.
     
     calcOmniHelium();
 
@@ -857,7 +876,7 @@ function buildWorldArray(){
             else if(worldArray[i-1].mutation == "Corruption")
                 regularHelium = m * 0.15 * (1 + spireRowBonus * (30+Math.floor(i/10))) / (1 + spireRowBonus * 30);
             else if(worldArray[i-1].mutation == "Healthy")
-                regularHelium = m * 0.45 * (1 + spireRowBonus * (30+Math.floor(i/10))) / (1 + spireRowBonus * 30);
+                regularHelium = m * (game.talents.healthStrength2.purchased ? .65 : .45) * (1 + spireRowBonus * (30+Math.floor(i/10))) / (1 + spireRowBonus * 30);
             if(i == 100) //omni
                 regularHelium = m * (1 + spireRowBonus * (30+Math.floor(i/10))) / (1 + spireRowBonus * 30);
             if(i == 20 || i == 50 || i == 60 || i == 70 || i == 80)
@@ -1012,6 +1031,8 @@ function goDefaultStance(chosenFormation){
     else if (formation == 3 && !game.upgrades.Barrier.done)
         formation = '0';
     else if (formation == 4 && !(game.global.world >= 60 && game.global.highestLevelCleared >= 180))
+        formation = '0';
+    else if (formation == 5 && !getUberEmpowerment() == "Wind")
         formation = '0';
     
     if(formation != game.global.formation)

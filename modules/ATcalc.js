@@ -119,6 +119,11 @@ function calcArmyDamage(printout, currentGame, zone, dailyObj, armySizeUncapped,
         dmg *= str;
         if (printout) debug("strength in health " + str.toFixed(2) + " dmg " + dmg.toExponential(2));
     }
+    if (currentGame && game.talents.voidMastery.purchased && game.global.voidBuff){
+        var vpAmt = 5;
+        dmg *= vpAmt;
+        if (printout) debug("void power " + ((vpAmt / 100) + 1).toFixed(2) + " dmg " + dmg.toExponential(2));
+    }
     if (playerSpireTraps.Strength.owned){
         var strBonus = playerSpireTraps.Strength.getWorldBonus();
         var str = (1 + (strBonus / 100));
