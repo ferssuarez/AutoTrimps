@@ -1553,16 +1553,14 @@ function calcDmg(){
     if (windZone() && getPageSetting('AutoStance') == 1 && !game.global.runningChallengeSquared && zoneWorth > 1)
         windMult = 0.08; //in windstacking zones, we want less dmg since more attacks is not as bad
     else
-        windMult = .25;
+        windMult = 0.5;
     
     poisonMult = (getEmpowerment() == "Poison" ? poisonMultFixed : 1);
-
-    iceMult = (getEmpowerment() == "Ice" ? (Fluffy.isRewardActive("naturesWrath")?3:2) : 1);
     
     var zoneRemainingHealth = sumCurrZoneHP(game.global.lastClearedCell + 1);
     var zoneHP = sumCurrZoneHP();
     
-    threshold = poisonMult * windMult * iceMult * zoneRemainingHealth / zoneHP * 1;
+    threshold = poisonMult * windMult * zoneRemainingHealth / zoneHP * 1;
     
     DHratio = (ourBaseDamage*0.25*100) / zoneHP;
     nextZoneDHratio = DHratio / (game.jobs.Magmamancer.getBonusPercent() * ((game.global.mapBonus * .2) + 1) * 2);

@@ -164,6 +164,10 @@ function calcArmyDamage(printout, currentGame, zone, dailyObj, armySizeUncapped,
         dmg *= ice;
         if (printout) debug("ice " + ice.toExponential(2) + " dmg " + dmg.toExponential(2));
     }
+    if (currentGame && getUberEmpowerment() == "Poison"){
+        dmg *= 3;
+        if (printout) debug("Poison Enlightenment " +  " dmg " + dmg.toExponential(2));
+    }
     if (Fluffy.isActive()){
         var fluff = lastFluffDmg;
         dmg *= fluff;
