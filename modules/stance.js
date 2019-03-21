@@ -561,15 +561,9 @@ function autoStance(){
     if (chosenFormation == '0' && game.global.soldierHealth < 0.66 * game.global.soldierHealthMax) //dont swap to X if it will kill/almost kill us
         chosenFormation = 3;
 
-    if((cmp >= 1 && !stackSpire || zoneWorth > .4) && game.global.uberNature === "Wind" && getPageSetting('AutoStance') === 1)
+    if((cmp >= 1 && !stackSpire) && game.global.uberNature === "Wind" && getPageSetting('AutoStance') === 1)
     {
         chosenFormation = 5;
-        if (zoneWorth > .4)
-        {
-            allowBuyingCoords = true;
-            wantMoreDamage = true;
-            wantLessDamage = false;
-        }
         if (cell.health !== 1 && game.empowerments.Wind.currentDebuffPower === ATmaxWind && zoneWorth > .4)
         {
             if (maxAttacks++ > 0)
