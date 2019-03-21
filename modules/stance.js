@@ -1043,7 +1043,7 @@ function goDefaultStance(chosenFormation){
         formation = '0';
     else if (formation == 4 && !(game.global.world >= 60 && game.global.highestLevelCleared >= 180))
         formation = '0';
-    else if (formation == 5 && !getUberEmpowerment() == "Wind")
+    else if (formation == 5 && getUberEmpowerment() !== "Wind")
         formation = '0';
     
     if(formation != game.global.formation)
