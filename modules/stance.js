@@ -567,11 +567,10 @@ function autoStance(){
         if (zoneWorth > .4)
         {
             allowBuyingCoords = true;
-            wantGoodShield = true;
             wantMoreDamage = true;
             wantLessDamage = false;
         }
-        if (cell.health !== 1 && game.empowerments.Wind.currentDebuffPower === ATmaxWind)
+        if (cell.health !== 1 && game.empowerments.Wind.currentDebuffPower === ATmaxWind && zoneWorth > .4)
         {
             if (maxAttacks++ > 0)
             chosenFormation = 2;
