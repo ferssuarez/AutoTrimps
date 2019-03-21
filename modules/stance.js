@@ -561,7 +561,7 @@ function autoStance(){
     if (chosenFormation == '0' && game.global.soldierHealth < 0.66 * game.global.soldierHealthMax) //dont swap to X if it will kill/almost kill us
         chosenFormation = 3;
 
-    if(cmp >= 1 && !stackSpire && game.global.uberNature === "Wind" || zoneWorth > .4)
+    if((cmp >= 1 && !stackSpire || zoneWorth > .4) && game.global.uberNature === "Wind")
     {
         chosenFormation = 5;
         if (zoneWorth > .4)
