@@ -74,7 +74,7 @@ function autoHeirlooms(){
         var originalLength = game.global.heirloomsExtra.length;
         for(var index=0; index < originalLength; index++) {
             var theLoom = game.global.heirloomsExtra[index];
-            if ((theLoom.protected) && (game.global.heirloomsCarried.length < game.global.maxCarriedHeirlooms)){
+            if ((theLoom.protected) && (game.global.heirloomsCarried.length < getMaxCarriedHeirlooms())){
                 selectHeirloom(index, 'heirloomsExtra', true);
                 newCarryHeirloom();
                 index--; originalLength--;  //stop index-skipping/re-ordering (idk how else to do it).
@@ -99,7 +99,7 @@ function valueLoomsNew(){
     var counter = 0;
     for(loom of game.global.heirloomsExtra){
         counter++;
-        if(game.global.heirloomsCarried.length >= game.global.maxCarriedHeirlooms){ //can't carry any more
+        if(game.global.heirloomsCarried.length >= getMaxCarriedHeirlooms()){ //can't carry any more
             debug("Can't carry any more heirlooms.", "heirlooms");
             return;
         }
@@ -128,7 +128,7 @@ function valueLoomsOld(){
     //now start by re-filling any empty carried slots with the most highly evaluated heirlooms
     //Alternates EQUALLY between Shield and Staff, putting the best ones of each.
     //PART 3:
-    while ((game.global.heirloomsCarried.length < game.global.maxCarriedHeirlooms) && game.global.heirloomsExtra.length > 0){
+    while ((game.global.heirloomsCarried.length < getMaxCarriedHeirlooms()) && game.global.heirloomsExtra.length > 0){
         //re-evaluate their worth (needed to refresh the worth array since we for sure re-arranged everything.)
         worthOfHeirlooms();
         if (worth2["Shield"].length > 0){
@@ -521,7 +521,7 @@ function newSelectHeirloom(number, location, noScreenUpdate){
 
 function newCarryHeirloom(){
 	var heirloom = getSelectedHeirloom();
-	if (game.global.heirloomsCarried.length >= game.global.maxCarriedHeirlooms) return;
+	if (game.global.heirloomsCarried.length >= getMaxCarriedHeirlooms()) return;
 	game.global.heirloomsExtra.splice(game.global.selectedHeirloom[0], 1);
 	game.global.heirloomsCarried.push(heirloom);
 	//populateHeirloomWindow();
