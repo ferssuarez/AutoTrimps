@@ -727,7 +727,7 @@ function BWRaidNowLogic(){
     if(setting === 0)                                                                                        return false; //never
     else if(setting === 1 && !game.global.runningChallengeSquared)                                           return false; //c2 only
     else if(setting === 2 && !game.global.runningChallengeSquared && game.global.challengeActive != "Daily") return false; //c2 + dailies
-    else if(game.global.world < getPageSetting('BWraidingmin') || (game.global.challengeActive != "Trimp" && game.global.world >= 236 && !((cycleZone() == 4 || cycleZone() == 19)))) return false;
+    else if(game.global.world < getPageSetting('BWraidingmin') || (game.global.challengeActive != "Trimp" && game.global.world >= 239 && !((cycleZone() == 4 || cycleZone() == 19)))) return false;
     return true;                                                                                                                
 }
 
