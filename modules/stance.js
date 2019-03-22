@@ -523,6 +523,18 @@ function autoStance(){
                 else
                     chosenFormation = 3;
 
+                if (game.global.uberNature === "Wind") {
+                    chosenFormation = 5;
+                    if (cell.health !== 1 && game.empowerments.Wind.currentDebuffPower === ATmaxWind) {
+                        if (maxAttacks++ > 0)
+                            chosenFormation = 2;
+                    }
+                    else {
+                        maxAttacks = 0;
+                    }
+                }
+
+
                 //update cell PBWorth to current plaguebringer value
                 /*pbMult = (game.heirlooms.Shield.plaguebringer.currentBonus > 0 ? game.heirlooms.Shield.plaguebringer.currentBonus / 100 : 0);
                 if(cellNum < 99)
@@ -563,7 +575,8 @@ function autoStance(){
     if (chosenFormation == '0' && game.global.soldierHealth < 0.66 * game.global.soldierHealthMax) //dont swap to X if it will kill/almost kill us
         chosenFormation = 3;
 
-    if(((cmp >= 1 && !stackSpire) || zoneWorth > 10) && game.global.uberNature === "Wind" && getPageSetting('AutoStance') === 1)
+    /*
+    if(( zoneWorth > 10) && game.global.uberNature === "Wind" && getPageSetting('AutoStance') === 1)
     {
         chosenFormation = 5;
         if (cell.health !== 1 && game.empowerments.Wind.currentDebuffPower === ATmaxWind && zoneWorth > 10)
@@ -576,6 +589,7 @@ function autoStance(){
             maxAttacks = 0;
         }
     }
+    */
 
     goDefaultStance(chosenFormation);
     
