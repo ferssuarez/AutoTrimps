@@ -187,10 +187,12 @@ function buyJobs(){
     
     //Magmamancers code:
     if (game.jobs.Magmamancer.locked) return;
-    var timeOnZone = Math.floor((getGameTime() - game.global.zoneStarted) / 60000);
-    if (game.talents.magmamancer.purchased)
-        timeOnZone += 5;
-    var stacks2 = Math.floor(timeOnZone / 10);
+    var timeOnZone = getGameTime() - game.global.zoneStarted;
+    if (game.talents.magmamancer.purchased) timeOnZone += 300000;
+    if (game.talents.stillMagmamancer.purchased){
+        timeOnZone = Math.floor(timeOnZone + (60000 * game.global.spireRows));
+    }
+    var stacks2 = Math.floor(timeOnZone / 600000);
     if (stacks2 > tierMagmamancers) {
         var old = preBuy2();
         game.global.firing = false;
