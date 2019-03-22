@@ -85,7 +85,7 @@ function autoMap(){
     //PRaidStartZone = getPageSetting('PRaidSetting') ? Math.min(PRaidStartZone, praidAutoStart()) : getPageSetting('PRaidingZoneStart'); //from this zone we prestige raid
     //if (!needPrestige && (getPageSetting('PRaidingZoneStart') > 0 || getPageSetting('PRaidSetting'))){
     PRaidStartZone = getPageSetting('PRaidingZoneStart'); //from this zone we prestige raid
-    if (!needPrestige) {// && game.global.challengeActive !== "Obliterated" && game.global.challengeActive !== "Trimp"){
+    if (!needPrestige) {
         if(!PrestigeRaid()){ //not done yet so we'll return to it in the next visit to autoMaps() function. until then go back to main AT so we can purchase prestiges and stuff
             PRaidingActive = true; //tells buyUpgrades() that we should buy coords
             return; 
@@ -586,7 +586,7 @@ function PrestigeRaid() {
     if(havePrestigeUpTo === maxDesiredLevel && prestigeState === 2) //have all
         return true; 
     var aboutToSpire = game.global.world % 100 === 0 || game.global.world % 100 >= 95; //when spire is coming up, we want that last gambesome prestige as well
-    if(havePrestigeUpTo === maxDesiredLevel && prestigeState === 1 && !aboutToSpire && !BWRaidNowLogic() && (maxDesiredLevel >= expectedPortalZone || bsZone >= maxDesiredLevel)) //when to skip last gambes
+    if(havePrestigeUpTo === maxDesiredLevel && prestigeState === 1 && !aboutToSpire && !BWRaidNowLogic() && game.global.challengeActive != "Obliterated" && game.global.challengeActive != "Trimp" && (maxDesiredLevel >= expectedPortalZone || bsZone >= maxDesiredLevel)) //when to skip last gambes
     //if(havePrestigeUpTo === maxDesiredLevel && prestigeState === 1 && game.global.world % 100 !== 0 && !BWRaidNowLogic() && (maxDesiredLevel >= expectedPortalZone || bsZone >= maxDesiredLevel)) //when to skip last gambes
         return true;
     if(expectedPortalZone == game.global.world && !doVoids && !isActiveSpireAT()) //last zone and we dont need any void maps
