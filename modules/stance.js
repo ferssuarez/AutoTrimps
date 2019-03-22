@@ -452,6 +452,8 @@ function autoStance(){
             if (game.global.world <= Math.floor((game.global.highestLevelCleared + 1) * (game.talents.liquification3.purchased ? 75 : 50 / 100)))
             {
                 zoneWorth *= 1.63;
+                cmp *=1.63;
+                cmpActual *= 1.63;
             }
 
             if(zoneWorth < 0.4){ //wind zone suxxx full OK
