@@ -81,11 +81,11 @@ function autoMap(){
     if (game.global.mapsActive && game.options.menu.mapLoot.enabled != 1) toggleSetting('mapLoot');
     //Control in-map right-side-buttons.
     if (game.options.menu.exitTo.enabled != 0) toggleSetting('exitTo');
-    
+
     //PRaidStartZone = getPageSetting('PRaidSetting') ? Math.min(PRaidStartZone, praidAutoStart()) : getPageSetting('PRaidingZoneStart'); //from this zone we prestige raid
     //if (!needPrestige && (getPageSetting('PRaidingZoneStart') > 0 || getPageSetting('PRaidSetting'))){
     PRaidStartZone = getPageSetting('PRaidingZoneStart'); //from this zone we prestige raid
-    if (!needPrestige){
+    if (!needPrestige && game.global.challengeActive !== "Obliterated" && game.global.challengeActive !== "Trimp"){
         if(!PrestigeRaid()){ //not done yet so we'll return to it in the next visit to autoMaps() function. until then go back to main AT so we can purchase prestiges and stuff
             PRaidingActive = true; //tells buyUpgrades() that we should buy coords
             return; 
@@ -727,7 +727,9 @@ function BWRaidNowLogic(){
     if(setting === 0)                                                                                        return false; //never
     else if(setting === 1 && !game.global.runningChallengeSquared)                                           return false; //c2 only
     else if(setting === 2 && !game.global.runningChallengeSquared && game.global.challengeActive != "Daily") return false; //c2 + dailies
-    else if(game.global.world < getPageSetting('BWraidingmin') || (game.global.challengeActive != "Trimp" && game.global.world >= 239 && !((cycleZone() == 4 || cycleZone() == 19)))) return false;
+    else if(game.global.challengeActive == "Obliterated" && game.global.world === 239) return true;
+    else if(game.global.challengeActive == "Trimp" && game.global.world === 236) return true;
+    else if(game.global.world < getPageSetting('BWraidingmin') || !(cycleZone() == 4 || cycleZone() == 19)) return false;
     return true;                                                                                                                
 }
 
