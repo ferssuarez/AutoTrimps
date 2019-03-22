@@ -85,7 +85,7 @@ function autoMap(){
     //PRaidStartZone = getPageSetting('PRaidSetting') ? Math.min(PRaidStartZone, praidAutoStart()) : getPageSetting('PRaidingZoneStart'); //from this zone we prestige raid
     //if (!needPrestige && (getPageSetting('PRaidingZoneStart') > 0 || getPageSetting('PRaidSetting'))){
     PRaidStartZone = getPageSetting('PRaidingZoneStart'); //from this zone we prestige raid
-    if (!needPrestige) {// && game.global.challengeActive !== "Obliterated" && game.global.challengeActive !== "Trimp"){
+    if (!needPrestige)// && game.global.challengeActive !== "Obliterated" && game.global.challengeActive !== "Trimp"){
         if(!PrestigeRaid()){ //not done yet so we'll return to it in the next visit to autoMaps() function. until then go back to main AT so we can purchase prestiges and stuff
             PRaidingActive = true; //tells buyUpgrades() that we should buy coords
             return; 
