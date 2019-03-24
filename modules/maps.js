@@ -1388,6 +1388,13 @@ function windZone(value){
         return (game.global.world-241) % 15 <= 4 && game.global.world > 240;
 }
 
+function iceZone(value){
+    if(value !== undefined && value > 0)
+        return (value-246) % 15 <= 4 && value > 245;
+    else
+        return (game.global.world-246) % 15 <= 4 && game.global.world > 245;
+}
+
 function poisonZone(zoneNum){
     var zone = typeof zoneNum === 'undefined' ? game.global.world : zoneNum;
     return game.global.challengeActive == "Eradicated" ? zone % 15 <= 4 : ((zone-236) % 15 <= 4);
