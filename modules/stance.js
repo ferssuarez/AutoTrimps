@@ -290,7 +290,7 @@ function autoStance(){
             if(getPageSetting('AutoStance') == 3)  //push mode
                 chosenFormation = 2; //D if we have it, X otherwise
             else{ //hybrid mode
-            if(poisonZone()){
+            if(poisonZone() || (game.global.uberNature == 'Ice' && iceZone())){
                 if(remainingDrops > 0)
                     chosenFormation = 4;
                 else
