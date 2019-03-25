@@ -231,7 +231,7 @@ function buyBuildings() {
         nNeed = pn;
     }
 
-    if ((!buyN && !isActiveSpireAT()) || (game.buildings.Nursery.owned >= nNeed && nNeed >= 0) || (getPageSetting('NoNurseriesIce') && (getEmpowerment() == "Ice") && game.global.world > Math.max(zone, pZone)+5)) {
+    if (!buyN || (game.buildings.Nursery.owned >= nNeed && nNeed >= 0) || (getPageSetting('NoNurseriesIce') && (getEmpowerment() == "Ice") && game.global.world > Math.max(zone, pZone)+5)) {
         postBuy2(oldBuy);
         return;
     }
