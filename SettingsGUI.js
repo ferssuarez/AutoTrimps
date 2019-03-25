@@ -920,6 +920,14 @@ function updateCustomButtons() {
         turnOff('Post60LSC');
         turnOff('Post60LWC');
     }
+
+    if (game.stats.highestLevel.valueTotal() < 400 && getPageSetting("PauseScript") == true) {
+        turnOff("PauseScript");
+    }
+    else
+    {
+        turnOn("PauseScript");
+    }
     
     //Show and Hide useless settings to reduce UI clutter
     var turnonofflist = [

@@ -18,11 +18,12 @@ var ATversion = '2.1.7.1'; //when this increases it forces users setting update 
 
 var local = false;
 //local = true;
-var ver = "53.09";
-var verDate = "22.3.19";
+var ver = "53.10";
+var verDate = "22.3.24";
 
 var changelogList = [];
-changelogList.push({date: "22.3.2019", version: "", description: "Obli and Trimp now start BW raiding on proper zones. ", isNew: true});
+changelogList.push({date: "24.3.2019", version: "", description: "Saving new players from themselves. ", isNew: true});
+changelogList.push({date: "22.3.2019", version: "", description: "Obli and Trimp now start BW raiding on proper zones. ", isNew: false});
 changelogList.push({date: "19.3.2019", version: "", description: "Updated for 4.11. ", isNew: false});
 changelogList.push({date: "8.1.2019", version: "", description: "Stacked Void running is now a value. ", isNew: false});
 changelogList.push({date: "8.1.2019", version: "", description: "Added Option to stack bleed and dodge cells", isNew: false});
@@ -175,9 +176,13 @@ function startAT() {
     script.setAttribute('crossorigin',"anonymous");
     document.head.appendChild(script);
 
-
+    //saving new players from themselves
+    if (game.stats.highestLevel.valueTotal() < 400) {
+        setPageSetting("PauseScript",true);
+    }
 
     debug('AutoTrimps loaded!');
+
 }
 
 //This should redirect the script to wherever its being mirrored from.
