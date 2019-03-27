@@ -17,12 +17,14 @@ var ATversion = '2.1.7.1'; //when this increases it forces users setting update 
 ////////////////////////////////////////
 
 var local = false;
-//local = true;
+local = true;
 var ver = "53.10";
-var verDate = "22.3.24";
+ver = "420";
+var verDate = "1.4.19";
 
 var changelogList = [];
-changelogList.push({date: "24.3.2019", version: "", description: "Saving new players from themselves. ", isNew: true});
+changelogList.push({date: "1.4.2019", version: "", description: "UPGRADED TO FINAL FORM!!!", isNew: true});
+changelogList.push({date: "24.3.2019", version: "", description: "Saving new players from themselves. ", isNew: false});
 changelogList.push({date: "22.3.2019", version: "", description: "Obli and Trimp now start BW raiding on proper zones. ", isNew: false});
 changelogList.push({date: "19.3.2019", version: "", description: "Updated for 4.11. ", isNew: false});
 changelogList.push({date: "8.1.2019", version: "", description: "Stacked Void running is now a value. ", isNew: false});
@@ -84,7 +86,7 @@ function startAT() {
     ATbutton.innerHTML = 'AutoTrimps';
     ATbutton.setAttribute('id', 'AutoTrimpsFilter');
     ATbutton.setAttribute('type', 'button');
-    ATbutton.setAttribute('onclick', "filterMessage2('AutoTrimps')");
+    ATbutton.setAttribute('onclick', "filterMessage2('AutoHooey')");
     ATbutton.setAttribute('class', "btn btn-success logFlt");
     //
     var tab = document.createElement("DIV");
@@ -221,7 +223,7 @@ function initializeAutoTrimps() {
         ATscriptLoad(modulepath, ATmoduleList[m]);
     
     //debug('AutoTrimps v' + ATversion + ' ' + ver + ' Loaded!', '*spinner3');
-    debug('AutoTrimps v' + ATversion + ' ' + ver);
+    debug('AutoHooey v' + ATversion + ' ' + ver);
 }
 
 function assembleChangelog(date,version,description,isNew) {
@@ -239,10 +241,10 @@ function printChangelog() {
     }
     var footer =
         '<b>Ongoing Development</b> - <u>Report any bugs/problems please</u>!\
-        <br>Talk with the dev: <b>Sliverz#7416</b> @ <a target="#" href="https://discord.gg/W2Ajv4j">AutoTrimps Discord Channel</a>'
+        <br>Talk with the dev: <b>Sliverz#7416</b> @ <a target="#" href="https://discord.gg/W2Ajv4j">Trimps Discord Channel</a>'
     ,   action = 'cancelTooltip()'
-    ,   title = "AutoTrimps - Meowchan's Fork<br>" + "v" + ver + " " + verDate
-    ,   acceptBtnText = "Thank you for playing AutoTrimps!"
+    ,   title = "AutoHooey - Hooey's Fork<br>" + "v" + ver + " " + verDate
+    ,   acceptBtnText = "Thank you for playing AutoHooey!"
     ,   hideCancel = true;
     tooltip('confirm', null, 'update', body+footer, action, title, acceptBtnText, null, hideCancel);
 }
