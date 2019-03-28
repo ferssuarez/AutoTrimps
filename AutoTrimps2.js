@@ -86,7 +86,7 @@ function startAT() {
     ATbutton.innerHTML = 'AutoTrimps';
     ATbutton.setAttribute('id', 'AutoTrimpsFilter');
     ATbutton.setAttribute('type', 'button');
-    ATbutton.setAttribute('onclick', "filterMessage2('AutoHooey')");
+    ATbutton.setAttribute('onclick', "filterMessage2('AutoTrimps')");
     ATbutton.setAttribute('class', "btn btn-success logFlt");
     //
     var tab = document.createElement("DIV");
