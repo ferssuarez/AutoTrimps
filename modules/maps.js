@@ -1358,6 +1358,8 @@ function checkNeedToVoid(){
 
     if (!findFirstStackedVoidMap()) return false;
 
+    if (Fluffy.isRewardActive("voidSiphon") && BWRaidNowLogic()) return true;
+
     
     if(voidMapZone <= 0 || voidMapZone > game.global.world) return false;
     
