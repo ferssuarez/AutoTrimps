@@ -93,7 +93,7 @@ function autoMap(){
     }
     
     //BW Raiding
-    if ((enoughDamage || game.global.mapBonus >= 10) && !needPrestige && BWRaidNowLogic() && !BWraiding()){
+    if ((enoughDamage || game.global.mapBonus >= 10) && !needPrestige && !doVoids && BWRaidNowLogic() && !BWraiding()){
         PRaidingActive = true;
         return;
     }
@@ -1355,6 +1355,9 @@ function checkNeedToVoid(){
         }
         voidMapZone += dailyVoidMod;
     }
+
+    if (!findFirstStackedVoidMap()) return false;
+
     
     if(voidMapZone <= 0 || voidMapZone > game.global.world) return false;
     
