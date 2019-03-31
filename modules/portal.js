@@ -139,6 +139,7 @@ function doPortal(challenge) {
     activateClicked(); //click button
     activatePortal(); //confirm
     zonePostpone = 0;
+    if (game.global.challengeActive === "Daily") nextEnlight();
 }
 
 // Finish Challenge2 (UNI mod)
@@ -184,4 +185,51 @@ function findOutCurrentPortalLevel(){
             break;
     }
     return {level:portalLevel, lead:leadCheck};
+}
+
+function DailyQueueInit() {
+    return queuePresetObj([0,"W","W","I"]);
+}
+
+function queuePresetObj(arr)
+{
+    if (typeof autoTrimpSettings.DailyQueue === "undefined") autoTrimpSettings.DailyQueue = arr;
+    var preset = [];
+    for (let i = 0; i < autoTrimpSettings.DailyQueue.length; i++)
+    {
+        preset[i] = (typeof autoTrimpSettings.DailyQueue[i] !== "undefined") ? autoTrimpSettings.DailyQueue[i] : arr[i];
+    }
+    if (preset[0] === "") preset[0] = 0;
+    return preset;
+}
+
+function updateDailyQueue(arr)
+{
+    autoTrimpSettings.DailyQueue = queuePresetObj(arr);
+    saveSettings();
+}
+
+function nextEnlight() {
+    autoTrimpSettings.DailyQueue = DailyQueueInit();
+
+    if (autoTrimpSettings.DailyQueue[0] === 0) return false; //If arr[0] is 0 disable Enlight Queueing
+    else
+    {
+       let enlight = "";
+       switch (autoTrimpSettings.DailyQueue[autoTrimpSettings.DailyQueue[0]]) {
+           case "P":
+               enlight = "Poison"; break;
+           case "W":
+               enlight = "Wind"; break;
+           case "I":
+               enlight = "Ice"; break;
+           default:
+               break;
+       }
+       if (enlight !== "") naturePurchase('uberEmpower', enlight);
+       autoTrimpSettings.DailyQueue[0]++;
+       if (autoTrimpSettings.DailyQueue[0] > autoTrimpSettings.DailyQueue.length-1)
+           autoTrimpSettings.DailyQueue[0] = 1; //If arr[0] passes last index, loop back to first index
+    }
+    saveSettings();
 }
