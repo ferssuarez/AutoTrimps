@@ -406,6 +406,7 @@ function initializeAllSettings() {
     createSetting('AutoStance', ['Off', 'Helium Mode', 'Dark Essence Mode', 'Push Mode', 'Hybrid'], 'Combat settings. Helium mode: will attempt to windstack any cell thats worth more than threshold. Be sure to have shield swapping enabled with this! Dark Essence Mode: Buys all damage and uses S stance. Push Mode: Buys all damage and uses D stance. Hybrid: Push in Wind/Ice, DE in Poison (+ice in ice enlightenment).', 'multitoggle', 0, null, 'Combat');
     createSetting('WindStackingPctHe', 'He/Hr% Threshold', 'For use with Helium Mode. Will lower damage for stacking on cells that yield higher than this threshold. Lower threshold -> more stacking. You should set this to about x2-3 times your filler He/Hr percent of total. In % units (type 0.5 for 0.5% He/Hr etc)', 'value', '-1', null, 'Combat');
     createSetting('StackSkip', ['Skip Bleed and Dodge','Stack Bleed', 'Stack Bleed and Dodge'],'Toggles for wind stacking','multitoggle', 0, null, 'Combat');
+    createSetting("ForceW", "Force W Zone","Forces W stance on Dailies after this zone", "value",'-1',null,'Combat' );
     createSetting('DelayCoordsForWind', 'Stall Coords For Wind', 'With this on, AS will micromanage Coordination for windstacking. Logic is: Buy all Coords utill *Start No Coord Buy* zone, then stop until Amalgamator amount, then let AS micromanage. Will always buy all coords for active spires, Void Map zone BW Raid and Prestige Raids.', 'boolean', true, null, 'Combat');
     createSetting('DelayWeaponsForWind', 'Stall Weapons For Wind', 'With this on, AS will micromanage Weapon purchases for windstacking. Used to lower damage in the early game.', 'boolean', true, null, 'Combat');
     createSetting('GASetting', 'AT Control GA', 'AT Control GA - Allow AT to control GeneticistAssist timer. Also handles bogged dailies (Recommended). When this is off will use your manually entered Input instead.', 'boolean', true, null, 'Combat');
@@ -901,6 +902,7 @@ function updateCustomButtons() {
     getPageSetting('HeirloomEvalNew') ? turnOn("HeirloomHighPushShield"): turnOff("HeirloomHighPushShield");
     getPageSetting('AutoStance') == 1 ? turnOn("WindStackingPctHe"): turnOff("WindStackingPctHe");
     getPageSetting('AutoStance') == 1 ? turnOn("StackSkip"): turnOff("StackSkip");
+    getPageSetting('AutoStance') == 1 ? turnOn("ForceW"): turnOff("ForceW");
     getPageSetting('AutoStance') == 1 ? turnOn("DelayCoordsForWind"): turnOff("DelayCoordsForWind");
     getPageSetting('AutoStance') == 1 ? turnOn("DelayWeaponsForWind"): turnOff("DelayWeaponsForWind");
     getPageSetting('AutoGoldenUpgrades') == "Helium" ? turnOn('BattleSwitchZone') : turnOff('BattleSwitchZone');

@@ -575,21 +575,18 @@ function autoStance(){
     if (chosenFormation == '0' && game.global.soldierHealth < 0.66 * game.global.soldierHealthMax) //dont swap to X if it will kill/almost kill us
         chosenFormation = 3;
 
-    /*
-    if(( zoneWorth > 10) && game.global.uberNature === "Wind" && getPageSetting('AutoStance') === 1)
+    if( game.global.uberNature === "Wind" && game.global.challengeActive === "Daily" && getPageSetting('AutoStance') === 1 && game.global.world >= getPageSetting("ForceW"))
     {
         chosenFormation = 5;
-        if (cell.health !== 1 && game.empowerments.Wind.currentDebuffPower === ATmaxWind && zoneWorth > 10)
-        {
+        if (cell.health !== 1 && game.empowerments.Wind.currentDebuffPower === ATmaxWind) {
             if (maxAttacks++ > 0)
             chosenFormation = 2;
         }
-        else
-        {
+        else {
             maxAttacks = 0;
         }
     }
-    */
+
 
     goDefaultStance(chosenFormation);
     
