@@ -81,9 +81,8 @@ function autoStance(){
             }
             else
                 updateLastPoint(lastCell);
-
-            maxAttacks = 0;
         }
+        maxAttacks = -5;
         
         /*if(stackSpire){
             debug("Spire Bonus should be: " + checkSpireValue(lastCell, stanceStats.stacks[lastCell], true).toExponential(2));
@@ -577,7 +576,7 @@ function autoStance(){
     if (chosenFormation == '0' && game.global.soldierHealth < 0.66 * game.global.soldierHealthMax) //dont swap to X if it will kill/almost kill us
         chosenFormation = 3;
 
-    if( game.global.uberNature === "Wind" && game.global.challengeActive === "Daily" && getPageSetting('AutoStance') === 1 && game.global.world >= getPageSetting("ForceW"))
+    if( game.global.uberNature === "Wind" && game.global.challengeActive === "Daily" && !game.global.mapsActive && getPageSetting('AutoStance') === 1 && game.global.world >= getPageSetting("ForceW"))
     {
         chosenFormation = 5;
         if (cell.health !== 1 && game.empowerments.Wind.currentDebuffPower === ATmaxWind) {
