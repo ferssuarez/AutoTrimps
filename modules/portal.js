@@ -205,7 +205,7 @@ function queuePresetObj(arr)
 
 function updateDailyQueue(arr)
 {
-    autoTrimpSettings.DailyQueue = queuePresetObj(arr);
+    autoTrimpSettings.DailyQueue = queuePresetObj(typeof arr === "undefined" ? autoTrimpSettings.DailyQueue : arr);
     saveSettings();
 }
 
