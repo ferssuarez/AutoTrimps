@@ -81,6 +81,8 @@ function autoStance(){
             }
             else
                 updateLastPoint(lastCell);
+
+            maxAttacks = 0;
         }
         
         /*if(stackSpire){
@@ -579,7 +581,7 @@ function autoStance(){
     {
         chosenFormation = 5;
         if (cell.health !== 1 && game.empowerments.Wind.currentDebuffPower === ATmaxWind) {
-            if (maxAttacks++ > 1)
+            if (maxAttacks++ > 0)
             chosenFormation = 2;
         }
         else {
