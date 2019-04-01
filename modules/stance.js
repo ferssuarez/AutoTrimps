@@ -579,7 +579,7 @@ function autoStance(){
     {
         chosenFormation = 5;
         if (cell.health !== 1 && game.empowerments.Wind.currentDebuffPower === ATmaxWind) {
-            if (maxAttacks++ > 0)
+            if (maxAttacks++ > 1)
             chosenFormation = 2;
         }
         else {
