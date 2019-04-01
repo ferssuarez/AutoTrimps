@@ -178,6 +178,8 @@ function startAT() {
     script.setAttribute('crossorigin',"anonymous");
     document.head.appendChild(script);
 
+    if (typeof autoTrimpSettings["toggleExport"] !== "undefined") toggleExport = autoTrimpSettings["toggleExport"];
+
     //saving new players from themselves
     if (game.stats.highestLevel.valueTotal() < 400) {
         setPageSetting("PauseScript",true);
