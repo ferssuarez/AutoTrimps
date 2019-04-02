@@ -50,6 +50,11 @@ function presetListInit(header, Helium, Attack, Health, Fluffy, DG, Income, maxZ
 presetListInit("Filler", 1000, 100, 1, 1000, 50, 0, 700, 8, 500, 0, 695);
 presetListInit("Daily", 2000, 100, 1, 1000, 50, 0, 700, 9, 600, 0, 695);
 
+function togglePresetList() {
+    autoTrimpSettings.PresetList[0] = autoTrimpSettings.PresetList[0] === 1 ? 0 : 1;
+    saveSettings();
+}
+
 function setFiller() {
     autoTrimpSettings.PresetList[1] = autoTrimpSettings.APValueBoxes;
     saveSettings();

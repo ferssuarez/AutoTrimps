@@ -216,10 +216,15 @@ function updateDailyQueue(arr)
     saveSettings();
 }
 
+function toggleDailyQueue() {
+    autoTrimpSettings.DailyQueue[0] = autoTrimpSettings.DailyQueue[0] === 0 ? 1 : -1 * autoTrimpSettings.DailyQueue[0];
+    saveSettings();
+}
+
 function nextEnlight() {
     autoTrimpSettings.DailyQueue = DailyQueueInit();
 
-    if (autoTrimpSettings.DailyQueue[0] === 0) return false; //If arr[0] is 0 disable Enlight Queueing
+    if (autoTrimpSettings.DailyQueue[0] <= 0) return false; //If arr[0] is 0 disable Enlight Queueing
     else
     {
        let enlight = "";
