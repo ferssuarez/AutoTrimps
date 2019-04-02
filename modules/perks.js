@@ -1,11 +1,13 @@
 //Create blank AutoPerks object
 var AutoPerks = {};
+var presetList = [0,{},{}];
+
 AutoPerks.Squared = "ChallengeSquared";
 
 //someday might implement presets back
 AutoPerks.makeDefaultValueBoxes = function(){
     return presetObj("default", 2200, 333, 11, 1500, 55, 0, 605, 7, 522, 21, 0);
-}
+};
 
 function presetObj(header, Helium, Attack, Health, Fluffy, DG, Income, maxZone, amalGoal, amalZone, coordsBehind, maxPrestigeZ){
     if(typeof autoTrimpSettings.APValueBoxes === 'undefined') autoTrimpSettings.APValueBoxes = {};
@@ -25,9 +27,39 @@ function presetObj(header, Helium, Attack, Health, Fluffy, DG, Income, maxZone, 
     return preset;
 }
 
+function presetListInit(header, Helium, Attack, Health, Fluffy, DG, Income, maxZone, amalGoal, amalZone, coordsBehind, maxPrestigeZ){
+    if (typeof autoTrimpSettings.PresetList !== "undefined") return;
+    var preset = {header:header,
+        Helium: Helium,
+        Attack: Attack,
+        Health: Health,
+        Fluffy: Fluffy,
+        DG: DG,
+        Income: Income,
+        maxZone: maxZone,
+        amalGoal: amalGoal,
+        amalZone: amalZone,
+        coordsBehind: coordsBehind,
+        maxPrestigeZ: maxPrestigeZ
+    };
+    if (preset.header === "Filler") presetList[1] = preset;
+    else if (preset.header === "Daily") presetList[2] = preset;
+    autoTrimpSettings.PresetList = presetList;
+}
+
+presetListInit("Filler", 1000, 100, 1, 1000, 50, 0, 700, 8, 500, 0, 695);
+presetListInit("Daily", 2000, 100, 1, 1000, 50, 0, 700, 9, 600, 0, 695);
+
+function setFiller() {
+    autoTrimpSettings.PresetList[1] = autoTrimpSettings.APValueBoxes;
+}
+
+function setDaily() {
+    autoTrimpSettings.PresetList[2] = autoTrimpSettings.APValueBoxes;
+}
 AutoPerks.makeDefaultCheckBoxes = function(){
     return presetCheckObj("default", false, false, false, false, false);
-}
+};
 
 function presetCheckObj(header, userMaxFuel, userBattleGU, userMaintainMode, userSharpTrimps, userSaveATSettings){
     if(typeof autoTrimpSettings.APCheckBoxes === 'undefined') autoTrimpSettings.APCheckBoxes = {};
@@ -85,58 +117,43 @@ AutoPerks.initializeGUI = function() {
     
     var heliumBox = AutoPerks.createInput("Helium",apGUI.$ratiosLine1);
     heliumBox.setAttribute("onmouseover", 'tooltip("Helium Weight", "customText", event, "How much you value helium")');
-    
     var attackBox = AutoPerks.createInput("Attack",apGUI.$ratiosLine1);
     attackBox.setAttribute("onmouseover", 'tooltip("Attack Weight", "customText", event, "How much you value attack")');
-    
     var healthBox = AutoPerks.createInput("Health",apGUI.$ratiosLine1);
     healthBox.setAttribute("onmouseover", 'tooltip("Health Weight", "customText", event, "How much you value health")');
-    
     var fluffyBox = AutoPerks.createInput("Fluffy",apGUI.$ratiosLine1);
     fluffyBox.setAttribute("onmouseover", 'tooltip("Fluffy Weight", "customText", event, "How much you value fluffy")');
-    
     var dgBox = AutoPerks.createInput("DG",apGUI.$ratiosLine1);
     dgBox.setAttribute("onmouseover", 'tooltip("DG Weight", "customText", event, "How much you value dg")');
-    
     var incomeBox = AutoPerks.createInput("Income",apGUI.$ratiosLine1);
     incomeBox.setAttribute("onmouseover", 'tooltip("Income Weight", "customText", event, "This should normally be kept at 0. Only increase this when using More Farming mode and attempting to increase early game population (pre z230) for the big C2s and intending to use a respec later.")');
-
     apGUI.$customRatios.appendChild(apGUI.$ratiosLine1);
+
     //Line 2 of the UI
     apGUI.$ratiosLine2 = document.createElement("DIV");
     apGUI.$ratiosLine2.setAttribute('style', 'display: inline-block; text-align: left; width: 100%');
-    
     var portalZone   = AutoPerks.createInput("maxZone",apGUI.$ratiosLine2);
     portalZone.setAttribute("onmouseover", 'tooltip("Portal Zone", "customText", event, "The zone you intend to portal on.")');
-    
     var amalGoal     = AutoPerks.createInput("amalGoal",apGUI.$ratiosLine2);
     amalGoal.setAttribute("onmouseover", 'tooltip("Amalgamator Goal", "customText", event, "How many Amalgamators do you want to get.")');
-    
     var amalZone     = AutoPerks.createInput("amalZone",apGUI.$ratiosLine2);
     amalZone.setAttribute("onmouseover", 'tooltip("Amalgamator Zone", "customText", event, "On which zone do you wish to hit your Amalgamator goal. 1-20 zones after a spire is generally a good place, starting spire 2.")');
-    
     var coordsBehind = AutoPerks.createInput("coordsBehind",apGUI.$ratiosLine2);
     coordsBehind.setAttribute("onmouseover", 'tooltip("Coordinations Behind", "customText", event, "How many unspent Coordination upgrades will you have at your Amalgamator Zone. Pick an amount that doesnt slow you down. If first equals amalZone (you wish to amal without buying a single Coordination) will force coordinated to level 0.")');
-    
     var maxPrestigeZ = AutoPerks.createInput("maxPrestigeZ",apGUI.$ratiosLine2);
     maxPrestigeZ.setAttribute("onmouseover", 'tooltip("Maximum Prestige Zone", "customText", event, "If you plan on running Bionic Warfare, put the highest level BW map you intend to raid here. Otherwise leave at 0.")');    
     
     //check boxes line
     apGUI.$checkBoxesLine3 = document.createElement("DIV");
     apGUI.$checkBoxesLine3.setAttribute('style', 'display: inline-block; text-align: left; width: 100%');
-    
     var checkBoxMaxFuel = AutoPerks.createInput("MaxFuel", apGUI.$checkBoxesLine3, true);
     checkBoxMaxFuel.setAttribute("onmouseover", 'tooltip("Max Fuel", "customText", event, "Force use max fuel, even after Amalgamator goal has been reached.")');
-    
     var checkBoxBattleGU = AutoPerks.createInput("BattleGU", apGUI.$checkBoxesLine3, true);
     checkBoxBattleGU.setAttribute("onmouseover", 'tooltip("Use Battle Golden Upgrades", "customText", event, "Will calculate using Battle Golden Upgrades instead of 60% Void + Helium.")');
-    
     var sharpTrimps = AutoPerks.createInput("SharpTrimps", apGUI.$checkBoxesLine3, true);
-    sharpTrimps.setAttribute("onmouseover", 'tooltip("Calculate Sharp Trimps +50% Damage", "customText", event, "Will calculate using the extra 50% damage from purchasing Sharp Trimps for 25 bones.")');
-    
+    sharpTrimps.setAttribute("onmouseover", 'tooltip("Calculate Sharp Trimps +50% Damage", "customText", event, "Will calculate using the extra 50% damage from purchasing Sharp Trimps for 25 bones.")')
     var checkBoxMaintainMode = AutoPerks.createInput("MaintainMode", apGUI.$checkBoxesLine3, true);
     checkBoxMaintainMode.setAttribute("onmouseover", 'tooltip("Maintain Amalgamator only", "customText", event, "Check this box if you in the middle of a run and already have Amalgamator Goal and wish to respec to minimum Carp1 / 2 / Coordinated to maintain it until Portal Zone. Assumes fueling until the end of the run.")');
-    
     var checkBoxSaveSettings = AutoPerks.createInput("SaveATSettings", apGUI.$checkBoxesLine3, true);
     checkBoxSaveSettings.setAttribute("onmouseover", 'tooltip("Save Run Settings to AT", "customText", event, "Will save Fuel Start / Fuel End / Disables Fuel until Amalgamator / Start no Buy Coords / Amalgamator Goal to AT settings. Only occurs when the confirm button is pressed.")');
     

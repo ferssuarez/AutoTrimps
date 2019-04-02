@@ -102,6 +102,7 @@ function doPortal(challenge) {
     if(!game.global.portalActive) return;
     if (getPageSetting('AutoMagmiteSpender2') == 1) autoMagmiteSpender();
     if (getPageSetting('AutoUpgradeHeirlooms') && !heirloomsShown) autoNull();  //"Auto Upgrade Heirlooms" (heirlooms.js)
+    let daily = false;
     //Go into portal screen
     portalClicked();
     //Auto Start Daily:
@@ -123,6 +124,7 @@ function doPortal(challenge) {
         } 
         else{
             getDailyChallenge(lastUndone);
+            daily = true;
             debug("Portaling into Daily for: " + getDailyTimeString(lastUndone, true) + " now!", "portal");
         }
     }
@@ -130,8 +132,13 @@ function doPortal(challenge) {
     else if(challenge)
         selectChallenge(challenge);
     
-    if (getPageSetting('AutoAllocatePerks') == 1)
+    if (getPageSetting('AutoAllocatePerks') == 1) {
+        if (autoTrimpSettings.PresetList[0] === 1) {
+            autoTrimpSettings.APValueBoxes = autoTrimpSettings.PresetList[daily?2:1];
+            AutoPerks.updateBoxesUI();
+        }
         AutoPerks.clickAllocate();
+    }
     
     //Push He Data for graphs.js:
     pushData();
