@@ -52,10 +52,12 @@ presetListInit("Daily", 2000, 100, 1, 1000, 50, 0, 700, 9, 600, 0, 695);
 
 function setFiller() {
     autoTrimpSettings.PresetList[1] = autoTrimpSettings.APValueBoxes;
+    saveSettings();
 }
 
 function setDaily() {
     autoTrimpSettings.PresetList[2] = autoTrimpSettings.APValueBoxes;
+    saveSettings();
 }
 AutoPerks.makeDefaultCheckBoxes = function(){
     return presetCheckObj("default", false, false, false, false, false);
@@ -161,7 +163,7 @@ AutoPerks.initializeGUI = function() {
     apGUI.$textArea = document.createElement("DIV");
     apGUI.$textArea.setAttribute('style', 'display: inline-block; text-align: left; width: 100%; background-color: #ffffff; font-size: 15px; color: #000000'); //black on white background                       ";
     apGUI.$textArea.id ='textAreaAllocate';
-    
+
     apGUI.$customRatios.appendChild(apGUI.$ratiosLine2);
     apGUI.$customRatios.appendChild(apGUI.$checkBoxesLine3);
     apGUI.$customRatios.appendChild(apGUI.$textArea);
