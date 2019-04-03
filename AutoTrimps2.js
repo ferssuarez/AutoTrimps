@@ -18,8 +18,8 @@ var ATversion = '2.1.7.1'; //when this increases it forces users setting update 
 
 var local = false;
 //local = true;
-var ver = "53.10";
-var verDate = "22.3.24";
+var ver = "53.15";
+var verDate = "3.4.19";
 
 var changelogList = [];
 changelogList.push({date: "24.3.2019", version: "", description: "Saving new players from themselves. ", isNew: true});
