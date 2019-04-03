@@ -153,7 +153,7 @@ function fightManualAT(){
         
         if(!game.global.mapsActive || block < enemyDamage){
             if(nextArmyHealth/enemyDamage < 1000) return;
-            if(handleGA(true) < maxAnti) return; //in nom/bogged/electricity, never send armies before max pop
+            if(handleGA(true) < maxAnti && getPageSetting("GASetting")) return; //in nom/bogged/electricity, never send armies before max pop
         }
     }
     

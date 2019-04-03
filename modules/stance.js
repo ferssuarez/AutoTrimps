@@ -90,7 +90,7 @@ function autoStance(){
         }*/
         lastCell = cellNum;
     }
-    
+
     if(trimpicide && !getTargetAntiStack(minAnticipationStacks, false))
         return;
     

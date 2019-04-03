@@ -179,10 +179,6 @@ function handleGA(currentGame, dailyObj){
         }
     }
 
-    let cellNum = (game.global.mapsActive) ? game.global.lastClearedMapCell + 1 : game.global.lastClearedCell + 1;
-    if (getPageSetting('StackSkip') >= 1 && worldArray[cellNum] != undefined && (worldArray[cellNum].corrupted === "healthyBleed" || worldArray[cellNum].corrupted === "corruptBleed") && getPageSetting('AutoStance') === 1 && windZone(game.global.world))
-        GATimer = 1;
-    
     if(currentGame && !getPageSetting('GASetting') && getPageSetting('GASettingManual') > 0) //manual input
         GATimer = getPageSetting('GASettingManual');
     

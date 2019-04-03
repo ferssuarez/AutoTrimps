@@ -136,6 +136,7 @@ function doPortal(challenge) {
         if (autoTrimpSettings.PresetList[0] === 1) {
             autoTrimpSettings.APValueBoxes = autoTrimpSettings.PresetList[daily?2:1];
             AutoPerks.updateBoxesUI();
+            saveSettings();
         }
         AutoPerks.clickAllocate();
     }
