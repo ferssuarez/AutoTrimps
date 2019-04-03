@@ -56,11 +56,13 @@ function togglePresetList() {
 }
 
 function setFiller() {
+    autoTrimpSettings.APValueBoxes.header = "Filler";
     autoTrimpSettings.PresetList[1] = autoTrimpSettings.APValueBoxes;
     saveSettings();
 }
 
 function setDaily() {
+    autoTrimpSettings.APValueBoxes.header = "Daily";
     autoTrimpSettings.PresetList[2] = autoTrimpSettings.APValueBoxes;
     saveSettings();
 }
