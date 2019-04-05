@@ -18,22 +18,19 @@ var ATversion = '2.1.7.1'; //when this increases it forces users setting update 
 
 var local = false;
 //local = true;
-var ver = "53.15";
-var verDate = "3.4.19";
+var ver = "53.16";
+var verDate = "4.4.19";
 
 var changelogList = [];
-changelogList.push({date: "24.3.2019", version: "", description: "Saving new players from themselves. ", isNew: true});
+changelogList.push({date: "4.4.2019", version: "", description: "Added Zek's C2 Table", isNew: true});
+changelogList.push({date: "24.3.2019", version: "", description: "Saving new players from themselves. ", isNew: false});
 changelogList.push({date: "22.3.2019", version: "", description: "Obli and Trimp now start BW raiding on proper zones. ", isNew: false});
 changelogList.push({date: "19.3.2019", version: "", description: "Updated for 4.11. ", isNew: false});
 changelogList.push({date: "8.1.2019", version: "", description: "Stacked Void running is now a value. ", isNew: false});
 changelogList.push({date: "8.1.2019", version: "", description: "Added Option to stack bleed and dodge cells", isNew: false});
 changelogList.push({date: "7.1.2019", version: "", description: "Golden Void toggle for dailies", isNew: false});
 changelogList.push({date: "2.1.2019", version: "", description: "Run Stacked Voids only added. More features soon", isNew: false});
-changelogList.push({date: "21.12.2018", version: "", description: "Spire Import Readded", isNew: false});
-//changelogList.push({date: "9.12.2018", version: "", description: "Max Void Fixed", isNew: false});
-//changelogList.push({date: "18.11.2018", version: "", description: "Jobs reworked." , isNew: false});
-//changelogList.push({date: "17.11.2018", version: "", description: "Added Income weight to Auto Allocate. Leave it at 0 unless you're deep running one of the big 3 C2s." , isNew: false});
-//changelogList.push({date: "14.11.2018", version: "", description: "Improved Auto Allocate fuel zones range." , isNew: false});
+
 
 var atscript = document.getElementById('AutoTrimps-script'),
         basepath = (local ? 'AutoTrimps/' : 'https://slivermasterz.github.io/AutoTrimps/'),
