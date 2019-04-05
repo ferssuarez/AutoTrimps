@@ -174,6 +174,7 @@ function startAT() {
     document.head.appendChild(script);
 
     if (typeof autoTrimpSettings["toggleExport"] !== "undefined") toggleExport = autoTrimpSettings["toggleExport"];
+    if (typeof autoTrimpSettings["MinSpireCost"] !== "undefined") MinSpireCost = autoTrimpSettings["MinSpireCost"];
 
     //saving new players from themselves
     if (game.stats.highestLevel.valueTotal() < 400) {
