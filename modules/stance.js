@@ -358,6 +358,12 @@ function autoStance(){
         if(stacks < ATmaxWind-8 && nextStartingStacks < ATmaxWind-6)
             cmp += worldArray[cellNum].geoRelativeCellWorth;
 
+        if (game.global.uberNature === "Wind")
+            cmp = worldArray[cellNum].baseWorth + worldArray[cellNum].PBWorth +  worldArray[cellNum].geoRelativeCellWorth;
+
+        if (getUberEmpowerment() === "Wind") cmp *= 2;
+        if (Fluffy.isRewardActive("plaguebrought")) cmp *= 2;
+
         if(stacks < ATmaxWind)
             cmpActual += worldArray[cellNum].baseWorth;
         if(nextStartingStacksCurrent < ATmaxWind)
@@ -487,6 +493,15 @@ function autoStance(){
                     else
                         wantGoodShield = true;
                 }
+                if (game.global.uberNature === "Wind") {
+                    chosenFormation = 5;
+                    if (cell.health !== 1 && game.empowerments.Wind.currentDebuffPower === ATmaxWind) {
+                        if (maxAttacks++ > 0)
+                            chosenFormation = 2;
+                    }
+                    else {
+                        maxAttacks = 0;
+                    }
             }
             if(stackSpire && expectedNumHitsD > missingStacks && stackSpireNoMoreDamageCell != cellNum){
                 getDamageCaller(1.2*8*baseDamageHigh, false, true);
