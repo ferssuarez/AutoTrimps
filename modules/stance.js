@@ -502,6 +502,7 @@ function autoStance(){
                     else {
                         maxAttacks = 0;
                     }
+                }
             }
             if(stackSpire && expectedNumHitsD > missingStacks && stackSpireNoMoreDamageCell != cellNum){
                 getDamageCaller(1.2*8*baseDamageHigh, false, true);
@@ -1071,3 +1072,4 @@ function goDefaultStance(chosenFormation){
     if(formation != game.global.formation)
         setFormation(formation);
 }
+
