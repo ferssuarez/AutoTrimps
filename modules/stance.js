@@ -501,6 +501,7 @@ function autoStance(){
                     }
                     else {
                         maxAttacks = 0;
+                        wantGoodShield = false;
                     }
                 }
             }
