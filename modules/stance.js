@@ -595,6 +595,9 @@ function autoStance(){
 
     if( game.global.uberNature === "Wind" && game.global.challengeActive === "Daily" && !game.global.mapsActive && getPageSetting('AutoStance') === 1 && game.global.world >= getPageSetting("ForceW"))
     {
+        wantGoodShield = true;
+        allowBuyingCoords = true;
+        wantMoreDamage = true;
         chosenFormation = 5;
         if (cell.health !== 1 && game.empowerments.Wind.currentDebuffPower === ATmaxWind) {
             if (maxAttacks++ > 0)
