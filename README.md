@@ -2,7 +2,6 @@
 
 ## Note
 Meowchan disappeared before the launch of 4.10 and in order to preserve his work, this fork will be kept up to date using Meow's fork as a base. 
- [![Join the chat at https://gitter.im/AutoTrimps/Lobby](https://badges.gitter.im/AutoTrimps/Lobby.svg)](https://gitter.im/AutoTrimps/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 ## Discussion / Discord Channel
 <a href="https://discord.gg/W2Ajv4j"><img src="https://pbs.twimg.com/profile_images/568588143226413056/9Lwrixxj.png" width=48></a>
 Discord is a chat program. Come to talk about AutoTrimps, for help, or suggestions for new features : https://discord.gg/W2Ajv4j 
