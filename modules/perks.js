@@ -319,7 +319,7 @@ AutoPerks.clickAllocate = function() {
         //calculates attack / health of non tough cell 50 corrupted enemy at autoTrimpSettings.APValueBoxes.maxZone
         AutoPerks.zoneHealth = approxZoneHP(autoTrimpSettings.APValueBoxes.maxZone); //this is health approx of the entire zone
         
-        var helium = AutoPerks.totalHelium * .9999;
+        var helium = AutoPerks.totalHelium;
 
         // Get fixed perks
         var preSpentHe = 0;
