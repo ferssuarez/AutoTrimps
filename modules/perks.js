@@ -483,7 +483,7 @@ AutoPerks.spendHelium = function(helium) {
     var calcHe = AutoPerks.applyCalculations(true);
     if(calcHe < 0) throw "loop1 error: negative helium remaining " + prettify(calcHe) + " expected: " + prettify(helium);
     if(calcHe !== helium) //this can (and will) happen due to large number rounding errors. thought about using bigInt, but since the game doesnt there's no point.
-        helium = calcHe;
+        helium = calcHe *.99;
     
     //add T2 perks into queue
     for (var i = 0; i < AutoPerks.additivePerks.length; i++){
