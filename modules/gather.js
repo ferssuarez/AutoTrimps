@@ -15,7 +15,7 @@ function manualLabor() {
             desired = 'metal';
     }
     
-    if(game.talents.turkimp4.purchased || game.global.turkimpTimer > 0){
+    if(game.talents.turkimp2.purchased || game.global.turkimpTimer > 0){
         var maxWorkers = Math.max(game.jobs.Farmer.owned, game.jobs.Lumberjack.owned, game.jobs.Miner.owned);
         if(maxWorkers == game.jobs.Farmer.owned) desired = 'food';
         else if(maxWorkers == game.jobs.Lumberjack.owned) desired = 'wood';
