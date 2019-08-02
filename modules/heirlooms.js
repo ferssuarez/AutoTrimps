@@ -530,6 +530,7 @@ function newCarryHeirloom(){
 function newStopCarryHeirloom(){
 	var heirloom = getSelectedHeirloom();
 	game.global.heirloomsCarried.splice(game.global.selectedHeirloom[0], 1);
+	if (heirloom.name === "Plagued Staff" || heirloom.name === "Plagued Shield")
 	game.global.heirloomsExtra.push(heirloom);
 	//populateHeirloomWindow();
 }
