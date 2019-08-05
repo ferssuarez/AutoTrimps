@@ -66,7 +66,7 @@ function autoMap(){
     
     if (!enoughDamage) AutoMapsCoordOverride = true; //if automaps thinks we need damage, override helium mode coord delay (not amalgamators' coord delay)
     //are we behind on prestige? ignores last gambesop on portal zone
-    needPrestige = (getScientistLevel() >= 5 ? 
+    needPrestige = ((portalUniverse==1 ? getScientistLevel():game.buildings.Microchip.owned) >= 5 ?
     ((lastPrestigeZone() < lastDropZone()) || (lastPrestigeZone() == lastDropZone() && prestigeState != 2 && game.global.world !== expectedPortalZone)) :
     preScience5NeedPrestige());
     
@@ -170,6 +170,13 @@ function autoMap(){
                     selectedMap = theMap;
                     break;
                 }
+                if (theMap.name == "Prismatic Palace" && !game.upgrades.Prismalicious.done) {
+                    var theMapDifficulty = Math.ceil(theMap.difficulty / 2);
+                    if (game.global.world < 20 + theMapDifficulty) continue;
+                    selectedMap = theMap;
+                    break;
+                }
+
             }
         }
     }
@@ -264,7 +271,7 @@ function autoMap(){
             else if(LWCDone < desiredLWC) desiredMapType = "lwc";
         }
         else if(needPrestige){
-            desiredMapLevel = getScientistLevel() >= 5 ? lastPrestigeZone(true) : game.global.world;
+            desiredMapLevel = (portalUniverse===1 ?getScientistLevel():game.buildings.Microchip.owned) >= 5  ? lastPrestigeZone(true) : game.global.world;
             desiredMapType  = "p";
             desiredMapFrags = 0.7;
             statusMsg = "Prestige" + (getScientistLevel() >= 5 ? ": " + addSpecialsAT(game.global.world) : "");
