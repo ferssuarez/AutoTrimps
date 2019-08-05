@@ -11,7 +11,7 @@ function pushData(){
         //AAFluffy: autoTrimpSettings.APValueBoxes.Fluffy,
         //AADG: autoTrimpSettings.APValueBoxes.DG,
         //maxVoids: ATMaxVoids,
-        totalPortals: game.global.totalPortals,
+        totalPortals: getTotalPortals(true),
         heliumOwned: game.resources.helium.owned,
         currentTime: getGameTime(),
         portalTime: game.global.portalTime,
@@ -35,7 +35,11 @@ function pushData(){
         magmite: game.global.magmite,
         magmamancers: game.jobs.Magmamancer.owned,
         fluffy: game.global.fluffyExp,
-        nursery: game.buildings.Nursery.purchased
+        scruffy: game.global.fluffyExp2,
+        nursery: game.buildings.Nursery.purchased,
+        radonOwned: game.resources.radon.owned,
+        rnhr: dailyMultGraph * game.stats.heliumHour.value() / (game.global.totalRadonEarned - (game.global.radonLeftover + game.resources.radon.owned))*100,
+        rnlife:  game.resources.radon.owned / (game.global.totalRadonEarned - game.resources.radon.owned)*100
     });
     //only keep 15 portals worth of runs to prevent filling storage
     if (allSaveData.length >= 9500) maxGraphs--;
@@ -76,7 +80,7 @@ document.getElementById("graphParent").innerHTML += '<div id="graphFooter" style
 var $graphFooter = document.getElementById('graphFooterLine1');
 //$graphFooter.innerHTML += '\
 //Create the dropdown for what graph to show    (these correspond to headings in setGraph() and have to match)
-var graphList = ['Efficiency and Stacks', 'Helium - He/Hr', 'Helium - Total', 'Helium - He/Hr Instant', 'Helium - He/Hr Delta', 'HeHr % / LifetimeHe', 'He % / LifetimeHe', 'Clear Time', 'Cumulative Clear Time', 'Run Time', 'Map Bonus', 'Void Maps', 'Void Map History', 'Loot Sources', 'Coordinations', 'GigaStations', 'Unused Gigas', 'Last Warpstation', 'Trimps', 'Trimps Base', 'Nullifium Gained', 'Dark Essence', 'Dark Essence PerHour', 'OverkillCells', 'Magmite', 'Magmamancers', 'Fluffy XP', 'Fluffy XP PerHour', 'Nurseries'];
+var graphList = ['Efficiency and Stacks', 'Helium - He/Hr', 'Helium - Total', 'Helium - He/Hr Instant', 'Helium - He/Hr Delta', 'HeHr % / LifetimeHe', 'He % / LifetimeHe', 'Radon - Rn/Hr','Radon - Total','RnHr % / LifetimeRn','Rn % / LifetimeRn','Radon - Rn/Hr Instant', 'Clear Time', 'Cumulative Clear Time', 'Run Time', 'Map Bonus', 'Void Maps', 'Void Map History', 'Loot Sources', 'Coordinations', 'GigaStations', 'Unused Gigas', 'Last Warpstation', 'Trimps', 'Trimps Base', 'Nullifium Gained', 'Dark Essence', 'Dark Essence PerHour', 'OverkillCells', 'Magmite', 'Magmamancers', 'Fluffy XP', 'Fluffy XP PerHour', 'Scruffy XP' ,'Scruffy XP PerHour' ,'Scruffy XP/Hour (Cumulative)', 'Nurseries'];
 var $graphSel = document.createElement("select");
 $graphSel.id = 'graphSelection';
 $graphSel.setAttribute("style", "");
@@ -233,11 +237,11 @@ function clearData(portal,clrall) {
     if(!portal)
         portal = 0;
     if (!clrall) {
-        while(allSaveData[0].totalPortals < game.global.totalPortals - portal) {
+        while(allSaveData[0].totalPortals < getTotalPortals(true) - portal) {
             allSaveData.shift();
         }
     } else {
-        while(allSaveData[0].totalPortals != game.global.totalPortals) {
+        while(allSaveData[0].totalPortals != getTotalPortals(true)) {
             allSaveData.shift();
         }
     }
@@ -572,25 +576,22 @@ function setGraphData(graph) {
             yminFloor=0;
             break;
         case 'Cumulative Clear Time':
-            graphData = allPurposeGraph('cumucleartime1',true,null,
-                    function specialCalc(e1,e2) {
-                        return Math.round(((e1.currentTime - e2.currentTime)-(e1.portalTime - e2.portalTime)) / 1000);
-                    },true);
-            /*graphData = allPurposeGraph('cumucleartime2',true,null,
-                    function specialCalc(e1,e2) {
-                        return Math.round(e1.zonetime);
-                    },true);*/
+            graphData = allPurposeGraph('cumucleartime1', true, null,
+                function specialCalc(e1, e2) {
+                    return Math.round((e1.currentTime - e2.currentTime) - (e1.portalTime - e2.portalTime));
+                }, true);
             title = 'Cumulative Time (at END of zone#)';
             xTitle = 'Zone';
             yTitle = 'Cumulative Clear Time';
             yType = 'datetime';
-            formatter =  function () {
+            formatter = function() {
                 var ser = this.series;
-                return '<span style="color:' + ser.color + '" >�?</span> ' +
-                        ser.name + ': <b>' +
-                        Highcharts.dateFormat('%H:%M:%S', 1000*this.y) + '</b><br>';
+                return '<span style="color:' + ser.color + '" >●</span> ' +
+                    ser.name + ': <b>' +
+                    Highcharts.dateFormat('%H:%M:%S', this.y) + '</b><br>';
+
             };
-            yminFloor=0;
+            yminFloor = 0;
             break;
         case 'Run Time':
             var currentPortal = -1;
@@ -918,6 +919,122 @@ function setGraphData(graph) {
             yTitle = 'Fluffy XP/Hour';
             yType = 'Linear';
             //xminFloor = 300;
+            xminFloor = 1;
+            break;
+        case 'Radon - Rn/Hr':
+            graphData = allPurposeGraph('radonhr', true, null,
+                function specialCalc(e1, e2) {
+                    return Math.floor(e1.radonOwned / ((e1.currentTime - e1.portalTime) / 3600000));
+                });
+            title = 'Radon/Hour (Cumulative)';
+            xTitle = 'Zone';
+            yTitle = 'Radon/Hour';
+            yType = 'Linear';
+            yminFloor = 0;
+            precision = 2;
+            break;
+        case 'Radon - Total':
+            graphData = allPurposeGraph('radonOwned', true, null,
+                function specialCalc(e1, e2) {
+                    return Math.floor(e1.radonOwned);
+                });
+            title = 'Radon (Lifetime Total)';
+            xTitle = 'Zone';
+            yTitle = 'Radon';
+            yType = 'Linear';
+            break;
+        case 'RnHr % / LifetimeHe':
+            graphData = allPurposeGraph('rnhr', true, "string");
+            title = 'Rn/Hr % of LifetimeHe';
+            xTitle = 'Zone';
+            yTitle = 'Rn/Hr % of LifetimeHe';
+            yType = 'Linear';
+            precision = 4;
+            break;
+        case 'Rn % / LifetimeHe':
+            graphData = allPurposeGraph('rnlife', true, "string");
+            title = 'Rn % of LifetimeRn';
+            xTitle = 'Zone';
+            yTitle = 'Rn % of LifetimeRn';
+            yType = 'Linear';
+            precision = 4;
+            break;
+        case 'Radon - Rn/Hr Instant':
+            var currentPortal = -1;
+            var currentZone = -1;
+            graphData = [];
+            var nowhehr=0;var lasthehr=0;
+            var dailyMultGraph = (countDailyWeight() === 0 ? 1 : 1 + getDailyHeliumValue(countDailyWeight()) / 100)
+            for (var i in allSaveData) {
+                if (allSaveData[i].totalPortals != currentPortal) {
+                    graphData.push({
+                        name: 'Portal ' + allSaveData[i].totalPortals + ': ' + allSaveData[i].challenge,
+                        data: []
+                    });
+                    currentPortal = allSaveData[i].totalPortals;
+                    if(allSaveData[i].world == 1 && currentZone != -1 )
+                        graphData[graphData.length -1].data.push(0);
+
+                    if(currentZone == -1 || allSaveData[i].world != 1) {
+                        var loop = allSaveData[i].world;
+                        while (loop > 0) {
+                            graphData[graphData.length -1].data.push(0);
+                            loop--;
+                        }
+                    }
+                    nowhehr = 0; lasthehr = 0;
+                }
+                if(currentZone < allSaveData[i].world && currentZone != -1) {
+                    nowhehr = Math.floor((allSaveData[i].radonOwned - allSaveData[i-1].radonOwned)*dailyMultGraph / ((allSaveData[i].currentTime - allSaveData[i-1].currentTime) / 3600000));
+                    graphData[graphData.length - 1].data.push(nowhehr);
+                }
+                currentZone = allSaveData[i].world;
+            }
+            title = 'Radon/Hour Instantaneous - between current and last zone.';
+            xTitle = 'Zone';
+            yTitle = 'Radon/Hour per each zone';
+            yType = 'Linear';
+            yminFloor=null;
+            break;
+        case 'Scruffy XP':
+            graphData = allPurposeGraph('scruffy', true, "number");
+            title = 'Scruffy XP (Lifetime Total)';
+            xTitle = 'Zone (starts at 300)';
+            yTitle = 'Scruffy XP';
+            yType = 'Linear';
+            xminFloor = 300;
+            break;
+        case 'Scruffy XP PerHour':
+            var currentPortal = -1;
+            var currentZone = -1;
+            var startScruffy = 0;
+            graphData = [];
+            for (var i in allSaveData) {
+                if (allSaveData[i].totalPortals != currentPortal) {
+                    graphData.push({
+                        name: 'Portal ' + allSaveData[i].totalPortals + ': ' + allSaveData[i].challenge,
+                        data: []
+                    });
+                    currentPortal = allSaveData[i].totalPortals;
+                    currentZone = 0;
+                    startScruffy = allSaveData[i].scruffy;
+                }
+                if (currentZone != allSaveData[i].world - 1 && i > 0) {
+                    var loop = allSaveData[i].world - 1 - currentZone;
+                    while (loop > 0) {
+                        graphData[graphData.length - 1].data.push(allSaveData[i-1][item]*1);
+                        loop--;
+                    }
+                }
+                if (currentZone != 0) {
+                    graphData[graphData.length - 1].data.push(Math.floor((allSaveData[i].scruffy - startScruffy) / ((allSaveData[i].currentTime - allSaveData[i].portalTime) / 3600000)));
+                }
+                currentZone = allSaveData[i].world;
+            }
+            title = 'Scruffy XP/Hour (Cumulative)';
+            xTitle = 'Zone';
+            yTitle = 'Scruffy XP/Hour';
+            yType = 'Linear';
             xminFloor = 1;
             break;
         case 'Nurseries':
