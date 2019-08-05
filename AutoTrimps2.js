@@ -18,8 +18,8 @@ var ATversion = '2.1.7.1'; //when this increases it forces users setting update 
 
 var local = false;
 //local = true;
-var ver = "53.2";
-var verDate = "13.6.19";
+var ver = "54.01";
+var verDate = "5.8.19";
 
 var changelogList = [];
 changelogList.push({date: "4.4.2019", version: "", description: "Added Zek's C2 Table", isNew: true});
@@ -573,6 +573,10 @@ var globalvar0,globalvar1,globalvar2,globalvar3,globalvar4,globalvar5,globalvar6
 function userscripts()
 {
     //insert code here:
+}
+
+function toggleUserScripts(){
+    userscriptOn = !userscriptOn;
 }
 
 //test.
