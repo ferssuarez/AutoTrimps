@@ -89,6 +89,7 @@ function autoPortal() {
         case "Corrupted":
         case "Domination":
         case "Bublé":
+        case "Melt":
             if(!game.global.challengeActive) {
                 doPortal(autoTrimpSettings.AutoPortal.selected);
             }
