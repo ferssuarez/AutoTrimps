@@ -329,6 +329,8 @@ var expectedPortalZone = 0;
 var ATmakeUp = false;
 var ATMaxVoids = 0;
 
+var Rthreshold = (1/5);
+
 function pauseRemovalLoop(){
     var wrapper = document.getElementById("wrapper");
     var chatFrame = document.getElementById("chatFrame");
