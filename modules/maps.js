@@ -11,6 +11,9 @@ var preSpireFarming = false;
 var spireMapBonusFarming = false;
 var stackSpireOneTime = true;
 var spireTime = 0;
+var maxMapLevel = -1;
+var threshold;
+var Rthreshold = (1/5);
 
 var baseLevel;
 var sizeSlider;
@@ -250,7 +253,10 @@ function autoMap(){
     if(game.talents.hyperspeed2.purchased && game.global.world <= Math.floor((game.global.highestLevelCleared+1)/2))
         preferFAMaps = false; //FA and hyper2 do not stack. if hyper2 is active no reason to use fa
 
-    var siphlvl = game.global.world - game.portal.Siphonology.level;
+    if (portalUniverse == 2 && game.global.world <= Math.floor((game.global.highestRadonLevelCleared+1)/2))
+        preferFAMaps = true;
+
+    var siphlvl = game.global.world - (portalUniverse == 1?game.portal.Siphonology.level : 0);
     var desiredMapLevel = siphlvl;
     var desiredMapType  = preferFAMaps ? "fa" : (game.global.highestLevelCleared < 185 ? "" : "lmc"); //havent unlocked LMC yet
     var desiredMapCheap = enoughDamage;
@@ -272,7 +278,7 @@ function autoMap(){
         }
         else if(needPrestige){
             desiredMapLevel = (portalUniverse===1 ?getScientistLevel():game.buildings.Microchip.owned) >= 5  ? lastPrestigeZone(true) : game.global.world;
-            desiredMapType  = "p";
+            desiredMapType  = portalUniverse == 2 && game.global.highestRadonLevelCleared <= mapSpecialModifierConfig['p'].unlocksAt2? 'fa':'p';
             desiredMapFrags = 0.7;
             statusMsg = "Prestige" + (getScientistLevel() >= 5 ? ": " + addSpecialsAT(game.global.world) : "");
         }
@@ -1582,11 +1588,18 @@ function calcDmg(){
     var zoneHP = sumCurrZoneHP();
     
     threshold = poisonMult * windMult * zoneRemainingHealth / zoneHP * 1;
-    
+
+    if(portalUniverse == 2) ourBaseDamage = RcalcOurDmg("avg", false, true);
+
     DHratio = (ourBaseDamage*0.25*100) / zoneHP;
     nextZoneDHratio = DHratio / (game.jobs.Magmamancer.getBonusPercent() * ((game.global.mapBonus * .2) + 1) * 2);
+
+    if(portalUniverse == 2) threshold = Rthreshold;
+    if(portalUniverse == 2) DHratio = (ourBaseDamage * 100) / zoneHP;
+
     enoughDamage = DHratio > threshold;
-    
+
+
     if(DHratio < 0.0001)
         formattedRatio = DHratio.toExponential(2);
     else formattedRatio = prettify(DHratio);
