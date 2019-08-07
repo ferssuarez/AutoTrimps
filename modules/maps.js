@@ -13,7 +13,7 @@ var stackSpireOneTime = true;
 var spireTime = 0;
 var maxMapLevel = -1;
 var threshold;
-var Rthreshold = (1/5);
+Rthreshold = (1/5);
 
 var baseLevel;
 var sizeSlider;
