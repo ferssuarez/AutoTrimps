@@ -1454,7 +1454,7 @@ function filterLoot (loot, amount, jest, fromGather){
 
   // who even thought copying the code was a good idea?
   const oldFunction = window.addResCheckMax;
-  window.addResCheckMax = (a, b, c, d, e) => filterLoot(a, b, null, d) || oldFunction(a, b, c, d, e);
+  window.addResCheckMax = (a, b, c, d, e, f) => filterLoot(a, b, null, d,f) || oldFunction(a, b, c, d, e,f);
 })();
 //END overwriting default game functions!!!!!!!!!!!!!!!!!!!!!!
 
