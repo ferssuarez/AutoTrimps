@@ -474,7 +474,7 @@ function initializeAllSettings() {
     createSetting('MaxVoidDaily',        'Max Void Daily', 'Always get 72% Void in Daily.' ,'boolean', true, null, 'Golden');
     createSetting('MaxVoidC2',   'Max Void C2', 'Always get 72% Void In C2.'     ,'boolean', true, null, 'Golden');
     createSetting('BattleSwitchZone','Battle GU Switch Zone', 'Zone to switch to buying battle GU over Helium GU','value',-1,null,'Golden');
-
+    createSetting('BattleSwitchNumber', 'U2 Battle Switch Upgrade #', 'GU number to switch to Battle','value',-1,null,'Golden');
 // Nature settings:
     createSetting('AutoNatureTokens', 'Spend Nature Tokens', '<b>MASTER BUTTON</b> Automatically spend or convert nature tokens.', 'boolean', false, null, 'Nature');
     createSetting('AutoPoison', 'Poison', 'Spend/convert Poison tokens', 'dropdown', 'Off', ['Off', 'Empowerment', 'Transfer', 'Convert to Wind', 'Convert to Ice', 'Convert to Both'], 'Nature');
@@ -907,6 +907,7 @@ function updateCustomButtons() {
     getPageSetting('AutoStance') == 1 ? turnOn("DelayCoordsForWind"): turnOff("DelayCoordsForWind");
     getPageSetting('AutoStance') == 1 ? turnOn("DelayWeaponsForWind"): turnOff("DelayWeaponsForWind");
     getPageSetting('AutoGoldenUpgrades') == "Helium" ? turnOn('BattleSwitchZone') : turnOff('BattleSwitchZone');
+    (getPageSetting('AutoGoldenUpgrades') == "Helium" && Fluffy.checkU2Allowed()) ? turnOn('BattleSwitchNumber') : turnOff('BattleSwitchNumber');
     if(getPageSetting('MoreFarming')){
         turnOn('Pre60LMC');
         turnOn('Pre60LSC');
