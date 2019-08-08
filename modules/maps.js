@@ -253,7 +253,7 @@ function autoMap(){
     if(game.talents.hyperspeed2.purchased && game.global.world <= Math.floor((game.global.highestLevelCleared+1)/2))
         preferFAMaps = false; //FA and hyper2 do not stack. if hyper2 is active no reason to use fa
 
-    if (portalUniverse == 2 && game.global.world <= Math.floor((game.global.highestRadonLevelCleared+1)/2))
+    if (portalUniverse == 2 && game.global.world >= Math.floor((game.global.highestRadonLevelCleared+1)/2))
         preferFAMaps = true;
 
     var siphlvl = game.global.world - (portalUniverse == 1?game.portal.Siphonology.level : 0);
