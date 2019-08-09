@@ -381,6 +381,8 @@ AutoPerks.clickAllocate = function() {
     }
     catch(err){
         debug("AutoPerks Critical Error: " + err);
+        err.print
+        console.trace(err);
         var $text = document.getElementById("textAreaAllocate");
         $text.innerHTML += 'Error: ' + err + '<br>' + '<a href="https://discord.gg/W2Ajv4j" target="_blank">Report it on the Trimps Discord</a>';
     }
@@ -638,6 +640,7 @@ function useQuickImportAT(testValidOnly){
         respecPerks();
 
     for (perk in changeAmt) {
+        if (game.portal[perk].level == undefined) continue;
         game.portal[perk].levelTemp += changeAmt[perk];
         game.resources.helium.totalSpentTemp += price[perk];
         game.portal[perk].heliumSpentTemp += price[perk];
