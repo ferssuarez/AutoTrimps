@@ -130,6 +130,7 @@ function autoMap(){
     //Look through all the maps we have and figure out, find and Run Uniques if we need to
     var selectedMap = false;
     for (var map in game.global.mapsOwnedArray){
+        if (getPageSetting("AutoMaps") == 2) break;
         var theMap = game.global.mapsOwnedArray[map];
         if (theMap.noRecycle){
             if (theMap.name == 'The Wall' && game.upgrades.Bounty.allowed == 0 && !game.talents.bounty.purchased){
@@ -173,9 +174,15 @@ function autoMap(){
                     selectedMap = theMap;
                     break;
                 }
-                if (theMap.name == "Prismatic Palace" && !game.upgrades.Prismalicious.done) {
+                if (theMap.name == "Prismatic Palace" && !game.upgrades.Prismalicious.done && runPrimPal) {
                     var theMapDifficulty = Math.ceil(theMap.difficulty / 2);
                     if (game.global.world < 20 + theMapDifficulty) continue;
+                    selectedMap = theMap;
+                    break;
+                }
+                if (theMap.name == "Melting Point" && game.global.challengeActive == "Melt") {
+                    var theMapDifficulty = Math.ceil(theMap.difficulty / 2);
+                    if (game.global.world < 51) continue;
                     selectedMap = theMap;
                     break;
                 }

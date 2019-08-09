@@ -18,7 +18,7 @@ var ATversion = '2.1.7.1'; //when this increases it forces users setting update 
 
 var local = false;
 //local = true;
-var ver = "54.05";
+var ver = "54.06";
 var verDate = "8.8.19";
 
 var changelogList = [];
@@ -330,6 +330,7 @@ var ATmakeUp = false;
 var ATMaxVoids = 0;
 
 var Rthreshold = (1/5);
+var runPrimPal = true;
 
 function pauseRemovalLoop(){
     var wrapper = document.getElementById("wrapper");
