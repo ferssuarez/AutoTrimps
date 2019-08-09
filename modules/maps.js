@@ -180,7 +180,7 @@ function autoMap(){
                     selectedMap = theMap;
                     break;
                 }
-                if (theMap.name == "Melting Point" && game.global.challengeActive == "Melt") {
+                if (theMap.name == "Melting Point" && game.global.challengeActive == "Melt" && runMeltingPoint) {
                     var theMapDifficulty = Math.ceil(theMap.difficulty / 2);
                     if (game.global.world < 51) continue;
                     selectedMap = theMap;

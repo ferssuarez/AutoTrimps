@@ -331,6 +331,7 @@ var ATMaxVoids = 0;
 
 var Rthreshold = (1/5);
 var runPrimPal = true;
+var runMeltingPoint = true;
 
 function pauseRemovalLoop(){
     var wrapper = document.getElementById("wrapper");
