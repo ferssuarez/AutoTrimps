@@ -921,8 +921,8 @@ function calcIncome(toRet){ //returns: 1 - equipment attack, 2 - equipment healt
 
     AutoPerks.baseZoneLoot = baseZoneDrop() * AutoPerks.DailyResourceMult;
     var tBonus = 1.166;
-    if (game.talents.turkimp4.purchased) tBonus = 1.333;
-    else if (game.talents.turkimp3.purchased) tBonus = 1.249;
+    if (game.talents.turkimp2.purchased) tBonus = 1.333;
+    else if (game.talents.turkimp.purchased) tBonus = 1.249;
     AutoPerks.lootedResources = calcLootedResources() * AutoPerks.DailyResourceMult;
     
     AutoPerks.totalResources = (AutoPerks.cacheResources + AutoPerks.gatheredResources + tBonus * staffBonusDrop * AutoPerks.lootedResources); //out of these 3, AutoPerks.cacheResources is the predominent one (from LMC maps)
@@ -999,7 +999,7 @@ function calcCacheReward(){
     amt *= AutoPerks.windMod;
     amt = calcHeirloomBonus("Staff", "MinerSpeed", amt);
 
-    if (game.talents.turkimp4.purchased)
+    if (game.talents.turkimp2.purchased)
         amt *= 2;
     
     amt += getPlayerModifierAT() * 20; //tiny effect
