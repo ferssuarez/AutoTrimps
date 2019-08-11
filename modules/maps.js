@@ -1602,7 +1602,7 @@ function calcDmg(){
     nextZoneDHratio = DHratio / (game.jobs.Magmamancer.getBonusPercent() * ((game.global.mapBonus * .2) + 1) * 2);
 
     if(portalUniverse == 2) threshold = Rthreshold;
-    if(portalUniverse == 2) DHratio = (ourBaseDamage * 100) / zoneHP;
+    if(portalUniverse == 2) DHratio = ourBaseDamage / RcalcEnemyHealth();
 
     enoughDamage = DHratio > threshold;
 
