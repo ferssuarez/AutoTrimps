@@ -169,7 +169,7 @@ function calcArmyDamage(printout, currentGame, zone, dailyObj, armySizeUncapped,
         if (printout) debug("Poison Enlightenment " +  " dmg " + dmg.toExponential(2));
     }
     if (getHeirloomBonus("Shield", "gammaBurst") > 0) {
-        dmg *= ((getHeirloomBonus("Shield", "gammaBurst")) + 1) / 5;
+        dmg *= ((getHeirloomBonus("Shield", "gammaBurst")/100) + 1) / 5;
     }
     if (Fluffy.isActive()){
         var fluff = lastFluffDmg;
