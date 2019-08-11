@@ -225,6 +225,7 @@ function toggleDailyQueue() {
 }
 
 function nextEnlight() {
+    if (portalUniverse == 2) return;
     autoTrimpSettings.DailyQueue = DailyQueueInit();
 
     if (autoTrimpSettings.DailyQueue[0] <= 0) return false; //If arr[0] is 0 disable Enlight Queueing
