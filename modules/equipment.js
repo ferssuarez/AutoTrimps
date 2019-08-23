@@ -105,7 +105,7 @@ function equipEffect(gameResource, equip) {
 function equipCost(gameResource, equip) {
     var price = parseFloat(getBuildingItemPrice(gameResource, equip.Resource, equip.Equip, 1));
     if (equip.Equip)
-        price = Math.ceil(price * (Math.pow(1 - game.portal.Artisanistry.modifier, game.portal.Artisanistry.level)));
+        price = Math.ceil(price * (Math.pow(1 - game.portal.Artisanistry.modifier, portalUniverse == 1 ? game.portal.Artisanistry.level : game.portal.Artisanistry.radLevel)));
     else
         price = Math.ceil(price * (Math.pow(1 - game.portal.Resourceful.modifier, game.portal.Resourceful.level)));
     return price;
@@ -148,7 +148,7 @@ function evaluateEquipmentEfficiency(equipName) {
             if ((game.global.challengeActive == "Scientist" && getScientistLevel() > 2) || (!BuyWeaponUpgrades && !BuyArmorUpgrades))
                 var NextCost = Infinity;
             else
-                var NextCost = Math.ceil(getNextPrestigeCost(equip.Upgrade) * Math.pow(1 - game.portal.Artisanistry.modifier, game.portal.Artisanistry.level));
+                var NextCost = Math.ceil(getNextPrestigeCost(equip.Upgrade) * Math.pow(1 - game.portal.Artisanistry.modifier, portalUniverse == 1 ? game.portal.Artisanistry.level : game.portal.Artisanistry.radLevel));
             Wall = (NextEffect / NextCost > Factor);
             if (buyWeaponsMode === 3) { //eventhough we allow prestiging of equipment, defer it until levels become expensive.
                 if(Cost * 100 < game.resources.metal.owned)
@@ -370,7 +370,7 @@ function autoLevelEquipment(buyDamage, colorStyle) {
                             buyWeaponsMode = 3; //cant afford to buy 1 level of the equipment, so allow prestiging and restart.
                             return autoLevelEquipment(buyDamage, colorStyle);
                         }
-                        game.global.buyAmt = howMany;
+                        game.global.buyAmt =  portalUniverse == 1 ? howMany : 1;
                         //debug('Buying ' + game.global.buyAmt + " levels " + game.equipment[equipName].prestige + "-" + game.equipment[equipName].level + " " + equipName + " buyWeaponsMode " + buyWeaponsMode, "equips", '*upload');
                         buyEquipment(equipName, null, true);
                         evalObjAT[equipName] = evaluateEquipmentEfficiency(equipName);
