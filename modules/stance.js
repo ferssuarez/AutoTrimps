@@ -495,7 +495,7 @@ function autoStance(){
                 }
                 if (game.global.uberNature === "Wind") {
                     chosenFormation = 5;
-                    if (cell.health !== 1 && game.empowerments.Wind.currentDebuffPower === ATmaxWind) {
+                    if (cell.health !== 1 && game.empowerments.Wind.currentDebuffPower === ATmaxWind && worldArray[cellNum].corrupted != "corruptDodge") {
                         if (maxAttacks++ > 0)
                             chosenFormation = 2;
                     }
@@ -543,7 +543,7 @@ function autoStance(){
 
                 if (game.global.uberNature === "Wind") {
                     chosenFormation = 5;
-                    if (cell.health !== 1 && game.empowerments.Wind.currentDebuffPower === ATmaxWind) {
+                    if (cell.health !== 1 && game.empowerments.Wind.currentDebuffPower === ATmaxWind && worldArray[cellNum].corrupted != "corruptDodge") {
                         if (maxAttacks++ > 0)
                             chosenFormation = 2;
                     }
@@ -599,7 +599,7 @@ function autoStance(){
         allowBuyingCoords = true;
         wantMoreDamage = true;
         chosenFormation = 5;
-        if (cell.health !== 1 && game.empowerments.Wind.currentDebuffPower === ATmaxWind) {
+        if (cell.health !== 1 && game.empowerments.Wind.currentDebuffPower === ATmaxWind && worldArray[cellNum].corrupted != "corruptDodge") {
             if (maxAttacks++ > 0)
             chosenFormation = 2;
         }
