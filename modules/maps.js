@@ -1380,7 +1380,10 @@ function checkNeedToVoid(){
 
     if (Fluffy.isRewardActive("voidSiphon") && BWRaidNowLogic()) return true;
 
-    
+    if (game.global.world === getPageSetting('CustomAutoPortal') && getPageSetting('RunVoidsBeforePortal') && portalUniverse === 2) {
+        return game.global.lastClearedCell + 1 >= 90;
+    }
+
     if(voidMapZone <= 0 || voidMapZone > game.global.world) return false;
     
     var voidsuntil = getPageSetting('RunNewVoidsUntilNew');

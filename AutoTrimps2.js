@@ -18,8 +18,8 @@ var ATversion = '2.1.7.1'; //when this increases it forces users setting update 
 
 var local = false;
 //local = true;
-var ver = "54.07";
-var verDate = "9.8.19";
+var ver = "54.08";
+var verDate = "26.8.19";
 
 var changelogList = [];
 changelogList.push({date: "4.4.2019", version: "", description: "Added Zek's C2 Table", isNew: true});
