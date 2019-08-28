@@ -872,7 +872,7 @@ function benefitFluffyCalc(){
     var flufffocus = (game.talents.fluffyExp.purchased ? 1 + (0.25 * game.global.fluffyPrestige) : 1);
     var staffBonusXP = 1 + game.heirlooms.Staff.FluffyExp.currentBonus / 100;
     var cunningCuriousMult = (50 + curiousPerk.level * 30) * (1 + cunningPerk.level * 0.25);
-    var startZone = 301 - 2*classyPerk.level;
+    var startZone = 301 - 3*classyPerk.level;
     
     var sumBenefit = autoTrimpSettings.APValueBoxes.maxZone < startZone + 1 ? 0 : (1 - Math.pow(1.015, autoTrimpSettings.APValueBoxes.maxZone - startZone + 1)) / (-0.015); //sum of a geometric series
     for(var zone = 400; zone <= autoTrimpSettings.APValueBoxes.maxZone; zone += 100)
