@@ -283,6 +283,13 @@ AutoPerks.heliumInaccuracy = function(checkTemp){
 //green "Allocate Perks" button:
 AutoPerks.clickAllocate = function() {
     try{
+        if(portalUniverse == 2) {
+            var $text = document.getElementById("textAreaAllocate");
+            var msg = "Auto Allocate does not work in U2.";
+            debug(msg);
+            $text.innerHTML = msg;
+            return;
+        }
         if(!game.global.canRespecPerks){
             var $text = document.getElementById("textAreaAllocate");
             var msg = "A respec is needed to Auto Allocate. Portal or use a Bone Portal to get a respec.";
