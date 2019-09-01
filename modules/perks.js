@@ -1745,29 +1745,29 @@ AutoPerks.initializeAmalg = function(){
 
 //Auto Dump into Looting II
 function lootdump() {
-    /*
     viewPortalUpgrades();
-    numTab(6, true);  
-    if (getPortalUpgradePrice("Looting_II")+game.resources.helium.totalSpentTemp <= game.resources.helium.respecMax){
-        var before = game.portal.Looting_II.level;
-        game.global.lockTooltip = true;
-        buyPortalUpgrade('Looting_II'); 
-        game.global.lockTooltip = false;
-        activateClicked();
-        var after = game.portal.Looting_II.level;
-        debug("Bought " + prettify(after-before) + " levels of Looting_II");
+    numTab(6, true);
+    if (portalUniverse == 1) {
+        if (getPortalUpgradePrice("Looting_II")+game.resources.helium.totalSpentTemp <= game.resources.helium.respecMax){
+            var before = game.portal.Looting_II.level;
+            game.global.lockTooltip = true;
+            buyPortalUpgrade('Looting_II');
+            game.global.lockTooltip = false;
+            activateClicked();
+            var after = game.portal.Looting_II.level;
+            debug("Bought " + prettify(after-before) + " levels of Looting_II");
+        }
     }
-    cancelPortal();
-    */
-        viewPortalUpgrades();
-        numTab(6, true);
+    else {
         var before = game.portal.Looting.level;
         game.global.lockTooltip = true;
         buyPortalUpgrade('Looting');
         game.global.lockTooltip = false;
         activateClicked();
         var after = game.portal.Looting.level;
-        cancelPortal();
+    }
+
+    cancelPortal();
 }
 
 AutoPerks.updateDailyMods = function(){
