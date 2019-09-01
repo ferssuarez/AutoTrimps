@@ -390,7 +390,7 @@ function autoLevelEquipment(buyDamage, colorStyle) {
                 }
             }
             //Always LVL 25:
-            if (!buyDamage && BuyArmorLevels && (DaThing.Stat == 'health') && game.equipment[equipName].level < 25){
+            if (!buyDamage && BuyArmorLevels && (DaThing.Stat == 'health') && game.equipment[equipName].level < 25 && portalUniverse == 1){
                 if (DaThing.Equip && !Best[stat].Wall && canAffordBuilding(equipName, null, null, true) && ((metalNeeded === 0 && woodNeeded === 0)  || game.global.totalHeliumEarned > 50000)) {
                     var ratio = (game.resources.metal.owned - metalNeeded) / (game.resources.metal.owned * 10)
                     var howMany = calculateMaxAfford(game.equipment[equipName], false, true, false, false, ratio); //1% of available resources
