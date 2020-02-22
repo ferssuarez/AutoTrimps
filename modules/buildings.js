@@ -17,28 +17,6 @@ function safeBuyBuilding(building){
     var oldBuy = preBuy2();
     //build 2 at a time if we have the mastery for it.
     //Note: Bypasses any "Max" caps by 1 if they are odd numbers and we can afford the 2nd one.
-    if(game.talents.doubleBuild.purchased) {
-        game.global.buyAmt = 2;
-        if(game.talents.deciBuild.purchased){
-            game.global.buyAmt = 10;
-            if (!canAffordBuilding(building))
-                game.global.buyAmt = 2;
-        }
-        if(!canAffordBuilding(building)) {
-            game.global.buyAmt = 1;
-            if(!canAffordBuilding(building)){
-                postBuy2(oldBuy);
-                return false;
-            }
-        }
-    }else {
-        game.global.buyAmt = 1;
-        if(!canAffordBuilding(building)){
-            postBuy2(oldBuy);
-            return false;
-        }
-    }
-    game.global.firing = false;
     //buy max warpstations when we own <2 (ie: after a new giga)
     //thereafter, buy only 1 warpstation
     
